@@ -1,0 +1,162 @@
+# Liftoff cheat sheet
+
+v0.7.0. What it does, what to say to get it, and when not to bother.
+
+---
+
+## The one-liner
+
+Liftoff runs a design job end to end and can tell you no. It sets what the work should make
+someone feel, checks there is an idea and not just a style, explores if the direction is open,
+builds, then hands the result to fresh eyes that grade it against the original target and fail
+it if the feeling did not land.
+
+---
+
+## How to invoke it
+
+Say any of these and it should pick itself up:
+
+> design this properly · full pass · the whole treatment · make this great · liftoff
+
+Or name it: `/liftoff [thing]`.
+
+**Say more than the noun.** "Design the settings page" gets you a settings page. "Design the
+settings page, it should make people feel like nothing is going to break" gets you a settings
+page with a target it can be graded against. The second sentence is the whole difference.
+
+---
+
+## What it can actually do
+
+### Decide what it is looking at
+- Classifies **product track** (an interface) versus **brand track** (a static asset) and runs
+  a different loop for each
+- Sends brand work your style guide already answers out a **fast lane**, no full loop
+- Reads what you attached and pulls in the right helpers on its own
+
+### Set a target before building
+- **Emotional target**: three feelings and a peak moment, written down and gradeable
+- **Idea pass**: one sentence naming a mechanism, tested four ways, before anything is drawn
+- Runs research synthesis first when you hand it transcripts or tickets, so the target is
+  derived rather than guessed
+
+### Explore, only when the direction is open
+- Single exploration for a screen or a direction check
+- Tournament format when the stakes justify it: competing versions, a jury, a synthesis pass
+- Skips the whole stage when the direction is already settled
+
+### Build
+- Reads the **live stylesheet** for real tokens before inventing any colour, face, or size
+- Reads real reference images as taste anchors, which is what keeps output from looking
+  generated
+- Inherits existing components instead of growing a parallel set
+- Writes UI microcopy and prose as separate jobs
+- Reaches for 3D, scroll-timeline motion, or Lottie only when the surface actually needs it
+
+### Grade it, honestly
+- Craft verdict and a separate **emotional verdict**, both must pass
+- Accessibility as a standing check on anything product track, not a late discovery
+- **Slop sweep** against absolute bans, automatic, not on request
+- Motion craft gate where approval is earned rather than assumed
+- Motion-gap analysis that also rejects things that should not animate
+- Optional second opinion when the verdict is close
+
+### Hand off
+- Engineering spec on request only: layout, tokens, props, states, breakpoints, edge cases,
+  motion
+
+### Audit something that already exists
+- Accessibility baseline before touching a live site
+- Codebase-scale motion audit as an entry point
+
+---
+
+## Cheat sheet: what to say
+
+| You want | Say this | What runs |
+|---|---|---|
+| A real design pass | "design this properly, it should feel like X" | everything |
+| Fast brand asset | "make the launch graphic" | fast lane, no loop |
+| Direction unknown | "I don't know which way this should go" | explore stage wakes up |
+| High-stakes direction | "run a deathmatch on this" | tournament format |
+| Just execution | "the direction is settled, build it" | skips explore |
+| A grade, not a build | "is this any good?" | evaluate only |
+| Ready for engineering | "this is ready for handoff" | spec generated |
+| Check an existing site | "audit this before we touch it" | baseline first |
+| Kill the AI smell | "check this for slop" | ban sweep, though it runs anyway |
+
+---
+
+## When NOT to use it
+
+- **Mechanical fixes.** Contrast, a breakpoint, a typo. Running a full emotional map on a
+  padding change wastes your time and teaches you to stop invoking it.
+- **Brand work the style guide already answers.** Apply, verify, ship.
+- **Decisions and documents.** Naming an emotional target for a pitch or a positioning doc is a
+  fine standalone use of resonance without the rest of the loop.
+- **Backend, data, or anything with no visual surface.**
+
+---
+
+## How to get the most out of it
+
+**Give it the real system, not a description of it.** A URL to the live site beats a brand PDF.
+It will read the stylesheet and use the actual tokens. Skip this and it will invent values that
+look right and are wrong.
+
+**Give it reference images, not adjectives.** "Premium and technical" produces a
+premium-and-technical-shaped design, which is to say a forgettable one. Three screenshots of
+work you actually admire produce something specific.
+
+**Answer the classification.** It states its read in one line at the start. Correcting it there
+costs a sentence; correcting it at hour three costs the build.
+
+**Let it fail things.** The gate is the product. If you overrule every FAIL, you have bought a
+slower version of a tool that agrees with you.
+
+**Tell it when the direction is settled.** Otherwise it will explore, and exploring a decided
+question is expensive theatre.
+
+**Kill one direction out loud.** When it gives you options, rejecting one with a stated reason
+is worth more than approving two.
+
+---
+
+## Known limits, plainly
+
+- **It cannot always see its own output.** When the render path is down it will verify structure
+  and say the visual check did not run. Structure passing is not the design being good. When it
+  says this, you are the evaluator.
+- **Render engines need installing.** 3D, scroll motion, and Lottie are registered but not
+  present by default. Script is in `scripts/`.
+- **Escalation runs one direction.** A large ask that mentions accessibility can still land in
+  the small audit skill and stay there. Drafted fix in `references/escalation-edits.md`, not
+  applied.
+- **The tournament format is not installed everywhere.** Where it is missing the format can be
+  run by hand, and the run should say so.
+- **Inspiration sourcing works and has nothing to draw from** until boards get curated.
+- **It has no memory between runs.** Hard-won gotchas live in `references/stack.md` because
+  nothing else carries them forward.
+
+---
+
+## The files
+
+```
+SKILL.md                          the loop
+references/stack.md               the registry, ordering rules, production gotchas
+references/idea-pass.md           the verbal gate
+references/inspiration.md         outside reference, and how it feeds the anchors
+references/escalation-edits.md    drafted, not applied
+scripts/install-render-engines.sh tested
+scripts/pinterest-sync.py         fallback path
+CHANGELOG.md                      what changed and when
+```
+
+---
+
+## The shortest useful version
+
+Give it a live URL, three reference screenshots, one sentence about how it should feel, and
+permission to tell you no. Everything else it can work out.
