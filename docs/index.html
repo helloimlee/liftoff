@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Liftoff — a design pass that can tell you no</title>
 <meta name="description" content="A Claude skill that runs a design job end to end, then fails it if the work renders correctly and makes nobody feel anything.">
-<meta name="theme-color" content="#080a08">
+<meta name="theme-color" content="#F2F4F0">
 <meta property="og:title" content="Liftoff — a design pass that can tell you no">
 <meta property="og:description" content="Most AI design help thinks everything you make is great. This one has a gate.">
 <meta property="og:type" content="website">
@@ -16,143 +16,139 @@
 <link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* read from gomaxq.com's live stylesheet, not invented */
-    --surface-0:#030403; --surface-1:#080a08; --surface-2:#0e100e;
-    --void:#000101;      --border:#292c29;    --border-subtle:#161917;
-    --text:#e0e0e0;      --text-bright:#fff;  --text-muted:#949494; --text-subtle:#a0a0a0;
-    --accent:#5ed276;    --accent-bright:#7ae090; --accent-dim:#3ea85a;
-    --ignition:#f6b32c;  --caution:#daa24f;   --alert:#e2726b;      --red:#ff6568;
+    /* Dark values read from gomaxq.com's live stylesheet. The light surfaces are
+       DERIVED, not invented from nothing: MaxQ's darks all carry a green cast
+       (#080a08, #0e100e), so the light counterparts carry the same one. This is
+       deliberately not the cream-and-terracotta default. */
+    --paper:#F2F4F0; --paper-2:#FFFFFF; --paper-3:#E7EBE4;
+    --rule:#D5DACF;  --rule-soft:#E4E8E0;
+    --ink:#0E100E;   --ink-2:#3A413A;   --ink-3:#5F6656;
+    --green:#2E7D46; --green-bright:#3ea85a;
+    --gold:#f6b32c;  --gold-ink:#8A5A0A;
+    --red:#C0392F;
     --display:'Outfit',system-ui,sans-serif;
     --sans:'Satoshi','Outfit',system-ui,sans-serif;
     --serif:'Instrument Serif',Georgia,serif;
     --mono:'JetBrains Mono',ui-monospace,monospace;
     --ease:cubic-bezier(.2,.7,.2,1);
-    --maxw:1080px;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    margin:0;background:var(--surface-1);color:var(--text);
-    font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  body{margin:0;background:var(--paper);color:var(--ink-2);
+       font-family:var(--sans);font-size:17px;line-height:1.65;
+       -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 32px}
   a{color:inherit}
-  ::selection{background:var(--ignition);color:var(--void)}
-  :focus-visible{outline:2px solid var(--accent-bright);outline-offset:3px;border-radius:2px}
+  ::selection{background:var(--gold);color:var(--ink)}
+  :focus-visible{outline:2px solid var(--green);outline-offset:4px;border-radius:3px}
 
-  /* ---------- reveal ---------- */
-  .r{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .r{opacity:0;transform:translateY(16px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
   .r.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto}
-    .r{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}.r{opacity:1;transform:none;transition:none}
     *{animation:none!important;transition-duration:.01ms!important}
   }
 
-  /* ---------- nav ---------- */
-  /* solid, not frosted. the nav sits over a solid ground so a blur would be
-     decoration that decorates nothing, and one more compositing layer. */
-  nav{position:sticky;top:0;z-index:50;background:var(--surface-1);
-      border-bottom:1px solid var(--border-subtle)}
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
-  .mark{font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:var(--text-bright);text-decoration:none}
-  .mark b{color:var(--ignition);font-weight:500}
-  .navlinks{display:flex;gap:26px;align-items:center}
-  .navlinks a{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
-    color:var(--text-muted);text-decoration:none;position:relative;padding:4px 0;transition:color .25s var(--ease)}
-  .navlinks a:hover{color:var(--text-bright)}
-  .navlinks a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
-    background:var(--ignition);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+  nav{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:1px solid var(--rule-soft)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .mark{font-family:var(--mono);font-size:13px;letter-spacing:.16em;color:var(--ink);text-decoration:none;font-weight:500}
+  .mark b{color:var(--gold-ink)}
+  .navlinks{display:flex;gap:30px}
+  .navlinks a{font-family:var(--mono);font-size:11.5px;letter-spacing:.11em;color:var(--ink-3);
+    text-decoration:none;position:relative;padding:5px 0;transition:color .3s var(--ease)}
+  .navlinks a:hover{color:var(--ink)}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--gold-ink);
+    transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease)}
   .navlinks a:hover::after{transform:scaleX(1);transform-origin:left}
-  @media(max-width:620px){.navlinks a:not(.gh){display:none}}
+  @media(max-width:660px){.navlinks a:not(.gh){display:none}}
 
-  /* ---------- hero ---------- */
-  header{padding:112px 0 84px;position:relative;overflow:hidden}
-  .field{position:absolute;inset:0;pointer-events:none;opacity:.5}
-  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--ignition);margin:0 0 26px}
-  h1{font-family:var(--display);font-weight:500;font-size:clamp(40px,6.6vw,76px);
-     line-height:1.02;letter-spacing:-.04em;margin:0 0 24px;color:var(--text-bright);max-width:15ch}
-  h1 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--ignition);letter-spacing:-.02em}
-  .sub{font-size:17px;line-height:1.65;color:var(--text-subtle);max-width:52ch;margin:0 0 40px}
-  .sub strong{color:var(--text);font-weight:500}
+  header{padding:150px 0 130px;position:relative;overflow:hidden}
+  .field{position:absolute;inset:0;pointer-events:none;opacity:.62}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--gold-ink);margin:0 0 34px}
+  h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,7.4vw,86px);line-height:.98;
+     letter-spacing:-.045em;margin:0 0 32px;color:var(--ink);max-width:14ch}
+  h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.02em;color:var(--gold-ink)}
+  .sub{font-size:19px;line-height:1.62;color:var(--ink-2);max-width:50ch;margin:0 0 48px}
+  .sub b{color:var(--ink);font-weight:500}
 
-  /* ---------- install ---------- */
-  .cmd{display:flex;align-items:stretch;gap:0;border:1px solid var(--border);
-       border-radius:6px;background:var(--surface-2);max-width:520px;overflow:hidden;
-       transition:border-color .3s var(--ease),box-shadow .3s var(--ease)}
-  .cmd:hover{border-color:var(--accent-dim);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 8%,transparent)}
-  .cmd code{flex:1;font-family:var(--mono);font-size:13.5px;padding:15px 18px;color:var(--text-bright);
+  .cmd{display:flex;border:1px solid var(--rule);border-radius:7px;background:var(--paper-2);
+       max-width:530px;overflow:hidden;transition:border-color .35s var(--ease),box-shadow .35s var(--ease)}
+  .cmd:hover{border-color:var(--green-bright);box-shadow:0 2px 20px -6px rgba(46,125,70,.22)}
+  .cmd code{flex:1;font-family:var(--mono);font-size:13.5px;padding:17px 20px;color:var(--ink);
             white-space:nowrap;overflow-x:auto;scrollbar-width:none}
   .cmd code::-webkit-scrollbar{display:none}
-  .cmd code i{color:var(--accent-bright);font-style:normal;user-select:none}
-  .copy{border:0;border-left:1px solid var(--border);background:transparent;color:var(--text-muted);
-        font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:0 18px;cursor:pointer;
-        transition:background .25s var(--ease),color .25s var(--ease)}
-  .copy:hover{background:var(--surface-0);color:var(--text-bright)}
-  .copy.done{color:var(--accent-bright)}
-  .undercmd{font-family:var(--mono);font-size:11.5px;color:var(--text-muted);margin:14px 0 0}
-  .undercmd a{color:var(--text-subtle);text-decoration:none;border-bottom:1px solid var(--border);transition:color .25s,border-color .25s}
-  .undercmd a:hover{color:var(--ignition);border-color:var(--ignition)}
+  .cmd code i{color:var(--green);font-style:normal;user-select:none}
+  .copy{border:0;border-left:1px solid var(--rule);background:transparent;color:var(--ink-3);
+        font-family:var(--mono);font-size:11px;letter-spacing:.11em;padding:0 20px;cursor:pointer;
+        transition:background .3s var(--ease),color .3s var(--ease)}
+  .copy:hover{background:var(--paper-3);color:var(--ink)}
+  .copy.done{color:var(--green)}
+  .undercmd{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);margin:18px 0 0}
+  .undercmd a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule);transition:color .3s,border-color .3s}
+  .undercmd a:hover{color:var(--gold-ink);border-color:var(--gold-ink)}
 
-  /* ---------- section chrome ---------- */
-  section{padding:88px 0;border-top:1px solid var(--border-subtle)}
-  .lede{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--text-muted);margin:0 0 18px}
-  h2{font-family:var(--display);font-weight:500;font-size:clamp(26px,3.4vw,38px);
-     letter-spacing:-.03em;line-height:1.1;margin:0 0 18px;color:var(--text-bright);max-width:22ch}
-  .body{font-size:16px;color:var(--text-subtle);max-width:56ch;margin:0}
+  section{padding:120px 0;border-top:1px solid var(--rule-soft)}
+  .lede{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--ink-3);margin:0 0 24px}
+  h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.2vw,46px);letter-spacing:-.035em;
+     line-height:1.06;margin:0 0 24px;color:var(--ink);max-width:20ch}
+  .body{font-size:18px;color:var(--ink-2);max-width:54ch;margin:0}
 
-  /* ---------- verdict ---------- */
-  .verdict{margin-top:44px;border:1px solid var(--border);background:var(--surface-2);
-           border-radius:8px;overflow:hidden;max-width:660px}
-  .vhead{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;
-         border-bottom:1px solid var(--border-subtle);font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--text-muted)}
-  .stamp{color:var(--text-muted);transition:color .4s var(--ease)}
-  .stamp.fail{color:var(--red)}
-  .checks{padding:8px 22px 18px}
-  .chk{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:11px 0;
-       font-size:14.5px;color:var(--text-subtle);border-bottom:1px solid var(--border-subtle)}
+  .verdict{margin-top:60px;border:1px solid var(--rule);background:var(--paper-2);border-radius:10px;
+           overflow:hidden;max-width:680px;box-shadow:0 1px 2px rgba(14,16,14,.03),0 12px 40px -20px rgba(14,16,14,.14)}
+  .vhead{display:flex;justify-content:space-between;align-items:center;padding:18px 26px;
+         border-bottom:1px solid var(--rule-soft);font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;color:var(--ink-3)}
+  .stamp{transition:color .5s var(--ease)}
+  .stamp.fail{color:var(--red);font-weight:700}
+  .checks{padding:10px 26px 20px}
+  .chk{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:14px 0;
+       font-size:15.5px;color:var(--ink-2);border-bottom:1px solid var(--rule-soft)}
   .chk:last-child{border-bottom:0}
-  .chk .v{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--border);
-          transition:color .35s var(--ease),opacity .35s var(--ease);opacity:0}
+  .chk .v{font-family:var(--mono);font-size:11.5px;letter-spacing:.11em;opacity:0;
+          transition:opacity .4s var(--ease),color .4s var(--ease)}
   .chk.done .v{opacity:1}
-  .chk.pass .v{color:var(--accent-bright)}
+  .chk.pass .v{color:var(--green)}
   .chk.fail .v{color:var(--red)}
-  .chk.fail{color:var(--text-bright)}
-  .vfoot{padding:18px 22px;border-top:1px solid var(--border-subtle);background:var(--surface-0);
-         font-family:var(--mono);font-size:12.5px;line-height:1.75;color:var(--text-muted);
-         opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .chk.fail{color:var(--ink);font-weight:500}
+  .vfoot{padding:22px 26px;border-top:1px solid var(--rule-soft);background:var(--paper-3);
+         font-family:var(--mono);font-size:12.5px;line-height:1.8;color:var(--ink-3);
+         opacity:0;transform:translateY(8px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
   .vfoot.in{opacity:1;transform:none}
-  .vfoot b{color:var(--ignition);font-weight:400}
+  .vfoot b{color:var(--gold-ink);font-weight:400}
 
-  /* ---------- loop ---------- */
-  .loop{margin-top:48px;display:grid;gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle)}
-  .step{background:var(--surface-1);padding:26px 24px;display:grid;grid-template-columns:132px 1fr;gap:24px;
-        transition:background .3s var(--ease)}
-  .step:hover{background:var(--surface-2)}
-  .step .t{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ignition);padding-top:3px}
-  .step h3{font-family:var(--display);font-weight:500;font-size:19px;letter-spacing:-.02em;margin:0 0 7px;color:var(--text-bright)}
-  .step p{margin:0;font-size:14.5px;color:var(--text-muted);max-width:58ch}
-  @media(max-width:620px){.step{grid-template-columns:1fr;gap:8px}}
+  .loop{margin-top:64px;display:flex;flex-direction:column}
+  .step{padding:34px 0;display:grid;grid-template-columns:150px 1fr;gap:32px;border-top:1px solid var(--rule-soft)}
+  .step:first-child{border-top:0}
+  .step .t{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--gold-ink);padding-top:6px}
+  .step h3{font-family:var(--display);font-weight:500;font-size:21px;letter-spacing:-.025em;margin:0 0 9px;color:var(--ink)}
+  .step p{margin:0;font-size:16px;color:var(--ink-2);max-width:56ch}
+  @media(max-width:660px){.step{grid-template-columns:1fr;gap:10px;padding:26px 0}}
 
-  /* ---------- degrade ---------- */
-  .deg{margin-top:40px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-  .degrow{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:15px 22px;
-          border-bottom:1px solid var(--border-subtle);font-size:14.5px}
-  .degrow:last-child{border-bottom:0}
-  .degrow span{font-family:var(--mono);font-size:11.5px;color:var(--text-muted);letter-spacing:.06em;text-align:right}
-  .degrow b{font-weight:500;color:var(--text);font-family:var(--mono);font-size:13px}
-  .degnote{margin-top:20px;font-size:14.5px;color:var(--text-muted);max-width:56ch}
-  .degnote b{color:var(--accent-bright);font-weight:500}
+  .rel{margin-top:56px;display:flex;flex-direction:column}
+  .note{border-top:1px solid var(--rule-soft);padding:36px 0;display:grid;grid-template-columns:112px 1fr;gap:32px}
+  .note:first-child{border-top:0}
+  .vtag{font-family:var(--mono);font-size:12px;color:var(--ink);letter-spacing:.04em;padding-top:5px}
+  .vtag span{display:block;font-size:10.5px;color:var(--ink-3);letter-spacing:.13em;margin-top:5px}
+  .note h3{font-family:var(--display);font-weight:500;font-size:20px;letter-spacing:-.025em;margin:0 0 10px;color:var(--ink)}
+  .note p{margin:0;font-size:16px;color:var(--ink-2);max-width:58ch}
+  .note p+p{margin-top:10px}
+  .note em{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--gold-ink)}
+  .latest{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+          background:var(--gold);color:var(--ink);padding:3px 7px;border-radius:3px;margin-top:8px}
+  @media(max-width:660px){.note{grid-template-columns:1fr;gap:8px}}
 
-  /* ---------- close ---------- */
-  .close{text-align:left}
-  .close h2{max-width:18ch}
-  footer{border-top:1px solid var(--border-subtle);padding:44px 0 60px}
-  .fl{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
-      font-family:var(--mono);font-size:11.5px;color:var(--text-muted);letter-spacing:.06em}
-  .fl a{color:var(--text-subtle);text-decoration:none;transition:color .25s var(--ease)}
-  .fl a:hover{color:var(--ignition)}
+  .deg{margin-top:52px;border-top:1px solid var(--rule-soft)}
+  .degrow{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:17px 0;
+          border-bottom:1px solid var(--rule-soft);font-size:16px}
+  .degrow b{font-weight:400;color:var(--ink);font-family:var(--mono);font-size:13.5px}
+  .degrow span{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.05em;text-align:right}
+  .degnote{margin-top:28px;font-size:17px;color:var(--ink-2);max-width:56ch}
+  .degnote b{color:var(--green);font-weight:500}
+
+  footer{border-top:1px solid var(--rule-soft);padding:56px 0 72px}
+  .fl{display:flex;justify-content:space-between;gap:22px;flex-wrap:wrap;
+      font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.06em}
+  .fl a{color:var(--ink-2);text-decoration:none;transition:color .3s var(--ease)}
+  .fl a:hover{color:var(--gold-ink)}
 </style>
 </head>
 <body>
@@ -161,9 +157,9 @@
   <div class="wrap">
     <a class="mark" href="#top">LIFT<b>OFF</b></a>
     <div class="navlinks">
-      <a href="#verdict">The gate</a>
+      <a href="#gate">The gate</a>
       <a href="#loop">The loop</a>
-      <a href="#install">Install</a>
+      <a href="#notes">What's new</a>
       <a class="gh" href="https://github.com/MaxQ-studio/liftoff">GitHub ↗</a>
     </div>
   </div>
@@ -172,9 +168,9 @@
 <header id="top">
   <canvas class="field" id="field" aria-hidden="true"></canvas>
   <div class="wrap">
-    <p class="kicker r">A CLAUDE SKILL · MIT · FROM MAXQ</p>
+    <p class="kicker r">A CLAUDE SKILL · MIT · BUILT AT MAXQ</p>
     <h1 class="r">A design pass that can <em>tell you no.</em></h1>
-    <p class="sub r">Most AI design help is an enthusiastic friend who thinks everything you make is great. Liftoff has a gate where <strong>renders correctly, makes nobody feel anything</strong> counts as a failure, and the run doesn't finish until that's fixed.</p>
+    <p class="sub r">Most AI design help is an enthusiastic friend who thinks everything you make is great. Liftoff has a gate where <b>renders correctly, makes nobody feel anything</b> counts as a failure, and the run doesn't finish until that's fixed.</p>
     <div class="r">
       <div class="cmd">
         <code><i>$</i> npx skills add MaxQ-studio/liftoff</code>
@@ -185,17 +181,13 @@
   </div>
 </header>
 
-<section id="verdict">
+<section id="gate">
   <div class="wrap">
     <p class="lede r">THE GATE</p>
     <h2 class="r">It grades the work against what you said it should feel like.</h2>
-    <p class="body r">Craft and feeling are separate verdicts and both have to pass. A build can be pixel-clean, token-perfect, fully accessible, and still be nothing. That is the failure nobody else checks for.</p>
-
+    <p class="body r">Craft and feeling are separate verdicts and both have to pass. A build can be pixel-clean, token-perfect, fully accessible, and still be nothing at all. That's the failure nobody else checks for.</p>
     <div class="verdict r" id="vcard">
-      <div class="vhead">
-        <span>EVALUATE · RESONANCE AUDIT</span>
-        <span class="stamp" id="stamp">GRADING</span>
-      </div>
+      <div class="vhead"><span>EVALUATE · RESONANCE AUDIT</span><span class="stamp" id="stamp">GRADING</span></div>
       <div class="checks">
         <div class="chk" data-v="PASS">Tokens inherited, none invented<span class="v">PASS</span></div>
         <div class="chk" data-v="PASS">Contrast clears AA at every size<span class="v">PASS</span></div>
@@ -213,23 +205,77 @@
     <h2 class="r">Four things happen before anything gets built.</h2>
     <p class="body r">Each one is cheap. Skipping them is what costs the afternoon.</p>
     <div class="loop r">
-      <div class="step">
-        <div class="t">CLASSIFY</div>
-        <div><h3>Read the room first</h3><p>Interface or static asset, and what you attached. Stated out loud in one line so you can correct it in a sentence instead of at hour three.</p></div>
-      </div>
-      <div class="step">
-        <div class="t">TARGET</div>
-        <div><h3>Name the feeling</h3><p>Three feelings and a peak moment, written down. Without this, "good" means "it renders" and the review is a formality.</p></div>
-      </div>
-      <div class="step">
-        <div class="t">IDEA</div>
-        <div><h3>Say it in one sentence</h3><p>A mechanism, not a mood. If the description could apply to nine other projects, you have a style and not an idea. Two minutes, and it kills the most expensive failure in the loop.</p></div>
-      </div>
-      <div class="step">
-        <div class="t">BUILD · GRADE</div>
-        <div><h3>Read the real stylesheet, then earn the pass</h3><p>Pulls your live tokens before inventing a single value, sweeps the output against known AI tells automatically, and hands the result to fresh eyes that never self-grade.</p></div>
-      </div>
+      <div class="step"><div class="t">CLASSIFY</div><div><h3>Read the room first</h3><p>Interface or static asset, and what you brought with you. Said out loud in one line so you can correct it in a sentence instead of at hour three.</p></div></div>
+      <div class="step"><div class="t">TARGET</div><div><h3>Name the feeling</h3><p>Three feelings and a peak moment, written down. Without this, "good" quietly means "it renders," and the review becomes a formality nobody admits to.</p></div></div>
+      <div class="step"><div class="t">IDEA</div><div><h3>Say it in one sentence</h3><p>A mechanism, not a mood. If your description could apply to nine other projects, you have a style and not an idea. Takes two minutes and kills the most expensive failure in the loop.</p></div></div>
+      <div class="step"><div class="t">BUILD · GRADE</div><div><h3>Read the real stylesheet, then earn the pass</h3><p>Pulls your live tokens before inventing a single value, sweeps the output for known AI tells without being asked, and hands the result to fresh eyes that never self-grade.</p></div></div>
     </div>
+  </div>
+</section>
+
+<section id="notes">
+  <div class="wrap">
+    <p class="lede r">WHAT'S NEW</p>
+    <h2 class="r">Still being built, mostly out of mistakes.</h2>
+    <p class="body r">Every version below exists because something went wrong first. Here's the honest log.</p>
+    <div class="rel r">
+
+      <div class="note">
+        <div class="vtag">0.8.0<span>17 AUG</span><span class="latest">LATEST</span></div>
+        <div>
+          <h3>Agents learned to take turns</h3>
+          <p>Six graders were politely queuing to read the same file one at a time, like it was a single-occupancy bathroom. They all read at once now, finish together, and hand back one verdict instead of six book reports.</p>
+          <p>Writing still happens one at a time, because two agents editing the same file don't error. They quietly produce something wrong that you find on Thursday. <em>Fan out reads. Serialize writes.</em></p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="vtag">0.7.0<span>17 AUG</span></div>
+        <div>
+          <h3>Added a gate that asks if this is about anything</h3>
+          <p>Turns out you can hit the emotional target, pass accessibility, use every token correctly, and still make something fundamentally about nothing. The tell is that you can't describe it without showing it.</p>
+          <p>So there's now a two-minute verbal gate before anything gets drawn. Say what it is in one sentence naming a mechanism, not a mood. <em>"Dark and technical" is not an idea. It's a mood board wearing a sentence.</em></p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="vtag">0.6.0<span>17 AUG</span></div>
+        <div>
+          <h3>Read someone else's homework, kept four answers</h3>
+          <p>Went through a well-regarded animation skill collection fully expecting to take all of it. Took four. Skipped six, wrote down why, and filed the reasons somewhere permanent so nobody re-pitches them in a month with fresh enthusiasm.</p>
+          <p>The bar for anything new is one sentence: what does this do that nothing already here does? Two skills claiming the same ground means neither gets reached for.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="vtag">0.5.0<span>27 JUL</span></div>
+        <div>
+          <h3>Learned that a clean build log and a working page are different things</h3>
+          <p>Shipped two boards with a spotless audit. Every check passed. They were visibly broken, because the layout tool ships every container with an invisible white fill and never throws an error about it.</p>
+          <p>Evaluate now has to render the thing and actually look at it. When it can't, it says so out loud instead of passing on structure. <em>A clean audit on a broken render doesn't build confidence. It manufactures it.</em></p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="vtag">0.4.0<span>27 JUL</span></div>
+        <div>
+          <h3>The install script that exists because a README lied</h3>
+          <p>Three animation repos, nineteen skills, and not one of them where the documentation said it would be. One repo's own install command points at a completely different project. Cloning them the documented way installs precisely nothing, silently, forever.</p>
+          <p>Now a script reads each skill's real name out of its own frontmatter and puts it where it actually goes. Not glamorous. Saves an afternoon.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="vtag">0.3.0<span>27 JUL</span></div>
+        <div>
+          <h3>Gave it a front door</h3>
+          <p>It could run the whole loop but had no idea what it was looking at. Now it classifies first, says the read out loud, and pulls in whichever helpers the job actually needs.</p>
+          <p>Also taught it to read real reference images before generating. A written description of taste produces a written-description-shaped design, which is a very polite way of saying forgettable.</p>
+        </div>
+      </div>
+
+    </div>
+    <p class="undercmd" style="margin-top:44px">Full detail in the <a href="https://github.com/MaxQ-studio/liftoff/blob/main/CHANGELOG.md">changelog</a>. Watch the repo for releases and GitHub will email you when something ships.</p>
   </div>
 </section>
 
@@ -237,23 +283,23 @@
   <div class="wrap">
     <p class="lede r">HONEST ABOUT ITSELF</p>
     <h2 class="r">It chains other skills, and degrades instead of breaking.</h2>
-    <p class="body r">You almost certainly do not have all of these. That is fine and expected. Run <code style="font-family:var(--mono);color:var(--text)">doctor.sh</code> after installing and it prints exactly what you have, what you don't, and what each absence costs you.</p>
+    <p class="body r">You almost certainly don't have all of these, which is fine and expected. Run <code style="font-family:var(--mono);color:var(--ink)">doctor.sh</code> after installing and it tells you what you have, what you don't, and what each absence actually costs.</p>
     <div class="deg r">
       <div class="degrow"><b>resonance</b><span>without it · the gate gets weaker</span></div>
       <div class="degrow"><b>impeccable</b><span>without it · planning only, nothing gets built</span></div>
-      <div class="degrow"><b>design-deathmatch</b><span>without it · single exploration, no tournament</span></div>
+      <div class="degrow"><b>design-deathmatch</b><span>without it · one exploration, no tournament</span></div>
       <div class="degrow"><b>accessibility-review</b><span>without it · a11y goes unchecked</span></div>
       <div class="degrow"><b>gsap · threejs · motion</b><span>without them · no timeline motion or 3D</span></div>
     </div>
-    <p class="degnote r"><b>None of it is required.</b> On its own, Liftoff is still a charter loop with an emotional target and an idea gate, which is most of the value. Missing pieces get skipped and named in the run summary rather than silently dropped.</p>
+    <p class="degnote r"><b>None of it is required.</b> On its own, Liftoff is still a charter loop with an emotional target and an idea gate, which is most of the value. Missing pieces get skipped and named in the summary rather than quietly dropped, because a stage that silently didn't run reads exactly like a stage that passed.</p>
   </div>
 </section>
 
-<section class="close" id="install">
+<section id="install">
   <div class="wrap">
     <p class="lede r">GET IT</p>
     <h2 class="r">One line. Then start a fresh session.</h2>
-    <p class="body r" style="margin-bottom:34px">Skills are read at session start, so the new one shows up next time you open Claude. There is nothing else to set up.</p>
+    <p class="body r" style="margin-bottom:44px">Skills are read at session start, so it shows up the next time you open Claude. There's nothing else to set up.</p>
     <div class="r">
       <div class="cmd">
         <code><i>$</i> npx skills add MaxQ-studio/liftoff</code>
@@ -275,88 +321,71 @@
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* reveal on scroll, staggered within a section */
   var io = new IntersectionObserver(function(es){
     es.forEach(function(e){
       if(!e.isIntersecting) return;
-      var sib = Array.prototype.filter.call(e.target.parentNode.children, function(n){return n.classList.contains('r');});
-      var i = sib.indexOf(e.target);
-      e.target.style.transitionDelay = reduce ? '0ms' : (Math.min(i,5)*70)+'ms';
-      e.target.classList.add('in');
-      io.unobserve(e.target);
+      var sib = Array.prototype.filter.call(e.target.parentNode.children,function(n){return n.classList.contains('r');});
+      e.target.style.transitionDelay = reduce ? '0ms' : (Math.min(sib.indexOf(e.target),5)*80)+'ms';
+      e.target.classList.add('in'); io.unobserve(e.target);
     });
-  },{threshold:.15,rootMargin:'0px 0px -60px 0px'});
+  },{threshold:.12,rootMargin:'0px 0px -70px 0px'});
   document.querySelectorAll('.r').forEach(function(n){io.observe(n);});
 
-  /* the verdict grades itself, once, when you reach it */
-  var card = document.getElementById('vcard');
-  var vio = new IntersectionObserver(function(es){
+  var card=document.getElementById('vcard');
+  var vio=new IntersectionObserver(function(es){
     es.forEach(function(e){
-      if(!e.isIntersecting) return;
-      vio.unobserve(e.target);
-      var chks = card.querySelectorAll('.chk');
-      var step = reduce ? 0 : 420;
+      if(!e.isIntersecting) return; vio.unobserve(e.target);
+      var chks=card.querySelectorAll('.chk'), step=reduce?0:430;
       chks.forEach(function(c,i){
-        setTimeout(function(){
-          c.classList.add('done', c.dataset.v === 'FAIL' ? 'fail' : 'pass');
-        }, i*step);
+        setTimeout(function(){ c.classList.add('done', c.dataset.v==='FAIL'?'fail':'pass'); }, i*step);
       });
       setTimeout(function(){
-        var s = document.getElementById('stamp');
-        s.textContent = 'FAIL'; s.classList.add('fail');
+        var s=document.getElementById('stamp'); s.textContent='FAIL'; s.classList.add('fail');
         document.getElementById('vfoot').classList.add('in');
-      }, chks.length*step + (reduce?0:180));
+      }, chks.length*step + (reduce?0:200));
     });
   },{threshold:.45});
   vio.observe(card);
 
-  /* copy */
   function wire(id){
-    var b = document.getElementById(id);
-    if(!b) return;
-    b.addEventListener('click', function(){
-      var txt = b.parentNode.querySelector('code').textContent.replace(/^\s*\$\s*/,'').trim();
-      var done = function(){
-        b.textContent = 'COPIED'; b.classList.add('done');
-        setTimeout(function(){ b.textContent='COPY'; b.classList.remove('done'); }, 1900);
-      };
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(txt).then(done, done);
-      } else {
-        var t=document.createElement('textarea'); t.value=txt; document.body.appendChild(t);
-        t.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(t); done();
-      }
+    var b=document.getElementById(id); if(!b) return;
+    b.addEventListener('click',function(){
+      var txt=b.parentNode.querySelector('code').textContent.replace(/^\s*\$\s*/,'').trim();
+      var done=function(){b.textContent='COPIED';b.classList.add('done');
+        setTimeout(function(){b.textContent='COPY';b.classList.remove('done');},1900);};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,done);}
+      else{var t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
+           try{document.execCommand('copy');}catch(e){}document.body.removeChild(t);done();}
     });
   }
   wire('copy1'); wire('copy2');
 
-  /* hero: a pressure field, drawn once. no loop, no cpu burn. */
-  var cv = document.getElementById('field');
+  /* Pressure field, drawn once. Light ground, so the dots read as ink not light.
+     Hardcoded rgba: color-mix and oklch fail silently in canvas. */
+  var cv=document.getElementById('field');
   if(cv){
-    var draw = function(){
-      var p = cv.parentNode, w = p.offsetWidth, h = p.offsetHeight, d = window.devicePixelRatio||1;
-      cv.width = w*d; cv.height = h*d; cv.style.width=w+'px'; cv.style.height=h+'px';
-      var x = cv.getContext('2d'); x.scale(d,d); x.clearRect(0,0,w,h);
-      var STEP=26, cx=w*0.78, cy=h*0.44, R=Math.max(w,h)*0.62;
-      for(var gy=0; gy*STEP<h+STEP; gy++){
-        for(var gx=0; gx*STEP<w+STEP; gx++){
-          var px=gx*STEP+13, py=gy*STEP+13;
-          var dx=(px-cx)/R, dy=(py-cy)/(R*0.72);
-          var t=1-Math.min(Math.sqrt(dx*dx+dy*dy),1);
-          t=Math.pow(t,1.9);
-          if(t<0.06) continue;
-          var r=1+t*4.6;
-          /* hardcoded rgba. color-mix and oklch fail silently in canvas. */
-          x.fillStyle = t>0.80 ? 'rgba(246,179,44,0.62)'
-                      : t>0.52 ? 'rgba(218,162,79,0.42)'
-                      : t>0.28 ? 'rgba(196,80,26,0.30)'
-                               : 'rgba(41,44,41,0.55)';
-          x.beginPath(); x.arc(px,py,r,0,6.2832); x.fill();
+    var draw=function(){
+      var p=cv.parentNode,w=p.offsetWidth,h=p.offsetHeight,d=window.devicePixelRatio||1;
+      cv.width=w*d;cv.height=h*d;cv.style.width=w+'px';cv.style.height=h+'px';
+      var x=cv.getContext('2d');x.scale(d,d);x.clearRect(0,0,w,h);
+      var STEP=30,cx=w*0.80,cy=h*0.40,R=Math.max(w,h)*0.66;
+      for(var gy=0;gy*STEP<h+STEP;gy++){
+        for(var gx=0;gx*STEP<w+STEP;gx++){
+          var px=gx*STEP+15,py=gy*STEP+15;
+          var dx=(px-cx)/R,dy=(py-cy)/(R*0.70);
+          var t=1-Math.min(Math.sqrt(dx*dx+dy*dy),1); t=Math.pow(t,2.1);
+          if(t<0.05) continue;
+          var r=1+t*4.2;
+          x.fillStyle = t>0.78 ? 'rgba(246,179,44,0.85)'
+                      : t>0.50 ? 'rgba(218,162,79,0.62)'
+                      : t>0.26 ? 'rgba(138,90,10,0.26)'
+                               : 'rgba(95,102,86,0.22)';
+          x.beginPath();x.arc(px,py,r,0,6.2832);x.fill();
         }
       }
     };
     draw();
-    var to; window.addEventListener('resize', function(){ clearTimeout(to); to=setTimeout(draw,180); });
+    var to;window.addEventListener('resize',function(){clearTimeout(to);to=setTimeout(draw,180);});
   }
 })();
 </script>
