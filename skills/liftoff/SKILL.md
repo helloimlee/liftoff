@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: The MaxQ full design pass. Use when someone wants a feature, flow, page, or product designed end to end and wants the emotional target, the exploration, the build, and the verification handled as one run rather than assembled by hand. Trigger on "design this properly," "full pass," "the whole treatment," "make this great," "liftoff," or any substantial design request that deserves more than a single skill. Classifies the ask first (product or brand, what is attached, what reference exists), then runs a charter loop: set the target, explore if the direction is unknown, build, then evaluate with fresh eyes and iterate to PASS. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy, or design-system alone when the work is substantial.
-version: 0.7.0
+version: 0.8.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -17,6 +17,11 @@ Read `references/stack.md` first. It is the registry of which skills and agents 
 ## The loop
 
 ### 1. Charter
+
+**Fan the recon out first.** Everything classify needs is a read, and reads are independent:
+the live stylesheet, the existing component library, an accessibility baseline, any research
+corpus, the taste anchors. Run them concurrently on a cheap model in one round trip. Nothing is
+written, so nothing needs approving. Detail in `references/agents.md`.
 
 **Read the room before you write anything.** Classify the ask on two axes, out loud, in one line. If the classification is wrong the user corrects it here, for free.
 
@@ -106,6 +111,12 @@ Emotional verdict: PASS | FAIL
 
 **Render the artifact and look at it.** A structural check is not an evaluation. Fills, counts, and hierarchy can all be correct while the output is visibly broken, because the common failures are silent defaults rather than thrown errors (see the production rules in `stack.md`). If the screenshot pipeline is unavailable, say the visual check did not run rather than passing on structure alone.
 
+**Grade in parallel, report once.** Every grader reads the same finished artifact and none
+depends on another, so craft, emotional audit, accessibility, slop sweep, motion craft and
+motion-gap all run concurrently. Merge them into one verdict block before showing anyone
+anything. Six reports is not a result, it is homework. Failures first, each with a one-line
+reason and the exact file or node.
+
 **Run the slop check without being asked.** Sweep the output against impeccable's absolute
 bans every time: side-stripe borders, gradient text, glassmorphism by default, identical card
 grids, numbered section markers used as scaffolding rather than sequence, hero-metric templates.
@@ -128,6 +139,20 @@ Feed failures back to stage 3 and rerun. Fix the peak moment first; a flat peak 
 ### 6. Hand off, only when asked
 
 **`design-handoff`** runs when the ask is explicitly "this is ready for engineering." It produces the spec: layout, tokens, component props, interaction states, breakpoints, edge cases, motion detail. It never runs by default. A handoff spec written for work still in exploration is a document nobody opens twice.
+
+## Deploying agents
+
+Fan out reads. Serialize writes. That one rule decides the shape of every wave: recon is five
+parallel reads, produce is one writer per artifact, evaluate is six parallel graders merged into
+a single verdict.
+
+Autonomy is a slider per stage, not a global setting, and it moves with earned trust. Start at
+recon 3, produce 1, grade 2, iterate 1. A stage goes up a level after three clean runs and drops
+back the moment it produces something you had to undo.
+
+The constraint is never generation speed, it is how fast a person can verify. If a wave returns
+more than a screen of output to check, the wave is too big. Split it and run twice. Full detail,
+concurrency caps and the run-summary format in `references/agents.md`.
 
 ## Cost routing
 

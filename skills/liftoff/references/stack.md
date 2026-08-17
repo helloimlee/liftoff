@@ -136,6 +136,24 @@ So the emotional audit runs through `maxq:evaluator` with the target attached, o
 
 `design-critique` is the tiebreaker, not a fourth mandatory gate. Two graders disagreeing tells you more than one grader agreeing with itself.
 
+## Wave structure
+
+Which rows can run at the same time, which cannot, and why.
+
+| Wave | Rows | Concurrency | Model | Default autonomy |
+|---|---|---|---|---|
+| A recon | 0b classify, 1b/1c research, 2c design-system, 1e inspiration, 4c baseline | all at once | cheap | 3, interrupt only on failure |
+| B make | 3 impeccable, 3b ux-copy, 3c copy-editor, 3d/3e render | one writer per artifact | mid, strong orchestrates | 1, surface every result |
+| B' explore | 2 designer, 2b deathmatch | cap 4 | mid | 2 |
+| C grade | 4 evaluator, 4b resonance, 4c a11y, 4d critique, 4e review-animations, 4f motion-gap | all at once | strong for verdicts | 2, merged output |
+
+Reads parallelise safely. Writes do not, and two agents touching one artifact fail later and
+inexplicably rather than immediately. Explore is the one place many agents produce concurrently,
+and it is safe because each produces a separate artifact.
+
+Never route a verdict to a cheaper model. A cheaper grader agrees more, and a grader that agrees
+is not a grader.
+
 ## Ordering rules
 
 Classification runs **before** everything. Track and attachments decide which of these rows are even live this run.

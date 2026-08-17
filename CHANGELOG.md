@@ -6,6 +6,33 @@ and loops until it passes.
 
 ---
 
+## 0.8.0, 17 August
+
+**Agents deploy in waves, on an autonomy slider.**
+
+- Added `references/agents.md`. The governing rule is **fan out reads, serialize writes**.
+  Reads are independent and safe to run concurrently; two agents writing one artifact fail
+  later and inexplicably rather than immediately.
+- **Wave A, recon:** everything classify needs is a read. Live stylesheet, component library,
+  accessibility baseline, research corpus, taste anchors. Five agents, one round trip, cheap
+  model, no approval because nothing is written.
+- **Wave B, make:** one writer per artifact, hard. Workers get a bounded spec rather than a
+  goal, and the unit is capped at what a person can verify in about a minute. Explore is the
+  exception, since a tournament produces separate artifacts.
+- **Wave C, grade:** the biggest win and the one most often missed. Every grader reads the same
+  finished artifact and none depends on another, so all six run concurrently and merge into a
+  single verdict block. Six separate reports is not a result, it is homework.
+- **Autonomy slider per stage**, after Karpathy: 0 propose, 1 surface every result, 2 surface
+  the merged wave, 3 run and interrupt only on failure. Defaults are recon 3, produce 1,
+  grade 2, iterate 1. A stage earns a level after three clean runs and loses one the moment it
+  produces something that had to be undone.
+- The reasoning behind all of it: **generation was never the bottleneck, verification is.** An
+  orchestrator that produces faster than a person can check has not sped anything up, it has
+  moved the queue. So parallelism belongs where verification is free, which is reads, and
+  everywhere else the correct number of agents is the number of results someone will look at.
+- Added a wave table to `stack.md` mapping every registry row to its wave, concurrency cap,
+  model tier, and default autonomy level.
+
 ## 0.7.0, 17 August
 
 **The idea pass, and three gates that should never have needed asking for.**

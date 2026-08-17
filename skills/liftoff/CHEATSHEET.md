@@ -62,6 +62,13 @@ page with a target it can be graded against. The second sentence is the whole di
 - Motion-gap analysis that also rejects things that should not animate
 - Optional second opinion when the verdict is close
 
+### Deploy agents efficiently
+- **Recon runs as one parallel batch**: stylesheet, components, a11y baseline, research,
+  anchors. Cheap model, no approval, nothing written
+- **One writer per artifact**, always. Concurrent writes to one file fail later and confusingly
+- **All six graders run at once** and merge into one verdict block, failures first
+- **Autonomy slider per stage**, 0 to 3, that moves with earned trust rather than preference
+
 ### Hand off
 - Engineering spec on request only: layout, tokens, props, states, breakpoints, edge cases,
   motion
@@ -85,6 +92,8 @@ page with a target it can be graded against. The second sentence is the whole di
 | Ready for engineering | "this is ready for handoff" | spec generated |
 | Check an existing site | "audit this before we touch it" | baseline first |
 | Kill the AI smell | "check this for slop" | ban sweep, though it runs anyway |
+| Keep it on a short leash | "surface every step" | drops produce to autonomy 1 |
+| Let it run | "only stop me on a fail" | raises the wave to autonomy 3 |
 
 ---
 
