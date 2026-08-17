@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liftoff — a design pass that can tell you no</title>
+<meta name="description" content="A Claude skill that runs a design job end to end, then fails it if the work renders correctly and makes nobody feel anything.">
+<meta name="theme-color" content="#080a08">
+<meta property="og:title" content="Liftoff — a design pass that can tell you no">
+<meta property="og:description" content="Most AI design help thinks everything you make is great. This one has a gate.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* read from gomaxq.com's live stylesheet, not invented */
+    --surface-0:#030403; --surface-1:#080a08; --surface-2:#0e100e;
+    --void:#000101;      --border:#292c29;    --border-subtle:#161917;
+    --text:#e0e0e0;      --text-bright:#fff;  --text-muted:#949494; --text-subtle:#a0a0a0;
+    --accent:#5ed276;    --accent-bright:#7ae090; --accent-dim:#3ea85a;
+    --ignition:#f6b32c;  --caution:#daa24f;   --alert:#e2726b;      --red:#ff6568;
+    --display:'Outfit',system-ui,sans-serif;
+    --sans:'Satoshi','Outfit',system-ui,sans-serif;
+    --serif:'Instrument Serif',Georgia,serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --ease:cubic-bezier(.2,.7,.2,1);
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--surface-1);color:var(--text);
+    font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:inherit}
+  ::selection{background:var(--ignition);color:var(--void)}
+  :focus-visible{outline:2px solid var(--accent-bright);outline-offset:3px;border-radius:2px}
+
+  /* ---------- reveal ---------- */
+  .r{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .r.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .r{opacity:1;transform:none;transition:none}
+    *{animation:none!important;transition-duration:.01ms!important}
+  }
+
+  /* ---------- nav ---------- */
+  /* solid, not frosted. the nav sits over a solid ground so a blur would be
+     decoration that decorates nothing, and one more compositing layer. */
+  nav{position:sticky;top:0;z-index:50;background:var(--surface-1);
+      border-bottom:1px solid var(--border-subtle)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+  .mark{font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:var(--text-bright);text-decoration:none}
+  .mark b{color:var(--ignition);font-weight:500}
+  .navlinks{display:flex;gap:26px;align-items:center}
+  .navlinks a{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
+    color:var(--text-muted);text-decoration:none;position:relative;padding:4px 0;transition:color .25s var(--ease)}
+  .navlinks a:hover{color:var(--text-bright)}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+    background:var(--ignition);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+  .navlinks a:hover::after{transform:scaleX(1);transform-origin:left}
+  @media(max-width:620px){.navlinks a:not(.gh){display:none}}
+
+  /* ---------- hero ---------- */
+  header{padding:112px 0 84px;position:relative;overflow:hidden}
+  .field{position:absolute;inset:0;pointer-events:none;opacity:.5}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--ignition);margin:0 0 26px}
+  h1{font-family:var(--display);font-weight:500;font-size:clamp(40px,6.6vw,76px);
+     line-height:1.02;letter-spacing:-.04em;margin:0 0 24px;color:var(--text-bright);max-width:15ch}
+  h1 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--ignition);letter-spacing:-.02em}
+  .sub{font-size:17px;line-height:1.65;color:var(--text-subtle);max-width:52ch;margin:0 0 40px}
+  .sub strong{color:var(--text);font-weight:500}
+
+  /* ---------- install ---------- */
+  .cmd{display:flex;align-items:stretch;gap:0;border:1px solid var(--border);
+       border-radius:6px;background:var(--surface-2);max-width:520px;overflow:hidden;
+       transition:border-color .3s var(--ease),box-shadow .3s var(--ease)}
+  .cmd:hover{border-color:var(--accent-dim);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 8%,transparent)}
+  .cmd code{flex:1;font-family:var(--mono);font-size:13.5px;padding:15px 18px;color:var(--text-bright);
+            white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+  .cmd code::-webkit-scrollbar{display:none}
+  .cmd code i{color:var(--accent-bright);font-style:normal;user-select:none}
+  .copy{border:0;border-left:1px solid var(--border);background:transparent;color:var(--text-muted);
+        font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:0 18px;cursor:pointer;
+        transition:background .25s var(--ease),color .25s var(--ease)}
+  .copy:hover{background:var(--surface-0);color:var(--text-bright)}
+  .copy.done{color:var(--accent-bright)}
+  .undercmd{font-family:var(--mono);font-size:11.5px;color:var(--text-muted);margin:14px 0 0}
+  .undercmd a{color:var(--text-subtle);text-decoration:none;border-bottom:1px solid var(--border);transition:color .25s,border-color .25s}
+  .undercmd a:hover{color:var(--ignition);border-color:var(--ignition)}
+
+  /* ---------- section chrome ---------- */
+  section{padding:88px 0;border-top:1px solid var(--border-subtle)}
+  .lede{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--text-muted);margin:0 0 18px}
+  h2{font-family:var(--display);font-weight:500;font-size:clamp(26px,3.4vw,38px);
+     letter-spacing:-.03em;line-height:1.1;margin:0 0 18px;color:var(--text-bright);max-width:22ch}
+  .body{font-size:16px;color:var(--text-subtle);max-width:56ch;margin:0}
+
+  /* ---------- verdict ---------- */
+  .verdict{margin-top:44px;border:1px solid var(--border);background:var(--surface-2);
+           border-radius:8px;overflow:hidden;max-width:660px}
+  .vhead{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;
+         border-bottom:1px solid var(--border-subtle);font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--text-muted)}
+  .stamp{color:var(--text-muted);transition:color .4s var(--ease)}
+  .stamp.fail{color:var(--red)}
+  .checks{padding:8px 22px 18px}
+  .chk{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:11px 0;
+       font-size:14.5px;color:var(--text-subtle);border-bottom:1px solid var(--border-subtle)}
+  .chk:last-child{border-bottom:0}
+  .chk .v{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--border);
+          transition:color .35s var(--ease),opacity .35s var(--ease);opacity:0}
+  .chk.done .v{opacity:1}
+  .chk.pass .v{color:var(--accent-bright)}
+  .chk.fail .v{color:var(--red)}
+  .chk.fail{color:var(--text-bright)}
+  .vfoot{padding:18px 22px;border-top:1px solid var(--border-subtle);background:var(--surface-0);
+         font-family:var(--mono);font-size:12.5px;line-height:1.75;color:var(--text-muted);
+         opacity:0;transform:translateY(6px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .vfoot.in{opacity:1;transform:none}
+  .vfoot b{color:var(--ignition);font-weight:400}
+
+  /* ---------- loop ---------- */
+  .loop{margin-top:48px;display:grid;gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle)}
+  .step{background:var(--surface-1);padding:26px 24px;display:grid;grid-template-columns:132px 1fr;gap:24px;
+        transition:background .3s var(--ease)}
+  .step:hover{background:var(--surface-2)}
+  .step .t{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ignition);padding-top:3px}
+  .step h3{font-family:var(--display);font-weight:500;font-size:19px;letter-spacing:-.02em;margin:0 0 7px;color:var(--text-bright)}
+  .step p{margin:0;font-size:14.5px;color:var(--text-muted);max-width:58ch}
+  @media(max-width:620px){.step{grid-template-columns:1fr;gap:8px}}
+
+  /* ---------- degrade ---------- */
+  .deg{margin-top:40px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .degrow{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:15px 22px;
+          border-bottom:1px solid var(--border-subtle);font-size:14.5px}
+  .degrow:last-child{border-bottom:0}
+  .degrow span{font-family:var(--mono);font-size:11.5px;color:var(--text-muted);letter-spacing:.06em;text-align:right}
+  .degrow b{font-weight:500;color:var(--text);font-family:var(--mono);font-size:13px}
+  .degnote{margin-top:20px;font-size:14.5px;color:var(--text-muted);max-width:56ch}
+  .degnote b{color:var(--accent-bright);font-weight:500}
+
+  /* ---------- close ---------- */
+  .close{text-align:left}
+  .close h2{max-width:18ch}
+  footer{border-top:1px solid var(--border-subtle);padding:44px 0 60px}
+  .fl{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+      font-family:var(--mono);font-size:11.5px;color:var(--text-muted);letter-spacing:.06em}
+  .fl a{color:var(--text-subtle);text-decoration:none;transition:color .25s var(--ease)}
+  .fl a:hover{color:var(--ignition)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="mark" href="#top">LIFT<b>OFF</b></a>
+    <div class="navlinks">
+      <a href="#verdict">The gate</a>
+      <a href="#loop">The loop</a>
+      <a href="#install">Install</a>
+      <a class="gh" href="https://github.com/MaxQ-studio/liftoff">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header id="top">
+  <canvas class="field" id="field" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <p class="kicker r">A CLAUDE SKILL · MIT · FROM MAXQ</p>
+    <h1 class="r">A design pass that can <em>tell you no.</em></h1>
+    <p class="sub r">Most AI design help is an enthusiastic friend who thinks everything you make is great. Liftoff has a gate where <strong>renders correctly, makes nobody feel anything</strong> counts as a failure, and the run doesn't finish until that's fixed.</p>
+    <div class="r">
+      <div class="cmd">
+        <code><i>$</i> npx skills add MaxQ-studio/liftoff</code>
+        <button class="copy" id="copy1" aria-label="Copy install command">COPY</button>
+      </div>
+      <p class="undercmd">Or <a href="https://github.com/MaxQ-studio/liftoff">clone the repo</a> and run <code style="font-family:var(--mono)">./install.sh</code>. No build step, nothing to configure.</p>
+    </div>
+  </div>
+</header>
+
+<section id="verdict">
+  <div class="wrap">
+    <p class="lede r">THE GATE</p>
+    <h2 class="r">It grades the work against what you said it should feel like.</h2>
+    <p class="body r">Craft and feeling are separate verdicts and both have to pass. A build can be pixel-clean, token-perfect, fully accessible, and still be nothing. That is the failure nobody else checks for.</p>
+
+    <div class="verdict r" id="vcard">
+      <div class="vhead">
+        <span>EVALUATE · RESONANCE AUDIT</span>
+        <span class="stamp" id="stamp">GRADING</span>
+      </div>
+      <div class="checks">
+        <div class="chk" data-v="PASS">Tokens inherited, none invented<span class="v">PASS</span></div>
+        <div class="chk" data-v="PASS">Contrast clears AA at every size<span class="v">PASS</span></div>
+        <div class="chk" data-v="PASS">No side stripes, no gradient text<span class="v">PASS</span></div>
+        <div class="chk" data-v="FAIL">Peak moment produces the target feeling<span class="v">FAIL</span></div>
+      </div>
+      <div class="vfoot" id="vfoot">&gt; three of four passed and the run does not ship.<br>&gt; <b>a flat peak outranks five flat edges.</b> back to stage three.</div>
+    </div>
+  </div>
+</section>
+
+<section id="loop">
+  <div class="wrap">
+    <p class="lede r">THE LOOP</p>
+    <h2 class="r">Four things happen before anything gets built.</h2>
+    <p class="body r">Each one is cheap. Skipping them is what costs the afternoon.</p>
+    <div class="loop r">
+      <div class="step">
+        <div class="t">CLASSIFY</div>
+        <div><h3>Read the room first</h3><p>Interface or static asset, and what you attached. Stated out loud in one line so you can correct it in a sentence instead of at hour three.</p></div>
+      </div>
+      <div class="step">
+        <div class="t">TARGET</div>
+        <div><h3>Name the feeling</h3><p>Three feelings and a peak moment, written down. Without this, "good" means "it renders" and the review is a formality.</p></div>
+      </div>
+      <div class="step">
+        <div class="t">IDEA</div>
+        <div><h3>Say it in one sentence</h3><p>A mechanism, not a mood. If the description could apply to nine other projects, you have a style and not an idea. Two minutes, and it kills the most expensive failure in the loop.</p></div>
+      </div>
+      <div class="step">
+        <div class="t">BUILD · GRADE</div>
+        <div><h3>Read the real stylesheet, then earn the pass</h3><p>Pulls your live tokens before inventing a single value, sweeps the output against known AI tells automatically, and hands the result to fresh eyes that never self-grade.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="chains">
+  <div class="wrap">
+    <p class="lede r">HONEST ABOUT ITSELF</p>
+    <h2 class="r">It chains other skills, and degrades instead of breaking.</h2>
+    <p class="body r">You almost certainly do not have all of these. That is fine and expected. Run <code style="font-family:var(--mono);color:var(--text)">doctor.sh</code> after installing and it prints exactly what you have, what you don't, and what each absence costs you.</p>
+    <div class="deg r">
+      <div class="degrow"><b>resonance</b><span>without it · the gate gets weaker</span></div>
+      <div class="degrow"><b>impeccable</b><span>without it · planning only, nothing gets built</span></div>
+      <div class="degrow"><b>design-deathmatch</b><span>without it · single exploration, no tournament</span></div>
+      <div class="degrow"><b>accessibility-review</b><span>without it · a11y goes unchecked</span></div>
+      <div class="degrow"><b>gsap · threejs · motion</b><span>without them · no timeline motion or 3D</span></div>
+    </div>
+    <p class="degnote r"><b>None of it is required.</b> On its own, Liftoff is still a charter loop with an emotional target and an idea gate, which is most of the value. Missing pieces get skipped and named in the run summary rather than silently dropped.</p>
+  </div>
+</section>
+
+<section class="close" id="install">
+  <div class="wrap">
+    <p class="lede r">GET IT</p>
+    <h2 class="r">One line. Then start a fresh session.</h2>
+    <p class="body r" style="margin-bottom:34px">Skills are read at session start, so the new one shows up next time you open Claude. There is nothing else to set up.</p>
+    <div class="r">
+      <div class="cmd">
+        <code><i>$</i> npx skills add MaxQ-studio/liftoff</code>
+        <button class="copy" id="copy2" aria-label="Copy install command">COPY</button>
+      </div>
+      <p class="undercmd">Prefer git? <a href="https://github.com/MaxQ-studio/liftoff">Clone it</a>, then <code style="font-family:var(--mono)">./install.sh --link</code> so <code style="font-family:var(--mono)">git pull</code> is the whole update. Contributions welcome.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fl">
+    <span>Built at <a href="https://gomaxq.com">MaxQ</a> · MIT</span>
+    <span><a href="https://github.com/MaxQ-studio/liftoff">GitHub</a> · <a href="https://github.com/MaxQ-studio/liftoff/blob/main/skills/liftoff/CHEATSHEET.md">Cheat sheet</a> · <a href="https://github.com/MaxQ-studio/liftoff/blob/main/CONTRIBUTING.md">Contribute</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* reveal on scroll, staggered within a section */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var sib = Array.prototype.filter.call(e.target.parentNode.children, function(n){return n.classList.contains('r');});
+      var i = sib.indexOf(e.target);
+      e.target.style.transitionDelay = reduce ? '0ms' : (Math.min(i,5)*70)+'ms';
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  },{threshold:.15,rootMargin:'0px 0px -60px 0px'});
+  document.querySelectorAll('.r').forEach(function(n){io.observe(n);});
+
+  /* the verdict grades itself, once, when you reach it */
+  var card = document.getElementById('vcard');
+  var vio = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      vio.unobserve(e.target);
+      var chks = card.querySelectorAll('.chk');
+      var step = reduce ? 0 : 420;
+      chks.forEach(function(c,i){
+        setTimeout(function(){
+          c.classList.add('done', c.dataset.v === 'FAIL' ? 'fail' : 'pass');
+        }, i*step);
+      });
+      setTimeout(function(){
+        var s = document.getElementById('stamp');
+        s.textContent = 'FAIL'; s.classList.add('fail');
+        document.getElementById('vfoot').classList.add('in');
+      }, chks.length*step + (reduce?0:180));
+    });
+  },{threshold:.45});
+  vio.observe(card);
+
+  /* copy */
+  function wire(id){
+    var b = document.getElementById(id);
+    if(!b) return;
+    b.addEventListener('click', function(){
+      var txt = b.parentNode.querySelector('code').textContent.replace(/^\s*\$\s*/,'').trim();
+      var done = function(){
+        b.textContent = 'COPIED'; b.classList.add('done');
+        setTimeout(function(){ b.textContent='COPY'; b.classList.remove('done'); }, 1900);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(done, done);
+      } else {
+        var t=document.createElement('textarea'); t.value=txt; document.body.appendChild(t);
+        t.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(t); done();
+      }
+    });
+  }
+  wire('copy1'); wire('copy2');
+
+  /* hero: a pressure field, drawn once. no loop, no cpu burn. */
+  var cv = document.getElementById('field');
+  if(cv){
+    var draw = function(){
+      var p = cv.parentNode, w = p.offsetWidth, h = p.offsetHeight, d = window.devicePixelRatio||1;
+      cv.width = w*d; cv.height = h*d; cv.style.width=w+'px'; cv.style.height=h+'px';
+      var x = cv.getContext('2d'); x.scale(d,d); x.clearRect(0,0,w,h);
+      var STEP=26, cx=w*0.78, cy=h*0.44, R=Math.max(w,h)*0.62;
+      for(var gy=0; gy*STEP<h+STEP; gy++){
+        for(var gx=0; gx*STEP<w+STEP; gx++){
+          var px=gx*STEP+13, py=gy*STEP+13;
+          var dx=(px-cx)/R, dy=(py-cy)/(R*0.72);
+          var t=1-Math.min(Math.sqrt(dx*dx+dy*dy),1);
+          t=Math.pow(t,1.9);
+          if(t<0.06) continue;
+          var r=1+t*4.6;
+          /* hardcoded rgba. color-mix and oklch fail silently in canvas. */
+          x.fillStyle = t>0.80 ? 'rgba(246,179,44,0.62)'
+                      : t>0.52 ? 'rgba(218,162,79,0.42)'
+                      : t>0.28 ? 'rgba(196,80,26,0.30)'
+                               : 'rgba(41,44,41,0.55)';
+          x.beginPath(); x.arc(px,py,r,0,6.2832); x.fill();
+        }
+      }
+    };
+    draw();
+    var to; window.addEventListener('resize', function(){ clearTimeout(to); to=setTimeout(draw,180); });
+  }
+})();
+</script>
+</body>
+</html>
