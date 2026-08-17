@@ -11,7 +11,7 @@ That last part is the point. Most AI design help is an enthusiastic friend who t
 you make is great. Liftoff has a gate where "this renders correctly and makes nobody feel
 anything" counts as a failure, and the run does not finish until that is fixed.
 
-Built at [MaxQ](https://gomaxq.com).
+**[liftoff.gomaxq.com](https://maxq-studio.github.io/liftoff/)** · Built at [MaxQ](https://gomaxq.com).
 
 ---
 
@@ -207,6 +207,15 @@ behaves; adding a step is a one-line edit to its registry table, not a rewrite.
 7. **Iterate** to PASS. **Hand off** only when asked.
 
 ---
+
+
+### Publishing the site
+
+`docs/index.html` is the landing page. To turn it on: **Settings → Pages → Source: Deploy from
+a branch → Branch: `main`, folder: `/docs`**. Live in about a minute at
+`https://<user>.github.io/liftoff/`.
+
+Single file, no build step, no framework. Fonts are the only external request.
 
 ## Contributing
 
