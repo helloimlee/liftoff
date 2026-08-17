@@ -31,6 +31,8 @@ git clone https://github.com/MaxQ-studio/liftoff
 cd liftoff
 ./install.sh                 # copies into ~/.claude/skills/
 ./install.sh --project       # or into ./.claude/skills/ for one project
+./install.sh --link          # symlink, so 'git pull' is the whole update
+./install.sh --check         # are you behind?
 ./install.sh --dry-run       # see what it would do first
 ```
 
@@ -95,6 +97,75 @@ Pulls the 3D, GSAP, and motion skills. Worth knowing: none of those upstream rep
 top-level `SKILL.md`, so cloning them directly into a skills folder silently installs nothing.
 The script resolves each skill by its frontmatter name and installs flat. That is the entire
 reason it exists.
+
+---
+
+---
+
+## Updates, and how they actually work
+
+**Nothing will prompt you.** A skill is just a folder of text files sitting in
+`.claude/skills/`. Installing copies those files onto your machine and the copy has no memory of
+where it came from. Git is a version history, not Dropbox. Nothing is watching, nothing phones
+home, and there is no notification when a new version ships.
+
+So pick how you want to handle that.
+
+### Copy mode (the default)
+
+```bash
+./install.sh
+```
+
+You get a frozen snapshot. It will keep working forever and it will never change on its own.
+To update, come back and pull:
+
+```bash
+git pull && ./install.sh
+```
+
+The old version is moved to a timestamped backup rather than clobbered, so a bad update is one
+`mv` away from being undone. Best for people who just want to use the thing.
+
+### Link mode (recommended if you might contribute)
+
+```bash
+./install.sh --link
+```
+
+This symlinks instead of copying, so the installed skill *is* the repo folder. Now:
+
+```bash
+git pull
+```
+
+That is the entire update. No second step, no reinstall, nothing to remember. Edits you make
+locally are live immediately too, which is what makes this the right mode for Matt, Caitlin,
+or anyone poking at the loop.
+
+### Am I behind?
+
+```bash
+./install.sh --check
+```
+
+Compares what you have installed against what is on GitHub and tells you plainly. Changes
+nothing. This is the closest thing to an update prompt, and it only runs when you run it.
+
+### Getting told when something ships
+
+On GitHub, click **Watch**, then **Custom**, then tick **Releases**. You get an email whenever
+a version is tagged, and nothing the rest of the time. Pair that with `--check` and you have a
+functioning update loop without any infrastructure.
+
+### If you installed with npx
+
+```bash
+npx skills add MaxQ-studio/liftoff
+```
+
+Re-running the same command pulls the current version and overwrites. Same idea, same manual
+trigger.
 
 ---
 
