@@ -6,6 +6,8 @@
 <title>Liftoff — a design pass that can tell you no</title>
 <meta name="description" content="A Claude skill that runs a design job end to end, then fails it if the work renders correctly and makes nobody feel anything.">
 <meta name="theme-color" content="#F2F4F0">
+<!-- Public, but deliberately not indexed yet. Remove this line and docs/robots.txt to open it up. -->
+<meta name="robots" content="noindex, nofollow">
 <meta property="og:title" content="Liftoff — a design pass that can tell you no">
 <meta property="og:description" content="Most AI design help thinks everything you make is great. This one has a gate.">
 <meta property="og:type" content="website">
@@ -205,7 +207,7 @@
     <h2 class="r">Four things happen before anything gets built.</h2>
     <p class="body r">Each one is cheap. Skipping them is what costs the afternoon.</p>
     <div class="loop r">
-      <div class="step"><div class="t">CLASSIFY</div><div><h3>Read the room first</h3><p>Interface or static asset, and what you brought with you. Said out loud in one line so you can correct it in a sentence instead of at hour three.</p></div></div>
+      <div class="step"><div class="t">CLASSIFY</div><div><h3>Read the room first</h3><p>Interface or static asset, and what you brought with you. Reads your <code style="font-family:var(--mono)">AGENTS.md</code>, your live tokens and any video you point at, then says the read out loud in one line so you can correct it in a sentence instead of at hour three.</p></div></div>
       <div class="step"><div class="t">TARGET</div><div><h3>Name the feeling</h3><p>Three feelings and a peak moment, written down. Without this, "good" quietly means "it renders," and the review becomes a formality nobody admits to.</p></div></div>
       <div class="step"><div class="t">IDEA</div><div><h3>Say it in one sentence</h3><p>A mechanism, not a mood. If your description could apply to nine other projects, you have a style and not an idea. Takes two minutes and kills the most expensive failure in the loop.</p></div></div>
       <div class="step"><div class="t">BUILD · GRADE</div><div><h3>Read the real stylesheet, then earn the pass</h3><p>Pulls your live tokens before inventing a single value, sweeps the output for known AI tells without being asked, and hands the result to fresh eyes that never self-grade.</p></div></div>
@@ -221,7 +223,17 @@
     <div class="rel r">
 
       <div class="note">
-        <div class="vtag">0.8.0<span>17 AUG</span><span class="latest">LATEST</span></div>
+        <div class="vtag">0.9.0<span>17 AUG</span><span class="latest">LATEST</span></div>
+        <div>
+          <h3>Learned to watch video, and to read the house rules first</h3>
+          <p>It could read stylesheets, markup, images and research notes. It could not watch a video, which got awkward once it grew opinions about motion. Grading how something moves while refusing to look at anything moving is a strange position to hold.</p>
+          <p>Now it watches. Captions only by default, because captions are free and frames are where the money goes. It reaches for frames when the motion itself is the point.</p>
+          <p>It also reads your <code style="font-family:var(--mono)">AGENTS.md</code> before applying any of its own defaults. <em>Your house, your rules, and it should not need telling twice.</em></p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="vtag">0.8.0<span>17 AUG</span></div>
         <div>
           <h3>Agents learned to take turns</h3>
           <p>Six graders were politely queuing to read the same file one at a time, like it was a single-occupancy bathroom. They all read at once now, finish together, and hand back one verdict instead of six book reports.</p>
@@ -290,6 +302,7 @@
       <div class="degrow"><b>design-deathmatch</b><span>without it · one exploration, no tournament</span></div>
       <div class="degrow"><b>accessibility-review</b><span>without it · a11y goes unchecked</span></div>
       <div class="degrow"><b>gsap · threejs · motion</b><span>without them · no timeline motion or 3D</span></div>
+      <div class="degrow"><b>watch</b><span>without it · video references can't be read</span></div>
     </div>
     <p class="degnote r"><b>None of it is required.</b> On its own, Liftoff is still a charter loop with an emotional target and an idea gate, which is most of the value. Missing pieces get skipped and named in the summary rather than quietly dropped, because a stage that silently didn't run reads exactly like a stage that passed.</p>
   </div>

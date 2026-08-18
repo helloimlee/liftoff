@@ -1,0 +1,4 @@
+# Public but not indexed yet. Delete this file and the noindex meta in
+# index.html when the site is ready to be found.
+User-agent: *
+Disallow: /

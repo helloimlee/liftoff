@@ -217,6 +217,10 @@ a branch → Branch: `main`, folder: `/docs`**. Live in about a minute at
 
 Single file, no build step, no framework. Fonts are the only external request.
 
+**It ships deliberately un-indexed.** There is a `noindex, nofollow` meta tag in `index.html`
+and a `Disallow: /` in `docs/robots.txt`, so the page is publicly reachable by anyone with the
+link but will not turn up in search. Delete both when you want it found.
+
 ## Contributing
 
 Yes please. See [CONTRIBUTING.md](CONTRIBUTING.md). The short version: the bar for adding
