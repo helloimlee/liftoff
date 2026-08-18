@@ -6,6 +6,32 @@ and loops until it passes.
 
 ---
 
+## 0.10.0, 18 August
+
+**It remembers now.**
+
+- Added `references/memory.md`. The longest-standing gap in this skill was that every run
+  rediscovered what the last one learned, and hard-won rules survived only because somebody
+  hand-edited `stack.md`. Closed with a folder: markdown in git, no vector database, no service.
+  Architecture borrowed from the Agentic Design Wiki.
+- **`memory/lessons.md`** joins Wave A recon, so a run starts already knowing what the last ten
+  runs learned. Cheapest high-value read in the set.
+- **`memory/decisions/`** is written at stage 5, and it records the option that lost alongside
+  the one that won. A record holding only winners cannot stop anyone re-litigating in six weeks.
+- **The promotion bar is the whole mechanism:** a note earns permanence when it has cost you
+  something three times, or once expensively. Everything under that stays forgettable, and most
+  observations should be forgotten. Without that filter a lessons file is a junk drawer inside a
+  month.
+- **Liftoff counts, a human decides.** It can spot a repeat and draft the lesson; it never
+  promotes one alone. Memory that writes itself is how a confident mistake becomes a permanent
+  one, and this loop already has enough ways to be wrong quickly.
+- **Rejected from the same repo: the vendored design and content systems.** It ships copies of
+  Material Design's tokens and the Microsoft Style Guide for agents to read, and that is exactly
+  the anti-pattern the produce-stage hard gate exists to prevent. A vendored third-party system
+  is a second source of truth that drifts, and on the day it disagrees with the project's real
+  CSS the local copy wins by being closer to hand. Its own README makes the case for taking the
+  shape and leaving the contents: the schema is the product.
+
 ## 0.9.0, 17 August
 
 **Liftoff can watch video, and reads your project's own rules first.**

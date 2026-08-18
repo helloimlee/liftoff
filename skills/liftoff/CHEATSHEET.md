@@ -43,6 +43,8 @@ page with a target it can be graded against. The second sentence is the whole di
 - **Reads video**: motion references, screen recordings, competitor flows, talks. Transcript
   only by default because it is free; frames only when motion is the point
 - Reads the project's own `AGENTS.md` or `CLAUDE.md` before applying any of its own defaults
+- **Remembers between runs.** Reads what past runs learned, files decisions including the
+  direction that lost, and proposes new lessons once something has cost you three times
 
 ### Explore, only when the direction is open
 - Single exploration for a screen or a direction check
@@ -149,8 +151,8 @@ is worth more than approving two.
 - **The tournament format is not installed everywhere.** Where it is missing the format can be
   run by hand, and the run should say so.
 - **Inspiration sourcing works and has nothing to draw from** until boards get curated.
-- **It has no memory between runs.** Hard-won gotchas live in `references/stack.md` because
-  nothing else carries them forward.
+- **Memory is opt-in and human-confirmed.** It writes to `memory/` and proposes lessons, but
+  never promotes one on its own. Counting is automatic; deciding it is true is not.
 
 ---
 

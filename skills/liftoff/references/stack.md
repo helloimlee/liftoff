@@ -12,6 +12,8 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 | 0b | Classify | inline, no skill | inline | on | First move of every run. Track, then inputs. |
 | 0d | Recon | `AGENTS.md` / `CLAUDE.md` read | inline | on | Wave A. Project conventions, whichever file exists. |
 | 0e | Recon | `watch` | skill | conditional | Wave A. A video is attached or referenced. |
+| 0f | Recon | `memory/lessons.md` | inline | on | Wave A. What past runs learned. Cheapest high-value read there is. |
+| 5b | Record | `memory/decisions/` | inline | on | Stage 5. File the call and the direction that lost. |
 | 1 | Target | `resonance map` | skill | on | Unless PRODUCT.md has a current emotional target |
 | 1a | Idea | idea pass (`references/idea-pass.md`) | inline | on | Every non-mechanical ask. Verbal gate before anything is drawn. |
 | 1b | Input | `research-synthesis` | skill | conditional | A research corpus is attached |
@@ -173,6 +175,34 @@ Evaluation runs **after** the build, against the target from stage 1, with fresh
 Handoff runs **last, and only on request.** It documents a decision, so it needs a decision to document.
 
 ## What we deliberately did not add
+
+### Agentic Design Wiki (evaluated 18 August)
+
+**Taken: the memory architecture.** Liftoff's longest-standing gap was that it had no memory
+between runs. That repo's whole thesis is a compounding markdown knowledge base in git, and it
+answers the gap directly. Three things came across: filed decisions including the option that
+lost, a lessons file with a real promotion criterion, and an append-only log. Plus the ownership
+contract, which matters more than the folder shape: sources are immutable, the loop owns only
+`memory/`, and the schema is human-written. An agent that can rewrite its own inputs will
+eventually launder a guess into a fact. See `references/memory.md`.
+
+The sharpest borrowed idea is the promotion bar. A note earns permanence when it has cost you
+something three times, or once expensively. Everything below that stays forgettable, and most
+observations should be forgotten. Without that filter a lessons file is a junk drawer inside a
+month.
+
+**Left: the vendored content, and this is the interesting rejection.** That repo ships copies of
+Material Design's tokens and the Microsoft Style Guide as markdown for agents to read. For
+liftoff that is precisely the anti-pattern the produce-stage hard gate exists to prevent. A
+vendored third-party system is a second source of truth that drifts, and on the day it disagrees
+with the project's real CSS the local copy wins by being closer to hand. Read the live
+stylesheet. Also skipped its `generate-*` recipes, which are impeccable's ground, and its voice
+and pattern pages, which are what `Brand-Style-Guide.md` and `Reference-Library.md` already hold.
+
+Its own README makes the case for taking the shape and not the contents: *the schema is the
+product, not the contents.*
+
+
 
 ### Video input (evaluated 17 August)
 

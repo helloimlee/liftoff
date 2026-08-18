@@ -39,6 +39,10 @@ row improve-animations  "codebase motion audit"              "no audit entry poi
 echo
 echo "INPUT"
 row watch               "reads video: motion refs, demos"    "video references cannot be read at all"
+echo
+echo "MEMORY"
+if [ -f "$(pwd)/memory/lessons.md" ]; then printf '  \033[32m✓\033[0m %-26s %s\n' "memory/lessons.md" "past runs carry forward"
+else printf '  \033[33m·\033[0m %-26s \033[2mnot started: every run begins from zero\033[0m\n' "memory/lessons.md"; fi
 row gsap-core           "timeline motion"                    "run scripts/install-render-engines.sh"
 row threejs-fundamentals "WebGL 3D"                          "run scripts/install-render-engines.sh"
 echo

@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: The MaxQ full design pass. Use when someone wants a feature, flow, page, or product designed end to end and wants the emotional target, the exploration, the build, and the verification handled as one run rather than assembled by hand. Trigger on "design this properly," "full pass," "the whole treatment," "make this great," "liftoff," or any substantial design request that deserves more than a single skill. Classifies the ask first (product or brand, what is attached, what reference exists), then runs a charter loop: set the target, explore if the direction is unknown, build, then evaluate with fresh eyes and iterate to PASS. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy, or design-system alone when the work is substantial.
-version: 0.9.0
+version: 0.10.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -20,8 +20,9 @@ Read `references/stack.md` first. It is the registry of which skills and agents 
 
 **Fan the recon out first.** Everything classify needs is a read, and reads are independent:
 the project's own `AGENTS.md` or `CLAUDE.md`, the live stylesheet, the existing component
-library, an accessibility baseline, any research corpus, the taste anchors, and any video
-reference via `watch`. Run them concurrently on a cheap model in one round trip. Nothing is
+library, an accessibility baseline, any research corpus, the taste anchors, any video
+reference via `watch`, and `memory/lessons.md`, which is what the last ten runs learned and the
+cheapest high-value read in the set. Run them concurrently on a cheap model in one round trip. Nothing is
 written, so nothing needs approving. Detail in `references/agents.md`.
 
 **Read the room before you write anything.** Classify the ask on two axes, out loud, in one line. If the classification is wrong the user corrects it here, for free.
@@ -136,6 +137,16 @@ it manufactures confidence.
 All required verdicts must pass. A build that renders correctly and misses the feeling is a FAIL, and saying so is the entire point of running this instead of impeccable alone.
 
 ### 5. Iterate
+
+**File the decision.** Whatever direction won, and whatever got killed, goes into
+`memory/decisions/` with the reasoning while it is still in the room. The losing option is the
+part people skip and the part worth most later; a record that holds only winners cannot stop
+anyone re-litigating in six weeks. Full schema in `references/memory.md`.
+
+**Propose promotions, never make them.** When a verdict repeats something already in the log,
+say so and offer to promote it to `memory/lessons.md`. The bar is three occurrences, or one
+expensive one. Liftoff counts; a human decides whether it is true. Memory that writes itself is
+how a confident mistake becomes a permanent one.
 
 Feed failures back to stage 3 and rerun. Fix the peak moment first; a flat peak outranks five flat edges. Stop at PASS on all required verdicts, and report honestly: what was verified, what was skipped, what still fails.
 
