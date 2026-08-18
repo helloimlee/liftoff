@@ -102,8 +102,21 @@ top of that.
 
 ## Cost routing
 
-- **Strong model** orchestrates, and holds evaluate and any gated PASS decision. Those are
-  precisely the judgment calls that get worse when they get cheaper.
+Three tiers, not two. The tiers are the durable part; specific model names are knobs.
+
+- **Orchestrator** owns the hot path: plan, delegate, verify, synthesize. Strong model. It never
+  does worker-level work itself.
+- **Workers** are the cheapest tier that passes verification. Bounded briefs, stateless.
+- **Advisor** is the strongest reasoning model you can reach, and it holds the verdict. Crucially
+  it is **not the orchestrator instance.**
+
+**Why the advisor is separate, and why this was a bug.** Earlier versions had the strong model
+both orchestrating the build and holding the PASS decision. That is self-grading one level up
+from the artifact, and this loop bans self-grading at the artifact level for exactly the reason
+it should ban it here: a session that produced the work finds what it expects to find when it
+grades the work. The orchestrator planned the thing. It is not a fresh pair of eyes on the thing.
+Route the verdict to an instance that did not plan the build, or run it in a fresh session, and
+flag it SELF and unreliable when neither is possible.
 - **Mid model** for bounded production units and tournament personas.
 - **Cheap model** for read-only recon. Wave A is almost entirely this.
 

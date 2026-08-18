@@ -9,6 +9,7 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 | # | Stage | Component | Kind | Status | Runs when |
 |---|---|---|---|---|---|
 | 0 | Context | maxq pack | CLAUDE.md | ambient | Loads every session. Never invoked. |
+| 0a | Echo | `references/echo.md` | inline | on | Before anything. Say back the brief, quarantine your own inferences, wait. |
 | 0b | Classify | inline, no skill | inline | on | First move of every run. Track, then inputs. |
 | 0d | Recon | `AGENTS.md` / `CLAUDE.md` read | inline | on | Wave A. Project conventions, whichever file exists. |
 | 0e | Recon | `watch` | skill | conditional | Wave A. A video is attached or referenced. |
@@ -175,6 +176,39 @@ Evaluation runs **after** the build, against the target from stage 1, with fresh
 Handoff runs **last, and only on request.** It documents a decision, so it needs a decision to document.
 
 ## What we deliberately did not add
+
+### awesome-llm-apps (evaluated 18 August)
+
+A 92MB collection of 100+ agent apps and tutorials, 1,849 files, mostly Python demos. As a whole
+it is a showcase rather than anything this registry wants. Its `agent_skills/` folder holds
+eight skills, and two of them carry mechanisms worth having.
+
+**Taken: the echo,** from `thinking-out-loud`. Its framing is the sharpest thing in the repo:
+*questions verify what the model doubts, an echo verifies what the model believes*, and a
+confident misreading never feels uncertain enough to become a question. Every expensive failure
+this loop has produced came from a confident gap-fill rather than a missing answer. Now a
+mandatory stage 0a. See `references/echo.md`.
+
+**Taken: the advisor tier,** from `advisor-orchestrator-worker`. It splits a model team three
+ways rather than two, with a separate strongest-model advisor holding the verdict and an
+orchestrator that owns the hot path but never grades. Comparing it against `agents.md` exposed a
+real bug in our own design: the strong model was both orchestrating the build and holding the
+PASS decision, which is self-grading one level up from the artifact. This loop bans self-grading
+at the artifact level for precisely that reason. Fixed. We took the tier separation and the
+principle that *models are knobs, tiers are the durable part*, and left the shell-dispatch
+mechanics, which are specific to their CLI.
+
+**Skipped, with reasons:**
+
+- `scope-creep-detector` reads git diffs against a stated intent. Real judgment, but the charter
+  plus evaluate already answers "did this drift from what we agreed," and this version is
+  code-shaped rather than design-shaped.
+- `commit-archaeologist`, `dependency-doctor`, `project-graveyard` are engineering-workflow
+  tools. Genuinely good, not design.
+- `evals` and `self-improving-agent-skills` are directories of tooling and app code rather than
+  skills with their own contract.
+
+
 
 ### Agentic Design Wiki (evaluated 18 August)
 

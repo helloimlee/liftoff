@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: The MaxQ full design pass. Use when someone wants a feature, flow, page, or product designed end to end and wants the emotional target, the exploration, the build, and the verification handled as one run rather than assembled by hand. Trigger on "design this properly," "full pass," "the whole treatment," "make this great," "liftoff," or any substantial design request that deserves more than a single skill. Classifies the ask first (product or brand, what is attached, what reference exists), then runs a charter loop: set the target, explore if the direction is unknown, build, then evaluate with fresh eyes and iterate to PASS. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy, or design-system alone when the work is substantial.
-version: 0.10.0
+version: 0.11.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -24,6 +24,12 @@ library, an accessibility baseline, any research corpus, the taste anchors, any 
 reference via `watch`, and `memory/lessons.md`, which is what the last ten runs learned and the
 cheapest high-value read in the set. Run them concurrently on a cheap model in one round trip. Nothing is
 written, so nothing needs approving. Detail in `references/agents.md`.
+
+**Echo the brief before you touch anything.** Say back what you absorbed, and put every
+inference you made below a hard line labelled as yours. A clarifying question verifies what you
+doubt; the echo verifies what you believe, and confident misreadings never feel uncertain enough
+to become questions. Act on nothing until it comes back answered. Under fifteen lines, skipped
+for small literal asks. Full shape in `references/echo.md`.
 
 **Read the room before you write anything.** Classify the ask on two axes, out loud, in one line. If the classification is wrong the user corrects it here, for free.
 
@@ -170,7 +176,7 @@ concurrency caps and the run-summary format in `references/agents.md`.
 
 ## Cost routing
 
-Orchestrate the loop on the strong model. Fan deathmatch personas and independent exploration out to Sonnet. Send read-only reconnaissance, like reading existing components or tokens, to Haiku. Keep evaluation and the gated PASS decision on the strong model, because those are exactly the judgment calls that get worse when they get cheaper.
+Three tiers. The orchestrator plans and delegates on a strong model, workers run on the cheapest tier that passes verification, and the **advisor holds the verdict on a separate instance that did not plan the build.** An orchestrator grading its own plan is self-grading one level up. Orchestrate the loop on the strong model. Fan deathmatch personas and independent exploration out to Sonnet. Send read-only reconnaissance, like reading existing components or tokens, to Haiku. Keep evaluation and the gated PASS decision on the strong model, because those are exactly the judgment calls that get worse when they get cheaper.
 
 ## When to skip stages
 

@@ -6,6 +6,27 @@ and loops until it passes.
 
 ---
 
+## 0.11.0, 18 August
+
+**Says back what it heard, and stops grading its own homework.**
+
+- Added `references/echo.md` as a mandatory stage 0a. Before touching anything, the loop says
+  back what it absorbed and puts every inference it made below a hard line labelled as its own.
+  Act on nothing until that comes back answered.
+- The framing came from `thinking-out-loud` and it is the sharpest idea borrowed so far:
+  **a clarifying question verifies what the model doubts, an echo verifies what the model
+  believes.** Asking requires felt uncertainty, and confident misreadings feel like knowledge,
+  so the expensive ones never become questions. Every costly failure in this skill's short
+  history came from a confident gap-fill, not a missing answer.
+- **Fixed a bug the comparison exposed.** Cost routing had the strong model both orchestrating
+  the build and holding the PASS decision. That is self-grading one level up from the artifact,
+  which this loop bans at the artifact level for exactly the same reason. Now three tiers:
+  orchestrator owns the hot path and never grades, workers are the cheapest tier that passes
+  verification, and the **advisor holds the verdict on an instance that did not plan the build.**
+- Kept the principle that models are knobs and tiers are the durable part.
+- Skipped the rest of that repo. It is a 92MB tutorial showcase, and its other six skills are
+  engineering-workflow tools or app code rather than design judgment.
+
 ## 0.10.0, 18 August
 
 **It remembers now.**

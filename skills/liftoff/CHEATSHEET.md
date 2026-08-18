@@ -35,6 +35,10 @@ page with a target it can be graded against. The second sentence is the whole di
 - Sends brand work your style guide already answers out a **fast lane**, no full loop
 - Reads what you attached and pulls in the right helpers on its own
 
+### Check itself before it starts
+- **Echoes the brief back** with every inference it made quarantined below a line as its own,
+  then waits. Catches the confident misreadings that never surface as questions
+
 ### Set a target before building
 - **Emotional target**: three feelings and a peak moment, written down and gradeable
 - **Idea pass**: one sentence naming a mechanism, tested four ways, before anything is drawn
@@ -89,6 +93,7 @@ page with a target it can be graded against. The second sentence is the whole di
 | You want | Say this | What runs |
 |---|---|---|
 | A real design pass | "design this properly, it should feel like X" | everything |
+| Make sure it heard you | paste a long messy brief | echo first, acts on nothing until confirmed |
 | Fast brand asset | "make the launch graphic" | fast lane, no loop |
 | Direction unknown | "I don't know which way this should go" | explore stage wakes up |
 | High-stakes direction | "run a deathmatch on this" | tournament format |
