@@ -10,6 +10,8 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 |---|---|---|---|---|---|
 | 0 | Context | maxq pack | CLAUDE.md | ambient | Loads every session. Never invoked. |
 | 0b | Classify | inline, no skill | inline | on | First move of every run. Track, then inputs. |
+| 0d | Recon | `AGENTS.md` / `CLAUDE.md` read | inline | on | Wave A. Project conventions, whichever file exists. |
+| 0e | Recon | `watch` | skill | conditional | Wave A. A video is attached or referenced. |
 | 1 | Target | `resonance map` | skill | on | Unless PRODUCT.md has a current emotional target |
 | 1a | Idea | idea pass (`references/idea-pass.md`) | inline | on | Every non-mechanical ask. Verbal gate before anything is drawn. |
 | 1b | Input | `research-synthesis` | skill | conditional | A research corpus is attached |
@@ -71,6 +73,8 @@ The front door. Two questions, answered out loud in one line, before any work st
 | Motion anywhere in the ask | `motion-design` | With the target, before any engine |
 | 3D or scroll-linked motion | `threejs-*` / `gsap-*` | Inside produce |
 | A curated Pinterest board on the topic | Pinterest via Zapier, `_zap_raw_request` | Before the charter. See `inspiration.md`. |
+| A video: motion ref, screen recording, competitor flow, talk | `watch --detail transcript` | Wave A. Escalate to `balanced` only when motion is the subject. |
+| An `AGENTS.md` or `CLAUDE.md` in the repo | read it first | Wave A. Project conventions outrank inferred ones. |
 
 Getting this wrong is cheap to fix at minute one and expensive to fix at hour three. Say the classification, let it get corrected, then charter.
 
@@ -142,7 +146,7 @@ Which rows can run at the same time, which cannot, and why.
 
 | Wave | Rows | Concurrency | Model | Default autonomy |
 |---|---|---|---|---|
-| A recon | 0b classify, 1b/1c research, 2c design-system, 1e inspiration, 4c baseline | all at once | cheap | 3, interrupt only on failure |
+| A recon | 0b classify, 0d AGENTS.md, 0e watch, 1b/1c research, 2c design-system, 1e inspiration, 4c baseline | all at once | cheap | 3, interrupt only on failure |
 | B make | 3 impeccable, 3b ux-copy, 3c copy-editor, 3d/3e render | one writer per artifact | mid, strong orchestrates | 1, surface every result |
 | B' explore | 2 designer, 2b deathmatch | cap 4 | mid | 2 |
 | C grade | 4 evaluator, 4b resonance, 4c a11y, 4d critique, 4e review-animations, 4f motion-gap | all at once | strong for verdicts | 2, merged output |
@@ -169,6 +173,50 @@ Evaluation runs **after** the build, against the target from stage 1, with fresh
 Handoff runs **last, and only on request.** It documents a decision, so it needs a decision to document.
 
 ## What we deliberately did not add
+
+### Video input (evaluated 17 August)
+
+**Added: `watch`** (`bradautomates/claude-video`, skill name `watch`, v0.2.0, at
+`skills/watch/SKILL.md`). Liftoff could read stylesheets, DOM, images and research text, and
+could not read video at all. That gap became acute the moment the registry gained
+`motion-design`, `apple-design`, `review-animations` and `find-animation-opportunities`: the
+loop can now grade motion but had no way to take a motion reference in. A still screenshot
+cannot anchor how something moves.
+
+Runs in Wave A at `--detail transcript`, which is free, pulls native captions and skips the
+video download entirely. Escalate to `--detail balanced` (scene-aware frames, cap 100) only
+when motion itself is the subject, because frames are where the token cost lives. A Whisper key
+is needed only for videos with no captions; Groq is cheaper, OpenAI is the fallback. Requires
+`yt-dlp` and `ffmpeg`.
+
+**Skipped: `watch-video`** (`Newuxtreme/watch-video-skill`). Its notes-file output is genuinely
+nice, but its own description reads **"SLASH-COMMAND-ONLY. Invoke ONLY when the user explicitly
+types the literal `/watch-video` slash command. Never auto-trigger,"** and it calls itself a
+heavyweight pipeline. Liftoff needs video reading it can invoke itself during recon; a skill
+gated behind a manual command cannot be orchestrated. Its `SKILL.md` also sits at the repo root
+rather than under `skills/`, which breaks the standard install path. And the notes file
+duplicates what `Reference-Library.md` already does.
+
+**On "learn any skillset from video," honestly.** Watching a video and becoming good at the
+thing are different problems. `watch` gives you a transcript and frames, which is ingestion, not
+acquisition. The narrower version is real and worth doing: **motion reference extraction**, where
+a video yields timing, easing and choreography observations in a form `motion-design` can set
+intent from and `gsap-*` can execute against. That is bounded enough to actually work. A general
+"absorb any expertise from video" claim is not, and putting it in the registry would be
+positioning language, which is the exact thing that got Genjutsu rejected.
+
+### AGENTS.md (evaluated 17 August)
+
+Adopted as a **read target, not a dependency.** `AGENTS.md` is the cross-agent convention file
+and it is where a project declares its own rules. Liftoff reading only `CLAUDE.md` made it
+Claude-parochial, which is a bad trait for a skill that now installs into Codex, Cursor and
+anything else supporting the format. Wave A reads whichever exists, and project conventions
+outrank anything liftoff would otherwise infer.
+
+This repo also now ships its own `AGENTS.md` so a contributor's agent knows the conventions
+without being told.
+
+
 
 ### From `emilkowalski/skills` (REQ-121, re-run 17 August)
 

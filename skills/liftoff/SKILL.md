@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: The MaxQ full design pass. Use when someone wants a feature, flow, page, or product designed end to end and wants the emotional target, the exploration, the build, and the verification handled as one run rather than assembled by hand. Trigger on "design this properly," "full pass," "the whole treatment," "make this great," "liftoff," or any substantial design request that deserves more than a single skill. Classifies the ask first (product or brand, what is attached, what reference exists), then runs a charter loop: set the target, explore if the direction is unknown, build, then evaluate with fresh eyes and iterate to PASS. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy, or design-system alone when the work is substantial.
-version: 0.8.0
+version: 0.9.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -19,8 +19,9 @@ Read `references/stack.md` first. It is the registry of which skills and agents 
 ### 1. Charter
 
 **Fan the recon out first.** Everything classify needs is a read, and reads are independent:
-the live stylesheet, the existing component library, an accessibility baseline, any research
-corpus, the taste anchors. Run them concurrently on a cheap model in one round trip. Nothing is
+the project's own `AGENTS.md` or `CLAUDE.md`, the live stylesheet, the existing component
+library, an accessibility baseline, any research corpus, the taste anchors, and any video
+reference via `watch`. Run them concurrently on a cheap model in one round trip. Nothing is
 written, so nothing needs approving. Detail in `references/agents.md`.
 
 **Read the room before you write anything.** Classify the ask on two axes, out loud, in one line. If the classification is wrong the user corrects it here, for free.
@@ -38,6 +39,8 @@ written, so nothing needs approving. Detail in `references/agents.md`.
 - Real UI copy in scope: `ux-copy` runs inside produce.
 - Motion anywhere in the ask: `motion-design` runs with the target, deciding what the movement should feel like before any engine gets involved.
 - A curated Pinterest board on the subject: sync it into `Reference-Library.md` now, not later. See `references/inspiration.md`.
+- A video, whether motion reference, screen recording, competitor flow or a talk: `watch` at `--detail transcript` first, which is free and skips the download. Escalate to `--detail balanced` only when motion itself is the subject, because a still cannot anchor how something moves.
+- An `AGENTS.md` or `CLAUDE.md` in the repo: read it before anything else. The project's own conventions outrank anything this loop would infer.
 
 Then write `charter.md` from `loops/charter-template.md`. Fill the normal fields, then add the emotional target as a required section. If PRODUCT.md already has a current `## Emotional target` block, copy it in. If not, run `resonance map` and write the result into both PRODUCT.md and the charter.
 
