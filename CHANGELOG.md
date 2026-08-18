@@ -6,6 +6,31 @@ and loops until it passes.
 
 ---
 
+## 0.9.0, 17 August
+
+**Liftoff can watch video, and reads your project's own rules first.**
+
+- Added `watch` (`bradautomates/claude-video`) to Wave A recon, conditional. The loop could read
+  stylesheets, DOM, images and research text and could not read video at all. That became a real
+  hole once 0.6.0 added the motion skills: liftoff could grade motion but had no way to take a
+  motion reference in, and a still screenshot cannot anchor how something moves.
+- Defaults to `--detail transcript`, which pulls native captions, skips the video download and
+  costs nothing. Frames are where the tokens go, so `--detail balanced` runs only when motion is
+  itself the subject.
+- **Skipped `watch-video`** (`Newuxtreme/watch-video-skill`), and the reason is instructive: its
+  own description reads SLASH-COMMAND-ONLY, never auto-trigger. Recon has to invoke video reading
+  itself, so a skill gated behind a manual command cannot be orchestrated no matter how good its
+  output is.
+- **Adopted `AGENTS.md`** as a read target. Wave A reads whichever of `AGENTS.md` or `CLAUDE.md`
+  exists, and the project's own conventions outrank anything the loop would infer. Reading only
+  `CLAUDE.md` made this Claude-parochial, which is a poor trait for a skill that installs into
+  Codex, Cursor and every other host supporting the format.
+- This repo now ships its own `AGENTS.md` so a contributor's agent knows the conventions without
+  being told.
+- On record in `stack.md`: "learn any skillset from video" is not a capability this registry will
+  claim. Watching something and becoming good at it are different problems. The bounded, real
+  version is motion reference extraction, and that is worth building next.
+
 ## 0.8.0, 17 August
 
 **Agents deploy in waves, on an autonomy slider.**

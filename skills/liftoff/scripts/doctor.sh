@@ -36,14 +36,17 @@ row apple-design        "gesture, momentum, interruptible"   "touch motion ungui
 row review-animations   "motion craft gate"                  "motion ungraded"
 row find-animation-opportunities "motion-gap analysis"       "missed motion goes unnoticed"
 row improve-animations  "codebase motion audit"              "no audit entry point"
+echo
+echo "INPUT"
+row watch               "reads video: motion refs, demos"    "video references cannot be read at all"
 row gsap-core           "timeline motion"                    "run scripts/install-render-engines.sh"
 row threejs-fundamentals "WebGL 3D"                          "run scripts/install-render-engines.sh"
 echo
 n=0; for s in liftoff resonance impeccable copy-editor design-deathmatch design-critique \
   accessibility-review design-system ux-copy design-handoff user-research research-synthesis \
   motion-design apple-design review-animations find-animation-opportunities improve-animations \
-  gsap-core threejs-fundamentals; do have "$s" && n=$((n+1)); done
-echo "$n of 19 present."
+  gsap-core threejs-fundamentals watch; do have "$s" && n=$((n+1)); done
+echo "$n of 20 present."
 echo
 echo "Nothing here is required. Liftoff degrades, it does not break."
 echo "Missing pieces get skipped and named in the run summary."

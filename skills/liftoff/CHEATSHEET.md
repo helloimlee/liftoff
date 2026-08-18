@@ -40,6 +40,9 @@ page with a target it can be graded against. The second sentence is the whole di
 - **Idea pass**: one sentence naming a mechanism, tested four ways, before anything is drawn
 - Runs research synthesis first when you hand it transcripts or tickets, so the target is
   derived rather than guessed
+- **Reads video**: motion references, screen recordings, competitor flows, talks. Transcript
+  only by default because it is free; frames only when motion is the point
+- Reads the project's own `AGENTS.md` or `CLAUDE.md` before applying any of its own defaults
 
 ### Explore, only when the direction is open
 - Single exploration for a screen or a direction check
@@ -91,6 +94,7 @@ page with a target it can be graded against. The second sentence is the whole di
 | A grade, not a build | "is this any good?" | evaluate only |
 | Ready for engineering | "this is ready for handoff" | spec generated |
 | Check an existing site | "audit this before we touch it" | baseline first |
+| Learn from a video | "watch this and use it as reference" | `watch`, transcript first |
 | Kill the AI smell | "check this for slop" | ban sweep, though it runs anyway |
 | Keep it on a short leash | "surface every step" | drops produce to autonomy 1 |
 | Let it run | "only stop me on a fail" | raises the wave to autonomy 3 |
