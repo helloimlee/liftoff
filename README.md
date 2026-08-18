@@ -11,14 +11,14 @@ That last part is the point. Most AI design help is an enthusiastic friend who t
 you make is great. Liftoff has a gate where "this renders correctly and makes nobody feel
 anything" counts as a failure, and the run does not finish until that is fixed.
 
-**[liftoff.gomaxq.com](https://maxq-studio.github.io/liftoff/)** · Built at [MaxQ](https://gomaxq.com).
+**[liftoff.gomaxq.com](https://helloimlee.github.io/liftoff/)** · Built at [MaxQ](https://gomaxq.com).
 
 ---
 
 ## Install
 
 ```bash
-npx skills add MaxQ-studio/liftoff
+npx skills add helloimlee/liftoff
 ```
 
 That drops `liftoff` into `.claude/skills/` for the current project. Start a fresh session
@@ -27,7 +27,7 @@ afterward; skills are read at session start.
 **Or clone and copy**, which works with any agent:
 
 ```bash
-git clone https://github.com/MaxQ-studio/liftoff
+git clone https://github.com/helloimlee/liftoff
 cd liftoff
 ./install.sh                 # copies into ~/.claude/skills/
 ./install.sh --project       # or into ./.claude/skills/ for one project
@@ -161,7 +161,7 @@ functioning update loop without any infrastructure.
 ### If you installed with npx
 
 ```bash
-npx skills add MaxQ-studio/liftoff
+npx skills add helloimlee/liftoff
 ```
 
 Re-running the same command pulls the current version and overwrites. Same idea, same manual

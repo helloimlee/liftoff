@@ -8,7 +8,7 @@
 #   ./install.sh --dry-run    print what would happen, change nothing
 set -euo pipefail
 
-REPO_RAW="https://raw.githubusercontent.com/MaxQ-studio/liftoff/main/skills/liftoff/SKILL.md"
+REPO_RAW="https://raw.githubusercontent.com/helloimlee/liftoff/main/skills/liftoff/SKILL.md"
 DEST="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 MODE=copy; DRY=0; CHECK=0
 
