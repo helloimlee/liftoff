@@ -1,0 +1,25 @@
+# Render Blueprint. On connect, Render reads this and configures the site itself.
+# Static hosting for docs/index.html. No build step, nothing to install.
+services:
+  - type: web
+    name: liftoff
+    runtime: static
+    staticPublishPath: ./docs
+    pullRequestPreviewsEnabled: true
+    buildCommand: ""
+    headers:
+      # Ships un-indexed on purpose. Delete this header, the noindex meta in
+      # docs/index.html, and docs/robots.txt when the site should be findable.
+      - path: /*
+        name: X-Robots-Tag
+        value: noindex, nofollow
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

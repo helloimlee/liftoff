@@ -217,6 +217,15 @@ a branch → Branch: `main`, folder: `/docs`**. Live in about a minute at
 
 Single file, no build step, no framework. Fonts are the only external request.
 
+### Deploying to Render instead
+
+`render.yaml` is a Blueprint, so Render configures itself. **New → Blueprint → connect this
+repo.** It reads the file, serves `docs/` as a static site, and needs no build command. Pull
+request previews are on.
+
+The `X-Robots-Tag: noindex` header there does the same job as the meta tag, at the edge, for
+crawlers that never parse the HTML.
+
 **It ships deliberately un-indexed.** There is a `noindex, nofollow` meta tag in `index.html`
 and a `Disallow: /` in `docs/robots.txt`, so the page is publicly reachable by anyone with the
 link but will not turn up in search. Delete both when you want it found.
