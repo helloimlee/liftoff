@@ -22,8 +22,9 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 | 1d | Target | `motion-design` | skill | conditional | The surface has motion. Sets timing/easing intent before any engine runs. |
 | 1f | Target | `apple-design` | skill | conditional | Gesture-driven or physical motion: drag, swipe, sheets, momentum, interruptible transitions. |
 | 1e | Input | Pinterest via Zapier | connector | conditional | A curated board exists and the library has no anchors from it. See `inspiration.md`. |
-| 2 | Explore | `maxq:designer` | agent | conditional | Direction unknown. The default explorer. |
-| 2b | Explore | `design-deathmatch` | skill | conditional | Direction unknown AND stakes justify a tournament |
+| 2 | Explore | `/design` | bundled skill | conditional | Direction unknown. The default explorer. Reads the codebase, derives tokens, returns editable artboards. |
+| 2b | Explore | `design-deathmatch` | skill | conditional | Stakes justify a tournament AND the argument matters more than the options |
+| 2b2 | Explore | `maxq:designer` | agent | conditional | Fallback when neither of the above is available |
 | 2c | Context | `design-system` | skill | conditional | A Figma file or existing component library is in play |
 | 3 | Build | `impeccable` | skill | on | Output is an interface |
 | 3b | Voice | `ux-copy` | skill | conditional | The surface has real microcopy: buttons, empty states, errors |
@@ -176,6 +177,38 @@ Evaluation runs **after** the build, against the target from stage 1, with fresh
 Handoff runs **last, and only on request.** It documents a decision, so it needs a decision to document.
 
 ## What we deliberately did not add
+
+### /design, and what it took from this loop (evaluated 18 August)
+
+Anthropic shipped `/design` in Claude Code on 17 August 2026 as a research preview. It analyses
+the codebase, understands the existing visual style, generates design tokens before it designs
+anything, returns editable artboards, and lets you accept or reject individual ideas from the
+CLI.
+
+**It obsoletes the explore stage, and the right response is to hand the stage over rather than
+defend it.** Generating several directions to choose between was `maxq:designer` and
+`design-deathmatch`'s job, and `/design` does it better: natively visual, editable, no render
+step. Retiring a stage that lost is cheaper than maintaining a worse copy of it.
+
+**It also partly overlaps the produce-stage token gate.** "Read the live system before inventing
+a token" was added in 0.7.0 after this loop invented a colour a design system already shipped.
+`/design` deriving tokens from the codebase covers most of that for codebase work. The gate
+stays because it also covers a deployed stylesheet, a brand doc, and non-code surfaces, but its
+scope is narrower now and pretending otherwise would be dishonest.
+
+**What it does not do is decide.** `/design` returns options and a person accepts or rejects
+them. That is judgment by preference. It has no notion of what the work should make someone
+feel, no test for whether there is an idea rather than a style, no sweep for the tells, and no
+memory of what the last ten runs learned. "Best of the six I was just shown" is a relative
+judgment with no outside standard.
+
+The sharpest statement of the split came from a stranger in the comments under the announcement,
+who had never heard of this skill: *knowing the tool will help, but knowing what to approve,
+reject, and change will matter much more.* That is the entire remaining case for this loop.
+`/design` generates. This judges. If the judging half goes unused, `/design` alone is enough and
+this is ceremony.
+
+
 
 ### awesome-llm-apps (evaluated 18 August)
 

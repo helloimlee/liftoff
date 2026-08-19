@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: The MaxQ full design pass. Use when someone wants a feature, flow, page, or product designed end to end and wants the emotional target, the exploration, the build, and the verification handled as one run rather than assembled by hand. Trigger on "design this properly," "full pass," "the whole treatment," "make this great," "liftoff," or any substantial design request that deserves more than a single skill. Classifies the ask first (product or brand, what is attached, what reference exists), then runs a charter loop: set the target, explore if the direction is unknown, build, then evaluate with fresh eyes and iterate to PASS. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy, or design-system alone when the work is substantial.
-version: 0.11.0
+version: 0.12.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -71,14 +71,26 @@ Skip for genuinely mechanical work. A padding fix does not need a thesis.
 
 ### 2. Explore, only if the direction is unknown
 
-Skip this stage when the direction is settled and this is execution. Otherwise pick one:
+Skip this stage when the direction is settled and this is execution.
 
-- **`maxq:designer`** for a single exploration of a screen, landing page, or direction. The default.
-- **`design-deathmatch`** when the stakes justify a tournament: the direction could go several ways, the current design is competent but stuck, the surface is a peak moment or a pitch, or two people have been arguing about direction past the point of usefulness.
+**`/design` is the explorer.** It reads the codebase, derives tokens from the existing visual
+style, and returns editable artboards you can accept or reject individually. That is a better
+exploration than this loop ever produced on its own, and the honest move is to use it rather
+than compete with it.
 
-Either way, pass the three feelings and the peak moment into the brief. A deathmatch without a stated target is four personas competing on taste and a jury grading vibes. With the target loaded, the jury has a real question: which of these makes the user feel the three things?
+- **`design-deathmatch`** only when the stakes justify a tournament and the value is the
+  argument rather than the options: two people stuck on direction, or a peak moment where the
+  losing directions need to be on record with reasons.
+- **`maxq:designer`** as the fallback when neither is installed.
 
-Judge the winner against the target before accepting it. A design can win on craft and still miss the feeling.
+**What this stage still owes, whichever explorer runs.** Pass the three feelings and the peak
+moment into the brief, because an explorer with no stated target returns options and a person
+picking a favourite. Then judge the winner against the target before accepting it.
+
+That last sentence is the whole reason this stage did not disappear. "Best of the options I was
+just shown" is a relative judgment with no outside standard. A design can win the comparison,
+match your tokens, be the strongest of six, and still miss the feeling. Accepting an artboard is
+a preference. Grading it against a written target is a verdict.
 
 ### 3. Produce
 

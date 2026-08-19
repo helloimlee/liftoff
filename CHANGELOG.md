@@ -6,6 +6,30 @@ and loops until it passes.
 
 ---
 
+## 0.12.0, 18 August
+
+**Gave the explore stage away.**
+
+- Anthropic shipped `/design` in Claude Code on 17 August. It reads the codebase, derives tokens
+  from the existing visual style, returns editable artboards, and lets you accept or reject ideas
+  individually.
+- **It is a better explorer than this loop ever had, so it is now the explorer.** `/design` takes
+  the row. `design-deathmatch` drops to conditional, for the case where the argument matters more
+  than the options. `maxq:designer` becomes the fallback. Retiring a stage that lost is cheaper
+  than maintaining a worse copy of it.
+- **Honest concession:** `/design` also partly overlaps the produce-stage token gate added in
+  0.7.0. Deriving tokens from the codebase covers most of what that gate was for on codebase work.
+  It stays, because it also covers deployed stylesheets, brand docs and non-code surfaces, but its
+  scope is genuinely narrower now.
+- **What did not move:** the emotional target, the idea pass, the slop sweep, the memory layer,
+  and the verdict. `/design` returns options and a person picks a favourite, which is judgment by
+  preference. "Best of the six I was just shown" is a relative judgment with no outside standard.
+  A design can win the comparison, match your tokens, and still miss the feeling.
+- The clearest statement of the split came from a stranger commenting under the announcement:
+  knowing the tool will help, but knowing what to approve, reject and change will matter more.
+  That is the remaining case for this loop, and if the judging half goes unused then `/design`
+  alone is enough and this is ceremony.
+
 ## 0.11.0, 18 August
 
 **Says back what it heard, and stops grading its own homework.**
