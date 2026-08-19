@@ -24,6 +24,10 @@ Raises the floor for someone with a point of view; raises nothing for someone wi
 **It cannot rescue a bad target.** A thin brief produces a thin run and every gate downstream will
 confirm the thin target was met.
 
+Put another way, borrowed from a design education practice teaching this exact shift: **speed
+without taste leads to noise, and real impact comes from knowing what good looks like.** Once
+execution is nearly free, directing is the job.
+
 ## How to invoke it
 
 Say any of these and it should pick itself up:
@@ -78,6 +82,7 @@ page with a target it can be graded against. The second sentence is the whole di
 - Craft verdict and a separate **emotional verdict**, both must pass
 - Accessibility as a standing check on anything product track, not a late discovery
 - **Slop sweep** against absolute bans, automatic, not on request
+- **Failures phrased as "stop doing X"**, not "X could be improved". One is a thing to go do
 - Motion craft gate where approval is earned rather than assumed
 - Motion-gap analysis that also rejects things that should not animate
 - Optional second opinion when the verdict is close

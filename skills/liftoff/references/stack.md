@@ -180,6 +180,32 @@ Handoff runs **last, and only on request.** It documents a decision, so it needs
 
 ## What we deliberately did not add
 
+### Design-education research (evaluated 19 August)
+
+A research pass on a design education practice training people through the AI shift. Four things
+taken, the rest left, and the reasons matter more than the count.
+
+**Taken:** *speed without taste leads to noise* as independent corroboration of the judgment
+section, arrived at by people whose business is watching what happens to designers when execution
+gets cheap. Failing checks now lead with a negative imperative, because "stop doing X" is a thing
+to go do and "X could be improved" is a paragraph to interpret. Motion got an actual rule to be
+graded against: movement tells the user what matters more or less right now, so motion decorating
+an already-clear moment is noise. And the classify pass now asks what is actually stuck, not only
+what track this is.
+
+**Left: nine technique anchors** offered for `Reference-Library.md`. The research was gathered by
+sampling keyframes rather than watching playback, and its author rated most of the anchors low or
+medium confidence and said so plainly. Feeding low-confidence anchors into the reference library
+would break the rule the library exists to enforce: anchors are real, specific, verified work, not
+plausible reconstructions. An anchor nobody can vouch for is worse than no anchor, because it gets
+treated as ground truth downstream. If those techniques are wanted, someone watches the videos.
+
+**Also left:** a two-voice grader model, since `resonance` and `accessibility-review` already split
+feel from mechanics and naming it adds a row without adding a mechanism. And the content playbook
+around hooks and verbal signatures, which is audience strategy rather than design judgment.
+
+
+
 ### /design, and what it took from this loop (evaluated 18 August)
 
 Anthropic shipped `/design` in Claude Code on 17 August 2026 as a research preview. It analyses

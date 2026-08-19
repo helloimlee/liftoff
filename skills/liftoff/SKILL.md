@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: One command that runs a design job end to end and can fail it. Bring your own generator: it routes exploration to /design in Claude Code, to Figma when the MCP is connected, or to a tournament when the argument matters more than the options, then grades what comes back against a target you set first. Trigger on "design this properly", "full pass", "the whole treatment", "make this great", "liftoff", or any substantial design request. Two stops only: the target, and the pick. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy or design-system alone.
-version: 0.14.0
+version: 0.15.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -48,6 +48,13 @@ does not know what they want produces confidently wrong work faster than no proc
 loop cannot rescue a bad target. It will execute faithfully toward the wrong feeling and grade
 itself green the whole way.
 
+**Worth knowing this is not a private theory.** A design education practice training designers on
+exactly this shift states it more cleanly than the paragraphs above: *speed without taste leads to
+noise, and real impact comes from knowing what good looks like.* Same conclusion, arrived at
+independently, from people whose whole business is watching what happens to designers when
+execution gets cheap. Their read is that AI did not speed the old process up, it collapsed the
+steps into each other, which moves the scarce skill from producing to directing.
+
 So: this raises the floor for a designer with a point of view, and raises nothing at all for
 someone without one. Generators made options cheap. That moved the scarce skill from making
 things to **knowing what to approve, reject and change**, which is the one part of this that has
@@ -72,7 +79,10 @@ doubt; the echo verifies what you believe, and confident misreadings never feel 
 to become questions. Act on nothing until it comes back answered. Under fifteen lines, skipped
 for small literal asks. Full shape in `references/echo.md`.
 
-**Read the room before you write anything.** Classify the ask on two axes, out loud, in one line. If the classification is wrong the user corrects it here, for free.
+**Read the room before you write anything.** Classify the ask on two axes, out loud, in one line.
+Then ask one more thing that the two axes miss: **what is actually stuck?** Not what track this is,
+but what the person has already tried and where it stalled. A full loop run against a narrow,
+specific blockage is ceremony, and the assessment is what catches that before the ceremony starts. If the classification is wrong the user corrects it here, for free.
 
 **Track.** Product or brand.
 
@@ -208,6 +218,11 @@ quietly drop the requirement. A clean audit on a broken render is worse than no 
 it manufactures confidence.
 
 **`design-critique` is the optional second opinion.** Pull it when the verdict is close, when the surface carries real weight, or when the evaluator passed something that still feels off. Two graders disagreeing is useful information.
+
+**Lead every failing check with a negative imperative.** "Stop burying the CTA below the fold"
+beats "the call-to-action placement could be improved." Same information, but one is a thing to
+go do and the other is a paragraph to interpret. It also matches how the emotional verdict already
+works: blunt, PASS or FAIL, no hedge. Explain after the imperative, never instead of it.
 
 All required verdicts must pass. A build that renders correctly and misses the feeling is a FAIL, and saying so is the entire point of running this instead of impeccable alone.
 

@@ -149,13 +149,16 @@ WAVE B  produce    1 writer · sequential         autonomy 1
 WAVE C  grade      6 graders · parallel          autonomy 2
 
 VERDICT  FAIL
-  ✗ peak moment produces target feeling   the moment carries no consequence
+  ✗ Stop shipping a peak that carries no consequence.
+      the moment renders, resolves, and asks nothing of the reader
   ✓ craft · a11y · slop · motion · gaps
 
 SKIPPED  design-deathmatch (not installed), review-animations (not installed)
 ```
 
-Failures first. Passes collapsed to one line. Skipped components named rather than silently
+Failures first, each led by a negative imperative rather than a description. "Stop shipping a
+peak that carries no consequence" is a thing to go do; "the peak moment could be stronger" is a
+paragraph to interpret. Passes collapsed to one line. Skipped components named rather than silently
 dropped, because a stage that quietly did not run reads exactly like a stage that passed.
 
 ---

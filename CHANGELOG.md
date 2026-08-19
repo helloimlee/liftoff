@@ -6,6 +6,32 @@ and loops until it passes.
 
 ---
 
+## 0.15.0, 19 August
+
+**Failures lead with an imperative, and motion gets a rule.**
+
+- **Every failing check now opens with a negative imperative.** "Stop burying the CTA below the
+  fold" rather than "the call-to-action placement could be improved." Same information, but one is
+  a thing to go do and the other is a paragraph to interpret. It also matches how the emotional
+  verdict already behaves: blunt, no hedge. Explanation comes after the imperative, never instead.
+- **Motion has something specific to fail against.** The rule: movement's job is to tell the user
+  what matters more or less right now. Motion decorating a moment that was already clear is not
+  neutral, it is noise competing with whatever needed the attention. `review-animations` and
+  `find-animation-opportunities` were grading against a vibe before this.
+- **Classify asks one more question:** what is actually stuck. Not what track this is, but what has
+  already been tried and where it stalled. A full loop against a narrow blockage is ceremony, and
+  the assessment catches that before the ceremony starts.
+- **Independent corroboration of the judgment section**, from a design education practice training
+  people through this exact shift: *speed without taste leads to noise, and real impact comes from
+  knowing what good looks like.* Their read is that AI collapsed the steps of the design process
+  into each other rather than speeding them up, which moves the scarce skill from producing to
+  directing. Same conclusion as 0.14.0, reached from a different direction.
+- **Declined nine ready-made reference anchors** offered by the same research. They were gathered by
+  sampling video keyframes rather than watching playback, and their author rated most low or medium
+  confidence and said so plainly. Feeding those into `Reference-Library.md` would break the rule the
+  library exists to enforce. An anchor nobody can vouch for is worse than none, because downstream
+  it gets treated as ground truth anyway.
+
 ## 0.14.0, 18 August
 
 **Named the input this whole thing runs on.**
