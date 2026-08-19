@@ -1,7 +1,7 @@
 ---
 name: liftoff
-description: The MaxQ full design pass. Use when someone wants a feature, flow, page, or product designed end to end and wants the emotional target, the exploration, the build, and the verification handled as one run rather than assembled by hand. Trigger on "design this properly," "full pass," "the whole treatment," "make this great," "liftoff," or any substantial design request that deserves more than a single skill. Classifies the ask first (product or brand, what is attached, what reference exists), then runs a charter loop: set the target, explore if the direction is unknown, build, then evaluate with fresh eyes and iterate to PASS. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy, or design-system alone when the work is substantial.
-version: 0.12.0
+description: One command that runs a design job end to end and can fail it. Bring your own generator: it routes exploration to /design in Claude Code, to Figma when the MCP is connected, or to a tournament when the argument matters more than the options, then grades what comes back against a target you set first. Trigger on "design this properly", "full pass", "the whole treatment", "make this great", "liftoff", or any substantial design request. Two stops only: the target, and the pick. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy or design-system alone.
+version: 0.13.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -10,7 +10,21 @@ The full MaxQ design pass, run as a charter loop.
 
 ## What this is
 
-Liftoff is not a new orchestrator. It is a **specialized charter** for design work, running the loop already established in the maxq pack: write the charter, produce, evaluate, iterate to PASS. What liftoff adds is the emotional target as a first-class gate, so "done" means something more specific than "it renders," and a classify pass up front, so the right sub-skills come along without anyone assembling them by hand.
+**Generators improve. Standards do not obsolete.** `/design` shipped on 17 August 2026 and took
+this loop's explore stage in a day. That is the right outcome and it points at where the durable
+value actually sits: a better generator makes the target, the idea gate, the verdict and the
+accumulated lessons *more* useful, not less, because the faster options arrive the more the
+bottleneck moves to knowing which one is right.
+
+So liftoff does not compete with a generator. **It decides what good means before anything is
+made, and whether it landed after.** Bring your own generator.
+
+That is also why it cannot live inside one surface. `/design` is Claude Code only. Figma work
+runs through the Figma MCP wherever it is connected. The loop routes exploration to whatever is
+present and degrades cleanly when nothing is.
+
+**One command, two stops.** The target and the pick. Everything else runs without asking. Full
+sequence in `references/run.md`.
 
 Read `references/stack.md` first. It is the registry of which skills and agents are in the pass and when each runs. Skip anything marked `off` or not installed, and name what you skipped. A missing skill degrades the pass; it never breaks it.
 
@@ -91,6 +105,22 @@ That last sentence is the whole reason this stage did not disappear. "Best of th
 just shown" is a relative judgment with no outside standard. A design can win the comparison,
 match your tokens, be the strongest of six, and still miss the feeling. Accepting an artboard is
 a preference. Grading it against a written target is a verdict.
+
+### 2b. Score the set
+
+Grade every option against the target *before* the user looks at them. Ranked, each with one line
+on what it does to the peak moment and what it costs.
+
+This is what changes an option set into a decision. Six artboards is a menu. Six artboards with a
+target and a score each is a decision with its reasoning attached.
+
+Keep it fast and shallow: does it serve the peak moment, does it produce an anti-feeling, does it
+carry the idea or only the style. Craft, accessibility and slop are not assessed here; they are
+cheap to fix and would drown the signal.
+
+**Then stop.** The user picks. Scores inform and never decide. If they pick the one ranked third,
+that is information about the target, not about their taste, and the target gets revisited rather
+than the choice overruled.
 
 ### 3. Produce
 

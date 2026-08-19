@@ -6,6 +6,33 @@ and loops until it passes.
 
 ---
 
+## 0.13.0, 18 August
+
+**Reframed around the thing that does not obsolete.**
+
+- Losing the explore stage to `/design` in a single day was clarifying rather than painful.
+  **Generators improve; standards do not obsolete.** A better generator makes the target, the
+  idea gate, the verdict and the accumulated lessons *more* useful, because the faster options
+  arrive the more the bottleneck moves to knowing which one is right.
+- So liftoff no longer pretends to be a generator. It decides what good means before anything is
+  made, and whether it landed after. **Bring your own generator.**
+- **Exploration routes by surface.** `/design` in Claude Code. Direct writes to the canvas when
+  the Figma MCP is connected. `design-deathmatch` when the argument matters more than the
+  options. A single exploration when none of those exist. This is also why the loop cannot live
+  inside Claude Code: real work happens in Figma too, and the next generator will land somewhere
+  else again.
+- **New step: score the set.** Every option graded against the target *before* the user looks,
+  ranked, one line each on what it does to the peak moment. Six artboards is a menu. Six with a
+  target and a score is a decision with the reasoning attached. Deliberately shallow, since
+  craft and accessibility are cheap to fix and would drown the signal.
+- **Two stops, and only two.** The target and the pick. They are the places where being wrong is
+  expensive and correcting is cheap. Stopping more often trains people to skim, and a skimmed
+  checkpoint manufactures agreement. These two do not move with the autonomy slider, because
+  they are not about whether the loop is reliable. They are about whether it is aimed correctly.
+- If the user picks the option ranked third, that is information about the target, not about
+  their taste. The target gets revisited; the choice does not get overruled.
+- Full sequence in `references/run.md`.
+
 ## 0.12.0, 18 August
 
 **Gave the explore stage away.**

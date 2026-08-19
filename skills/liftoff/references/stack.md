@@ -22,10 +22,12 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 | 1d | Target | `motion-design` | skill | conditional | The surface has motion. Sets timing/easing intent before any engine runs. |
 | 1f | Target | `apple-design` | skill | conditional | Gesture-driven or physical motion: drag, swipe, sheets, momentum, interruptible transitions. |
 | 1e | Input | Pinterest via Zapier | connector | conditional | A curated board exists and the library has no anchors from it. See `inspiration.md`. |
-| 2 | Explore | `/design` | bundled skill | conditional | Direction unknown. The default explorer. Reads the codebase, derives tokens, returns editable artboards. |
+| 2 | Explore | `/design` | bundled skill | conditional | Claude Code only. Reads the codebase, derives tokens, returns editable artboards. |
+| 2a | Explore | Figma MCP write | connector | conditional | Figma connected. The loop writes real boards to a real canvas. |
 | 2b | Explore | `design-deathmatch` | skill | conditional | Stakes justify a tournament AND the argument matters more than the options |
 | 2b2 | Explore | `maxq:designer` | agent | conditional | Fallback when neither of the above is available |
 | 2c | Context | `design-system` | skill | conditional | A Figma file or existing component library is in play |
+| 2d | Score | inline, against the target | inline | on | Whenever an explorer returned more than one option. Ranked before the user looks. |
 | 3 | Build | `impeccable` | skill | on | Output is an interface |
 | 3b | Voice | `ux-copy` | skill | conditional | The surface has real microcopy: buttons, empty states, errors |
 | 3c | Voice | `copy-editor` | skill | on | Any stage producing prose |

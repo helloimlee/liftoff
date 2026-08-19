@@ -1,11 +1,15 @@
 # Liftoff
 
-A design pass that can tell you no.
+Bring your own generator.
 
-Liftoff runs a design job end to end. It decides what the work should make someone feel, checks
-there is an idea and not just a style, explores if the direction is open, builds, then hands the
-result to fresh eyes that grade it against the original target and fail it if the feeling did
-not land.
+Generators keep improving. `/design` shipped in August 2026 and made a whole stage of this
+obsolete in a day. Liftoff is the part that does not change when the tools do: **it decides what
+good means before anything is made, and whether it landed after.**
+
+It routes exploring to whatever you have. `/design` in Claude Code, the Figma canvas when that
+MCP is connected, a tournament when the argument matters more than the options. Then it scores
+what comes back against the target before you look, builds the one you pick, and grades it with
+fresh eyes that can fail it.
 
 That last part is the point. Most AI design help is an enthusiastic friend who thinks everything
 you make is great. Liftoff has a gate where "this renders correctly and makes nobody feel

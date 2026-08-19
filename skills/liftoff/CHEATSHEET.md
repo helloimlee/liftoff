@@ -6,10 +6,12 @@ v0.7.0. What it does, what to say to get it, and when not to bother.
 
 ## The one-liner
 
-Liftoff runs a design job end to end and can tell you no. It sets what the work should make
-someone feel, checks there is an idea and not just a style, explores if the direction is open,
-builds, then hands the result to fresh eyes that grade it against the original target and fail
-it if the feeling did not land.
+Liftoff decides what good means before anything is made, and whether it landed after.
+**Bring your own generator.** It routes exploring to `/design` in Claude Code, to Figma when that
+is connected, or to a tournament when the argument matters more than the options, then scores what
+comes back against a target you set first.
+
+One command. Two stops: the target, and the pick. Everything else runs without asking.
 
 ---
 
