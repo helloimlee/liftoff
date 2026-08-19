@@ -56,6 +56,9 @@ page with a target it can be graded against. The second sentence is the whole di
 
 ### Set a target before building
 - **Emotional target**: three feelings and a peak moment, written down and gradeable
+- **A charter with fixed headings**: track, surface, constraints, definition of done, target,
+  direction, stakes, attachments, anchors. Nine fields, matched literally, because everything
+  downstream reads them and a missing one gets filled in with a guess that reads like a read
 - **Idea pass**: one sentence naming a mechanism, tested four ways, before anything is drawn
 - Runs research synthesis first when you hand it transcripts or tickets, so the target is
   derived rather than guessed
@@ -83,6 +86,9 @@ page with a target it can be graded against. The second sentence is the whole di
 - Accessibility as a standing check on anything product track, not a late discovery
 - **Slop sweep** against absolute bans, automatic, not on request
 - **Failures phrased as "stop doing X"**, not "X could be improved". One is a thing to go do
+- **Ordered by damage, not by ease**, and worked in that order on the way back
+- **The grader cannot see how it was built**, and does not go looking. Build notes live outside
+  the folder it is handed, because a grader who reads the reasoning agrees with the reasoning
 - Motion craft gate where approval is earned rather than assumed
 - Motion-gap analysis that also rejects things that should not animate
 - Optional second opinion when the verdict is close
@@ -162,8 +168,11 @@ is worth more than approving two.
 ## Known limits, plainly
 
 - **It cannot always see its own output.** When the render path is down it will verify structure
-  and say the visual check did not run. Structure passing is not the design being good. When it
-  says this, you are the evaluator.
+  and say the visual check did not run. That verdict is UNVERIFIED, which is neither a pass nor a
+  fail, and it does not trigger another build round. Structure passing is not the design being
+  good. When it says this, you are the evaluator.
+- **It stops after three rounds** whether or not it has a PASS, and hands back what still fails
+  plus a read on whether the target or the surface is the real problem. Deciding that is yours.
 - **Render engines need installing.** 3D, scroll motion, and Lottie are registered but not
   present by default. Script is in `scripts/`.
 - **Escalation runs one direction.** A large ask that mentions accessibility can still land in

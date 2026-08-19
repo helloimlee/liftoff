@@ -83,12 +83,23 @@ engines only if the surface needs them.
 
 ### 5 · Deep grade
 All graders at once on the finished thing, merged into one verdict block: craft, emotional audit,
-accessibility, slop sweep, motion craft, motion gaps. Failures first, each with a one-line reason
-and the exact file or node.
+accessibility, slop sweep, motion craft, motion gaps. Failures first, ordered by damage, each with
+a one-line reason and the exact file or node.
+
+Graders get the charter and the artifact and nothing about how the artifact was made. That is why
+the build log lives outside the artifact folder rather than beside it. If the thing cannot be
+rendered the verdict is UNVERIFIED, which is not a fail and does not start another build round.
 
 ### 6 · Iterate to PASS, then record
-Fix the peak moment first. On PASS, file the decision and the options that lost into
-`memory/decisions/`, and propose any lesson that has now cost you three times.
+Revise the prior artifact rather than rebuilding it, carrying the failure list across word for
+word. Fix the peak moment first, and work the rest in the order given, which is by damage rather
+than by ease.
+
+**Three rounds, then it stops** and hands back what still fails with a read on whether the target
+or the surface is the actual problem. A fourth round is usually the loop arguing with itself.
+
+On PASS, file the decision and the options that lost into `memory/decisions/`, and propose any
+lesson that has now cost you three times.
 
 ---
 

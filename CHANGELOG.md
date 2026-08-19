@@ -6,6 +6,43 @@ and loops until it passes.
 
 ---
 
+## 0.16.0, 19 August
+
+**Wrote down the thing every stage was already assuming.**
+
+- **The charter has a schema now.** Nine headings, matched literally: track, surface, constraints,
+  definition of done, emotional target, direction, stakes, attachments, anchors. Every stage
+  downstream was already asserting fields on this file. Nothing specified it. The instruction was
+  "write `charter.md` from `loops/charter-template.md`, fill the normal fields," against a template
+  that is not in this repo and may not be in yours.
+- **Two of those fields exist only because this stopped being one context.** Surface and definition
+  of done used to live in the conversation, back when whoever set the target and whoever built were
+  the same reader. A grader that cannot see the request has to be told what was asked for. A stage
+  that cannot find a field does not stop and ask; it fills the gap with a guess that reads exactly
+  like a read, which is the expensive version of this failure.
+- **The build log moved out of the artifact folder.** Fresh eyes was enforced in the prompt and
+  nowhere else, which means it held right up until a grader ran `ls` on the folder it was handed.
+  Reasoning now lives at `rounds/NN/build-log.md` and output at `rounds/NN/artifact/`, one level
+  apart. A grader who reads why a choice was made is agreeing with the choice, not grading it, and
+  no amount of instruction survives the reasoning being sat right there.
+- **Contamination refuses the round** instead of grading it with a caveat. A PASS with an asterisk
+  is indistinguishable from a PASS once it is three days old and someone is quoting it.
+- **UNVERIFIED is a third verdict**, not a soft FAIL. The render broke, so nothing was seen. It does
+  not send anything back to be rebuilt. Fix the render path and grade the same artifact again,
+  because sending a builder off to change things nobody has managed to look at is how a screenshot
+  bug turns into a redesign.
+- **Failing rounds revise rather than rebuild**, carrying the previous artifact forward with the
+  failure list word for word. Paraphrasing a failure is how a fix drifts into a redesign, and a
+  clean rebuild against the same charter reproduces whatever the charter did not say the first time.
+- **Three rounds, then it stops** whether or not it has a PASS. Each round is graded by something
+  that cannot be told what the last grader wanted, which is deliberate and also means the verdicts
+  do not converge on their own; a fourth round is usually the loop arguing with itself. It hands
+  back what still fails and a read on whether the target or the surface is the real problem, and
+  that call belongs to a person, same as the other two.
+- **Explorers get their own output slots.** Four running at once with no slots all write
+  `index.html` to the same place and quietly overwrite each other, and the one you lose is not
+  reliably the one that lost.
+
 ## 0.15.0, 19 August
 
 **Failures lead with an imperative, and motion gets a rule.**

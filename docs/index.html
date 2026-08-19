@@ -212,7 +212,7 @@
       <div class="step"><div class="t">TARGET · IDEA</div><div><h3>Three feelings, and one sentence</h3><p>What this should make someone feel, and the mechanism behind it. A mood is not an idea. If your description could apply to nine other projects, you have a style.</p><p style="margin-top:10px;color:var(--gold-ink)"><b>Stop 1.</b> You confirm the target. Everything downstream is graded against it.</p></div></div>
       <div class="step"><div class="t">EXPLORE</div><div><h3>Whatever generator you have</h3><p><code style="font-family:var(--mono)">/design</code> in Claude Code. Real boards on a real canvas when Figma is connected. A tournament when the argument matters more than the options. Skipped entirely when the direction is already settled.</p></div></div>
       <div class="step"><div class="t">SCORE</div><div><h3>Ranked before you look</h3><p>Every option graded against the target, with one line each on what it does to the peak moment. Six artboards is a menu. Six with a target and a score is a decision.</p><p style="margin-top:10px;color:var(--gold-ink)"><b>Stop 2.</b> You pick. The scores inform, they never decide.</p></div></div>
-      <div class="step"><div class="t">BUILD · GRADE</div><div><h3>Then earn the pass</h3><p>Builds the pick with your real tokens, then all six graders run at once and merge into one verdict. Craft, feeling, accessibility, AI tells, motion. Failures first, and any one of them can send it back.</p></div></div>
+      <div class="step"><div class="t">BUILD · GRADE</div><div><h3>Then earn the pass</h3><p>Builds the pick with your real tokens, then all six graders run at once and merge into one verdict. Craft, feeling, accessibility, AI tells, motion. Failures first, ordered by damage, and any one of them can send it back.</p><p style="margin-top:10px">Fixes revise what's there rather than rebuilding it, and after three rounds it stops whether or not it passed and tells you what still fails.</p></div></div>
     </div>
   </div>
 </section>
@@ -225,7 +225,17 @@
     <div class="rel r">
 
       <div class="note">
-        <div class="vtag">0.15.0<span>19 AUG</span><span class="latest">LATEST</span></div>
+        <div class="vtag">0.16.0<span>19 AUG</span><span class="latest">LATEST</span></div>
+        <div>
+          <h3>Wrote down what every step was already assuming</h3>
+          <p>The charter is the one file every later step reads, and it never had a shape. The instruction was "fill the normal fields" against a template that isn't in the repo. So a step that couldn't find a field didn't stop and ask &mdash; it filled the gap with a guess that reads exactly like a read. Nine required headings now, matched literally.</p>
+          <p>The grader also stopped being able to see how the work was made. That was always the rule, but it was only ever written in the instructions, which holds right up until the grader runs <code style="font-family:var(--mono)">ls</code> on the folder you handed it. Build notes moved one level up. <em>A grader who reads why you did it is agreeing with you, not grading you.</em></p>
+          <p>And it stops after three rounds whether it passed or not, then hands back what still fails plus a read on whether the target or the thing itself is the real problem. Each round is graded by something that can't be told what the last grader wanted, which is the point, and which also means the verdicts don't converge on their own. A fourth round is usually the loop arguing with itself.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="vtag">0.15.0<span>19 AUG</span></div>
         <div>
           <h3>Failures now start with "stop"</h3>
           <p>A verdict that reads "the call-to-action placement could be improved" is a paragraph to interpret. "Stop burying the CTA below the fold" is a thing to go do. Every failing check leads with the imperative now, explanation after.</p>

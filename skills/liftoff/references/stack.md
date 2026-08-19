@@ -146,6 +146,20 @@ So the emotional audit runs through `maxq:evaluator` with the target attached, o
 
 `design-critique` is the tiebreaker, not a fourth mandatory gate. Two graders disagreeing tells you more than one grader agreeing with itself.
 
+**Fresh eyes is a filesystem property, not a promise.** A grader gets the charter and the artifact
+folder. It does not get the build log or the losing directions, and it does not list the parent
+folder, glob for notes, or read `git log` looking for them. This is why wave B writes its log to
+`rounds/NN/build-log.md` and its output to `rounds/NN/artifact/`, one level apart. Put the
+reasoning next to the output and the grader reads the reasoning, at which point it is agreeing
+rather than grading, and no instruction in the prompt survives that.
+
+If reasoning reaches a grader anyway, the round is refused rather than graded with a note. A
+contaminated PASS is worse than no verdict because it is indistinguishable from a real one.
+
+**UNVERIFIED is a third verdict.** The artifact could not be rendered, so nothing was seen. It is
+not a FAIL and does not send anything back to wave B. Fix the render path and grade the same
+artifact again.
+
 ## Wave structure
 
 Which rows can run at the same time, which cannot, and why.
@@ -175,6 +189,12 @@ The target loads **before** exploration and build. Impeccable reads PRODUCT.md d
 Design system checks run **during** the build. Catching a token violation after the interface is finished means rework; catching it during means a different variable name.
 
 Evaluation runs **after** the build, against the target from stage 1, with fresh eyes. An audit with no stated target is an opinion. An audit by the author is a formality.
+
+Iteration runs **between** evaluation and PASS, revising the prior artifact rather than rebuilding
+it, and **stops after three rounds** whether or not it has passed. The cap is not a budget nicety.
+Each round is graded by something that cannot be told what the last grader wanted, which is the
+point, and which also means an uncapped loop can oscillate instead of converging. At three it goes
+back to a person with what still fails.
 
 Handoff runs **last, and only on request.** It documents a decision, so it needs a decision to document.
 

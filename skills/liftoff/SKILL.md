@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: One command that runs a design job end to end and can fail it. Bring your own generator: it routes exploration to /design in Claude Code, to Figma when the MCP is connected, or to a tournament when the argument matters more than the options, then grades what comes back against a target you set first. Trigger on "design this properly", "full pass", "the whole treatment", "make this great", "liftoff", or any substantial design request. Two stops only: the target, and the pick. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy or design-system alone.
-version: 0.15.0
+version: 0.16.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -100,7 +100,51 @@ specific blockage is ceremony, and the assessment is what catches that before th
 - A video, whether motion reference, screen recording, competitor flow or a talk: `watch` at `--detail transcript` first, which is free and skips the download. Escalate to `--detail balanced` only when motion itself is the subject, because a still cannot anchor how something moves.
 - An `AGENTS.md` or `CLAUDE.md` in the repo: read it before anything else. The project's own conventions outrank anything this loop would infer.
 
-Then write `charter.md` from `loops/charter-template.md`. Fill the normal fields, then add the emotional target as a required section. If PRODUCT.md already has a current `## Emotional target` block, copy it in. If not, run `resonance map` and write the result into both PRODUCT.md and the charter.
+### 1a. The charter, and where the run lives
+
+`charter.md` is the only thing that crosses between stages, so it carries every field a later
+stage will assert on it. **These headings are matched literally.** Renaming one is how a stage
+starts inferring instead of reading.
+
+```
+## Track                product | brand-document
+## Surface              what is being designed, specific enough to build from: which screen,
+                        which states, which breakpoints. "The onboarding" is not a surface.
+## Constraints          stack, components that must be reused, what must not change
+## Definition of done   what the deep grade holds the normal verdict against
+## Emotional target     three feelings, one peak moment
+## Direction            settled | unknown. Settled skips explore.
+## Stakes               routine | high. High is what buys a tournament, and it is rare.
+## Attachments          what is on the table, including any accessibility baseline
+## Anchors              absolute paths to the taste anchors and the real tokens
+```
+
+If PRODUCT.md already has a current `## Emotional target` block, copy it in. If not, run
+`resonance map` and write the result into both PRODUCT.md and the charter.
+
+**Write the fields out even when the template is missing.** Earlier versions pointed at
+`loops/charter-template.md` and assumed it would be there. A stage that cannot find its template
+does not stop. It improvises a charter with three of the nine fields, and every later stage
+fills the gaps with guesses that read exactly like reads.
+
+Two of those fields exist only because this stopped being one context. `## Surface` and
+`## Definition of done` used to live in the conversation, where whoever set the target and
+whoever built were the same reader. They are written down now because a grader who cannot see
+the request has to be told what was asked for, and a builder who cannot see the grade has to be
+told what it will be held to.
+
+**One directory per run**, so every path handed to a later stage resolves from anywhere:
+
+```
+.liftoff/<slug>/charter.md, anchors.md
+.liftoff/<slug>/rounds/NN/artifact/       what gets graded
+.liftoff/<slug>/rounds/NN/build-log.md    how it got built. Never inside artifact/.
+.liftoff/<slug>/rounds/NN/explore/01..04  one slot per competing direction
+```
+
+Four concurrent explorers given no slots all write `index.html` to the same place and quietly
+overwrite each other. The build log sitting one level up is structural rather than tidy, for
+the reason in evaluate.
 
 Confirm the three feelings and the peak moment with the user before producing anything. This is the cheapest moment to disagree and the most expensive one to skip.
 
@@ -196,6 +240,19 @@ Emotional verdict: PASS | FAIL
 - No mechanic on the ethics refuse list
 ```
 
+**Blindness has to hold on the filesystem, not only in the prompt.** The grader gets the
+charter and the artifact directory. It does not get the build log, the note about what the
+builder already knew was weak, the losing directions, or the previous round's verdict, and it
+does not go and fetch them either: no listing the parent directory, no globbing for notes, no
+`git log` or `git diff`. That is the whole reason the build log lives one level up. A grader
+told to be impartial and handed a folder containing the builder's reasoning will read the
+reasoning, and knowing why a choice was made is exactly the knowledge that makes a grader agree
+with it.
+
+If reasoning arrives anyway, refuse the round and say what arrived. Do not grade around it and
+mention the contamination afterwards. A contaminated verdict that reports PASS is worse than no
+verdict, because it gets believed.
+
 **`accessibility-review` runs as a standing sub-check on anything product track.** WCAG 2.1 AA: contrast, keyboard path, target size, screen reader behavior. Not a stage, not optional, not a thing we discover at handoff.
 
 **Render the artifact and look at it.** A structural check is not an evaluation. Fills, counts, and hierarchy can all be correct while the output is visibly broken, because the common failures are silent defaults rather than thrown errors (see the production rules in `stack.md`). If the screenshot pipeline is unavailable, say the visual check did not run rather than passing on structure alone.
@@ -216,6 +273,10 @@ produces slop is reflex and reflex does not announce itself.
 and say plainly that the visual check did not run. Do not pass on structure alone and do not
 quietly drop the requirement. A clean audit on a broken render is worse than no audit, because
 it manufactures confidence.
+
+That verdict is **UNVERIFIED**, which is a third state and not a soft FAIL. Do not spend a build
+round on it. Fix the render path and grade the same artifact again. Sending a builder off to
+change things nobody has managed to look at is how a render bug turns into a redesign.
 
 **`design-critique` is the optional second opinion.** Pull it when the verdict is close, when the surface carries real weight, or when the evaluator passed something that still feels off. Two graders disagreeing is useful information.
 
@@ -238,7 +299,23 @@ say so and offer to promote it to `memory/lessons.md`. The bar is three occurren
 expensive one. Liftoff counts; a human decides whether it is true. Memory that writes itself is
 how a confident mistake becomes a permanent one.
 
-Feed failures back to stage 3 and rerun. Fix the peak moment first; a flat peak outranks five flat edges. Stop at PASS on all required verdicts, and report honestly: what was verified, what was skipped, what still fails.
+**Revise, do not rebuild.** A failing round carries the prior artifact forward together with the
+failure list **verbatim**. Paraphrasing a failure is how a fix drifts into a redesign, and a
+fresh build against the same charter will faithfully reproduce whatever the charter did not say
+the first time.
+
+**Work the failures in the order given**, which is by damage and not by ease. A round that
+clears three cheap items and reports progress has handed back the same flat peak with tidier
+edges. Fix the peak moment first; a flat peak outranks five flat edges.
+
+**Three rounds, then stop and bring it to a person.** Not a budget nicety. A grader that did not
+see the last round cannot be told what the last grader wanted, which is deliberate, and which
+also means a fourth round is usually the loop arguing with itself rather than the work getting
+better. At three, report what passed, what still fails, and whether the target or the surface is
+the actual problem. That last one is a judgment call, and judgment is the input this runs on
+rather than something it produces.
+
+Stop at PASS on all required verdicts, and report honestly: what was verified, what was skipped, what still fails.
 
 ### 6. Hand off, only when asked
 
