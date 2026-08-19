@@ -102,6 +102,15 @@ Stopping more often trains people to skim the checkpoints, and a skimmed checkpo
 none because it manufactures agreement. Stopping less means discovering at the deep grade that
 the target was wrong three stages ago.
 
+Both stops are also the two moments the loop is structurally unqualified to handle. It can rank
+options against a target; it cannot tell you the target was the wrong thing to want. It can
+report that the peak moment is flat; it cannot decide that flat is correct here because the
+surface is a settings page and drama would be wrong. Those are judgment, and judgment is the
+input this whole thing runs on rather than something it produces.
+
+Everything the loop knows about good was put there by a person. If the target is thin, the run
+is thin, and every downstream gate will faithfully confirm the thin target was met.
+
 Autonomy per wave stays on the slider in `agents.md`: recon at 3, produce at 1 until trusted,
 grade at 2. The two stops here are hard and do not move with trust, because they are not about
 whether the loop is reliable. They are about whether it is aimed correctly, and only a person

@@ -15,6 +15,15 @@ One command. Two stops: the target, and the pick. Everything else runs without a
 
 ---
 
+## Who it is for
+
+It has no taste. Everything it knows about good came from a designer, and both stops in the run
+belong to a person. A FAIL is not the tool having an opinion, it is the tool holding you to yours.
+Raises the floor for someone with a point of view; raises nothing for someone without one.
+
+**It cannot rescue a bad target.** A thin brief produces a thin run and every gate downstream will
+confirm the thin target was met.
+
 ## How to invoke it
 
 Say any of these and it should pick itself up:

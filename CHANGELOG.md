@@ -6,6 +6,29 @@ and loops until it passes.
 
 ---
 
+## 0.14.0, 18 August
+
+**Named the input this whole thing runs on.**
+
+- "Bring your own generator" was quietly assuming a person who knows what to bring. Now stated
+  outright: **liftoff has no taste.** Everything it knows about good came from a designer. The
+  three feelings, the idea sentence, the reference images, the real tokens, the lessons that
+  earned their place by costing someone an afternoon. Remove the person and what remains is a
+  confident measuring instrument pointed at nothing.
+- A FAIL is not the loop having an opinion. It is the loop holding you to yours, consistently, at
+  4pm on a Friday when you would rather it did not.
+- Both stops belong to a person and do not move, because they are the two moments the loop is
+  structurally unqualified to handle. It can rank options against a target; it cannot tell you the
+  target was the wrong thing to want. It can report a flat peak; it cannot decide flat is correct
+  here because this is a settings page and drama would be wrong.
+- **Failure mode on the record:** this can become a way to feel rigorous without being rigorous.
+  Run the loop, collect a PASS, mistake the PASS for judgment rather than proof that judgment was
+  applied consistently. A thin target produces a thin run, and every downstream gate will
+  faithfully confirm the thin target was met.
+- It raises the floor for a designer with a point of view and raises nothing for someone without
+  one. Generators made options cheap, which moved the scarce skill from making things to knowing
+  what to approve, reject and change.
+
 ## 0.13.0, 18 August
 
 **Reframed around the thing that does not obsolete.**

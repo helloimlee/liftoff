@@ -11,6 +11,11 @@ MCP is connected, a tournament when the argument matters more than the options. 
 what comes back against the target before you look, builds the one you pick, and grades it with
 fresh eyes that can fail it.
 
+**It has no taste of its own.** Everything it knows about good was put there by a designer, and
+the two stops in the run belong to a person and never move. A FAIL is not the tool having an
+opinion; it is the tool holding you to yours. This raises the floor for someone with a point of
+view and raises nothing for someone without one.
+
 That last part is the point. Most AI design help is an enthusiastic friend who thinks everything
 you make is great. Liftoff has a gate where "this renders correctly and makes nobody feel
 anything" counts as a failure, and the run does not finish until that is fixed.

@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: One command that runs a design job end to end and can fail it. Bring your own generator: it routes exploration to /design in Claude Code, to Figma when the MCP is connected, or to a tournament when the argument matters more than the options, then grades what comes back against a target you set first. Trigger on "design this properly", "full pass", "the whole treatment", "make this great", "liftoff", or any substantial design request. Two stops only: the target, and the pick. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy or design-system alone.
-version: 0.13.0
+version: 0.14.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -25,6 +25,33 @@ present and degrades cleanly when nothing is.
 
 **One command, two stops.** The target and the pick. Everything else runs without asking. Full
 sequence in `references/run.md`.
+
+## Who this is for
+
+**Liftoff has no taste.** Everything it knows about good came from a person: the three feelings,
+the idea sentence, the reference images, the real tokens, the lessons that earned their place by
+costing something. Strip the designer out and what remains is a confident measuring instrument
+pointed at nothing.
+
+That is the design, not a limitation to apologise for. A FAIL is not the loop having an opinion.
+It is the loop holding you to yours, consistently, at 4pm on a Friday when you would rather it
+did not.
+
+Which is why the two stops belong to a person and never move. Max q is the moment the instruments
+report peak structural stress. They do not decide whether to throttle down. That is the pilot,
+and it always was.
+
+**The failure mode worth naming out loud:** this can become a way to feel rigorous without being
+rigorous. Someone runs the loop, gets a PASS, and treats the PASS as the judgment rather than as
+confirmation that their own judgment was applied consistently. A target written by someone who
+does not know what they want produces confidently wrong work faster than no process at all. The
+loop cannot rescue a bad target. It will execute faithfully toward the wrong feeling and grade
+itself green the whole way.
+
+So: this raises the floor for a designer with a point of view, and raises nothing at all for
+someone without one. Generators made options cheap. That moved the scarce skill from making
+things to **knowing what to approve, reject and change**, which is the one part of this that has
+never been automatable and is not close to becoming so.
 
 Read `references/stack.md` first. It is the registry of which skills and agents are in the pass and when each runs. Skip anything marked `off` or not installed, and name what you skipped. A missing skill degrades the pass; it never breaks it.
 
