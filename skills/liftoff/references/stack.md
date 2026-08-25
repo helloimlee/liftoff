@@ -44,6 +44,7 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 | 4e | Evaluate | `review-animations` | skill | conditional | The surface has motion. Craft gate: approval is earned. |
 | 4f | Evaluate | `find-animation-opportunities` | skill | conditional | Motion-gap pass. Finds what should animate and rejects what should not. |
 | 4g | Evaluate | prose-slop sweep (`references/prose-tells.md`) | inline | on | Any human-facing copy in the artifact. Automatic, clusters not single hits. |
+| 4h | Evaluate | `make-interfaces-feel-better` | skill | conditional | Output is an interface. Detail sweep in `quick` mode after impeccable; `full` mode when the ask is itself a polish pass. Its motion numbers yield to the project's motion doc. |
 | 5 | Handoff | `design-handoff` | skill | conditional | The ask is explicitly "ready for engineering" |
 | 0c | Audit | `improve-animations` | skill | conditional | Entry point for an existing codebase: prioritized motion audit, read-only. |
 
@@ -466,6 +467,29 @@ per-skill flag on that command, so either accept all ten and rely on the registr
 runs, or copy the four wanted folders out by hand. Three of them
 (`review-animations`, `prototype`, `pick-ui-library`) ship `disable-model-invocation: true` and
 only run when named.
+
+### make-interfaces-feel-better (REQ-155, 25 August)
+
+**Added: `make-interfaces-feel-better`** (`jakubkrehel/make-interfaces-feel-better`, MIT, at
+`skills/make-interfaces-feel-better/SKILL.md`). Nineteen concrete interface-detail
+prescriptions with exact values — concentric radii (outer = inner + padding), tabular numbers,
+`text-wrap: balance`/`pretty`, font smoothing, optical alignment, 44px hit areas,
+`scale(0.96)` on press, pure-neutral `oklch` image outlines — plus a review protocol with
+evidence tables, severity levels, a considered-but-rejected section, and a verdict.
+
+It passes the test `emil-design-eng` and Genjutsu failed. Those were skipped as a philosophy
+of UI polish, impeccable's exact ground with a looser checklist. This is a mechanism: named
+checks with numbers attached and a reviewable output format, neither of which impeccable
+carries. It runs at 4h as an evaluate-stage sweep, `quick` mode by default so it reports only
+HIGH and MEDIUM findings and stays out of impeccable's way; `full` mode is for asks that are
+themselves polish passes.
+
+**The override that comes with it, same precedent as REQ-121:** its motion prescriptions
+(~100ms staggers, 0.3s springs, exact icon cross-fade values) are defaults, not law. Where a
+project ships a motion doc — `motion-intent.md`, or a stated deliberate timing like Rooster's
+560ms — the project doc wins, and a finding that contradicts it is noise, not a finding.
+
+Install: `npx skills add jakubkrehel/make-interfaces-feel-better`.
 
 
 

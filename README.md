@@ -136,8 +136,10 @@ To update, come back and pull:
 git pull && ./install.sh
 ```
 
-The old version is moved to a timestamped backup rather than clobbered, so a bad update is one
-`mv` away from being undone. Best for people who just want to use the thing.
+The old version is moved to a timestamped backup in `~/.claude/backups/` rather than clobbered,
+so a bad update is one `mv` away from being undone. Backups live outside `skills/` on purpose:
+a backup left in the live directory gets loaded as a second installed skill. Best for people
+who just want to use the thing.
 
 ### Link mode (recommended if you might contribute)
 

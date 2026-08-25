@@ -82,12 +82,16 @@ done
 [ $DRY -eq 1 ] && { echo "(dry run, nothing written)"; exit 0; }
 
 STAMP="$(date +%Y%m%d%H%M%S)"
+# Backups go outside the live directories. Anything left under skills/ or agents/
+# is loaded as a second live copy with a stale description, not a backup.
+BAK_DIR="$(dirname "$DEST")/backups"
 mkdir -p "$DEST"
 if [ -e "$DEST/$NAME" ] || [ -L "$DEST/$NAME" ]; then
   if [ -L "$DEST/$NAME" ]; then
     rm "$DEST/$NAME"; echo "replaced existing symlink"
   else
-    BAK="$DEST/$NAME.backup.$STAMP"
+    BAK="$BAK_DIR/$NAME.backup.$STAMP"
+    mkdir -p "$BAK_DIR"
     mv "$DEST/$NAME" "$BAK"; echo "previous install moved to $BAK"
   fi
 fi
@@ -109,7 +113,8 @@ if [ $AGENT_N -gt 0 ]; then
     if [ -L "$target" ]; then
       rm "$target"
     elif [ -e "$target" ]; then
-      mv "$target" "$target.backup.$STAMP"; echo "previous $base moved to $base.backup.$STAMP"
+      mkdir -p "$BAK_DIR"
+      mv "$target" "$BAK_DIR/$base.backup.$STAMP"; echo "previous $base moved to $BAK_DIR/$base.backup.$STAMP"
     fi
     if [ "$MODE" = link ]; then ln -s "$f" "$target"; else cp "$f" "$target"; fi
   done

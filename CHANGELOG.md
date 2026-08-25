@@ -6,6 +6,25 @@ and loops until it passes.
 
 ---
 
+## 0.18.1, 25 August
+
+**Backups stop being live installs, and the stack learns nineteen small details.**
+
+- **`install.sh` moves backups out of the live directories.** The old behavior left
+  `liftoff.backup.<stamp>` inside `~/.claude/skills/`, where Claude Code loads it as a second
+  installed skill with a stale trigger description — and where preflight's first real run
+  recorded it as a duplicate `liftoff` entry, which is how this was found, about an hour after
+  0.18.0 shipped. Backups (skill and agents both) now land in `~/.claude/backups/`, or the
+  sibling `backups/` of whatever directory `--project` or `CLAUDE_SKILLS_DIR` targets. The
+  restore is still one `mv`.
+- **`make-interfaces-feel-better` joins the registry at 4h** (REQ-155,
+  `jakubkrehel/make-interfaces-feel-better`): nineteen interface-detail prescriptions with
+  exact values and a review protocol with evidence tables and a verdict. It passes the test
+  `emil-design-eng` and Genjutsu failed — a mechanism impeccable lacks, not a philosophy it
+  already holds — and runs as an evaluate-stage sweep in `quick` mode so it stays out of
+  impeccable's way. Its motion numbers (~100ms staggers, 0.3s springs) yield to the project's
+  motion doc, same override precedent as REQ-121.
+
 ## 0.18.0, 25 August
 
 **The agents come home, and get reconciled on the way in.**
