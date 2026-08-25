@@ -21,21 +21,30 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 | 1c | Input | `user-research` | skill | conditional | The decision needs research that does not exist yet |
 | 1d | Target | `motion-design` | skill | conditional | The surface has motion. Sets timing/easing intent before any engine runs. |
 | 1f | Target | `apple-design` | skill | conditional | Gesture-driven or physical motion: drag, swipe, sheets, momentum, interruptible transitions. |
-| 1e | Input | Pinterest via Zapier | connector | conditional | A curated board exists and the library has no anchors from it. See `inspiration.md`. |
-| 2 | Explore | `maxq:designer` | agent | conditional | Direction unknown. The default explorer. |
-| 2b | Explore | `design-deathmatch` | skill | conditional | Direction unknown AND stakes justify a tournament |
+| 1e | Input | Pinterest via Zapier | connector | conditional | A curated board exists and the library has no anchors from it. See `inspiration.md`. Anchors may carry prompt blocks per `anchor-prompts.md`. |
+| 0g | Recon | style extraction (`references/style-extract.md`) | inline | conditional | Wave A. Anything shipping into an existing visual system. Feeds the charter's anchors. |
+| 2e | Run | `liftoff-runner` | agent | on | Owns stage 2 and 3 execution against a written charter. Missing means those stages run inline from this file. |
+| 2 | Explore | `/design` | bundled skill | conditional | Claude Code only. Reads the codebase, derives tokens, returns editable artboards. |
+| 2a | Explore | Figma MCP write | connector | conditional | Figma connected. The loop writes real boards to a real canvas. |
+| 2b | Explore | `design-deathmatch` | skill | conditional | Stakes justify a tournament AND the argument matters more than the options |
+| 2b2 | Explore | `maxq:designer` | agent | conditional | Fallback when neither of the above is available |
+| 2b3 | Explore | `liftoff-persona` | agent | conditional | Tournament fan-out, four in parallel, only when a tournament is warranted and `design-deathmatch` is not installed |
 | 2c | Context | `design-system` | skill | conditional | A Figma file or existing component library is in play |
+| 2d | Score | inline, against the target | inline | on | Whenever an explorer returned more than one option. Ranked before the user looks. Never the runner's. |
 | 3 | Build | `impeccable` | skill | on | Output is an interface |
 | 3b | Voice | `ux-copy` | skill | conditional | The surface has real microcopy: buttons, empty states, errors |
 | 3c | Voice | `copy-editor` | skill | on | Any stage producing prose |
 | 3d | Render | `threejs-*` (10 skills) | skill | conditional | True WebGL 3D is in the ask |
 | 3e | Render | `gsap-*` (8 skills) | skill | conditional | Timeline or scroll-triggered motion on DOM/SVG |
-| 4 | Evaluate | `maxq:evaluator` | agent | on | Always. Fresh eyes, renders it, never self-grades. |
+| 4 | Evaluate | `liftoff-evaluator` | agent | on | Always. Gets the charter and the artifact and nothing else, renders it, holds every stage-4 verdict. |
+| 4a | Evaluate | `maxq:evaluator` | agent | conditional | Fallback when `liftoff-evaluator` is not installed. Different context, still fresh eyes. |
 | 4b | Evaluate | `resonance audit` | skill | on | Always, alongside the evaluator |
 | 4c | Evaluate | `accessibility-review` | skill | on | Always on product track. WCAG 2.1 AA. |
 | 4d | Evaluate | `design-critique` | skill | conditional | Close verdict, high-stakes surface, or a pass that still feels off |
 | 4e | Evaluate | `review-animations` | skill | conditional | The surface has motion. Craft gate: approval is earned. |
 | 4f | Evaluate | `find-animation-opportunities` | skill | conditional | Motion-gap pass. Finds what should animate and rejects what should not. |
+| 4g | Evaluate | prose-slop sweep (`references/prose-tells.md`) | inline | on | Any human-facing copy in the artifact. Automatic, clusters not single hits. |
+| 4h | Evaluate | `make-interfaces-feel-better` | skill | conditional | Output is an interface. Detail sweep in `quick` mode after impeccable; `full` mode when the ask is itself a polish pass. Its motion numbers yield to the project's motion doc. |
 | 5 | Handoff | `design-handoff` | skill | conditional | The ask is explicitly "ready for engineering" |
 | 0c | Audit | `improve-animations` | skill | conditional | Entry point for an existing codebase: prioritized motion audit, read-only. |
 
@@ -62,7 +71,7 @@ Matt's open proposal, from #readysend on 2026-07-21 and still unbuilt: extend th
 
 The front door. Two questions, answered out loud in one line, before any work starts.
 
-**Question 1: product or brand.** Product track means the output is an interface someone operates, and the full loop runs. Brand track means the output is a static asset, and it usually should not be here at all: if `Brand-Style-Guide.md`, `Reference-Library.md`, and `Layout-System.md` answer the question, apply them, run the token verification, and stop. That is the fast lane. Only assets that need real exploration come back to liftoff, in document mode, which keeps the target and the resonance audit and drops `impeccable` and `maxq:evaluator`.
+**Question 1: product or brand.** Product track means the output is an interface someone operates, and the full loop runs. Brand track means the output is a static asset, and it usually should not be here at all: if `Brand-Style-Guide.md`, `Reference-Library.md`, and `Layout-System.md` answer the question, apply them, run the token verification, and stop. That is the fast lane. Only assets that need real exploration come back to liftoff, in document mode, which keeps the target and the resonance audit and drops `impeccable` and the evaluator.
 
 **Question 2: what is on the table.** The attachments decide the conditional rows in the registry.
 
@@ -91,13 +100,23 @@ The overlap question it has to survive: resonance already sets emotional targets
 
 ## Stage 2: which explorer
 
-**`maxq:designer`** is the default. One exploration, fast, good for a screen, a landing page, or a direction check.
+`liftoff-runner` executes this stage, and the routing question comes before the explorer
+question. **If the value is the argument rather than the options, it is a tournament whatever
+surface you are standing on.** Otherwise route to whatever is present: `/design` in Claude Code,
+the Figma canvas where that MCP is connected, `maxq:designer` as the fallback when neither is.
+One exploration is fast and right for a screen, a landing page, or a direction check.
 
 **`design-deathmatch`** is the heavy option: four personas build and evolve competing designs, a jury critiques the field, a synthesis pass steals the best verified moves into a fifth iteration, and the PLAYBOOK improves each run. Expensive in time and tokens, so it earns its slot rather than getting it by default.
 
 Run the deathmatch when the direction could genuinely go several ways, when a competent design is stuck in the "fine but boring" diagnosis, when the surface carries real weight like a peak moment or a pitch, or when two people have been arguing about direction past the point of usefulness.
 
 Skip it when the direction is settled, the change is small, or an existing design system already answers the question.
+
+**Where `design-deathmatch` is not installed, the tournament runs on this repo's own machinery.**
+Four `liftoff-persona` agents spawned in one message, one output slot each, briefs written by the
+runner before it spawns anything. Same shape, no accumulated playbook, and it depends on a
+subagent being able to spawn subagents in the environment you are in. Test that once rather than
+discovering it mid-tournament.
 
 ### Why the target comes first
 
@@ -139,9 +158,30 @@ The pattern across all three: the failure is invisible at write time and only sh
 
 The pack's evaluator rule is not decoration. A session that produced the work will find what it expects to find when it grades the work.
 
-So the emotional audit runs through `maxq:evaluator` with the target attached, or in a fresh session. If neither is possible, run it anyway and flag the verdict as SELF and unreliable. The evaluator's normal verdict, the emotional verdict, and the accessibility check must all pass on product track. A build that renders correctly and misses the feeling is a FAIL.
+So stage 4 runs through `liftoff-evaluator`, which gets the charter and the artifact and nothing
+else, and holds every verdict the stage requires: normal, emotional, accessibility, the visual
+slop sweep, the prose sweep, and motion where the surface has any. Where that agent is not
+installed, `maxq:evaluator` takes the row instead: a different context is not a purpose-built
+grader, but it is still not the context that built the thing. Where neither is available, run the
+checks inline, flag the verdict SELF and unreliable, and say so in the run summary. All required
+verdicts must pass on product track. A build that renders correctly and misses the feeling is a
+FAIL.
 
 `design-critique` is the tiebreaker, not a fourth mandatory gate. Two graders disagreeing tells you more than one grader agreeing with itself.
+
+**Fresh eyes is a filesystem property, not a promise.** A grader gets the charter and the artifact
+folder. It does not get the build log or the losing directions, and it does not list the parent
+folder, glob for notes, or read `git log` looking for them. This is why wave B writes its log to
+`rounds/NN/build-log.md` and its output to `rounds/NN/artifact/`, one level apart. Put the
+reasoning next to the output and the grader reads the reasoning, at which point it is agreeing
+rather than grading, and no instruction in the prompt survives that.
+
+If reasoning reaches a grader anyway, the round is refused rather than graded with a note. A
+contaminated PASS is worse than no verdict because it is indistinguishable from a real one.
+
+**UNVERIFIED is a third verdict.** The artifact could not be rendered, so nothing was seen. It is
+not a FAIL and does not send anything back to wave B. Fix the render path and grade the same
+artifact again.
 
 ## Wave structure
 
@@ -149,10 +189,10 @@ Which rows can run at the same time, which cannot, and why.
 
 | Wave | Rows | Concurrency | Model | Default autonomy |
 |---|---|---|---|---|
-| A recon | 0b classify, 0d AGENTS.md, 0e watch, 1b/1c research, 2c design-system, 1e inspiration, 4c baseline | all at once | cheap | 3, interrupt only on failure |
-| B make | 3 impeccable, 3b ux-copy, 3c copy-editor, 3d/3e render | one writer per artifact | mid, strong orchestrates | 1, surface every result |
-| B' explore | 2 designer, 2b deathmatch | cap 4 | mid | 2 |
-| C grade | 4 evaluator, 4b resonance, 4c a11y, 4d critique, 4e review-animations, 4f motion-gap | all at once | strong for verdicts | 2, merged output |
+| A recon | 0b classify, 0d AGENTS.md, 0e watch, 0g style extraction, 1b/1c research, 2c design-system, 1e inspiration, 4c baseline | all at once | cheap | 3, interrupt only on failure |
+| B make | 2e runner orchestrating 3 impeccable, 3b ux-copy, 3c copy-editor, 3d/3e render | one writer per artifact | mid, strong orchestrates | 1, surface every result |
+| B' explore | 2 `/design`, 2a Figma, 2b deathmatch, 2b2 designer, 2b3 personas | cap 4 | mid | 2 |
+| C grade | 4 liftoff-evaluator holding 4b resonance, 4c a11y, 4d critique, 4e review-animations, 4f motion-gap, 4g prose sweep | all at once | strong for verdicts | 2, merged output |
 
 Reads parallelise safely. Writes do not, and two agents touching one artifact fail later and
 inexplicably rather than immediately. Explore is the one place many agents produce concurrently,
@@ -160,6 +200,33 @@ and it is safe because each produces a separate artifact.
 
 Never route a verdict to a cheaper model. A cheaper grader agrees more, and a grader that agrees
 is not a grader.
+
+### Who owns which stage
+
+Three named agents and the skill itself, split along the rule everything else here is split
+along: whoever made a thing does not get to say whether it is good.
+
+**The skill** owns the conversation and both stops. It classifies, writes the charter, runs the
+idea pass, scores the option set at row 2d, holds the pick, and decides whether to spend another
+round. None of that is delegable, because all of it is either talking to a person or asking one
+to decide.
+
+**`liftoff-runner`** owns execution of waves B and B'. It routes exploration, writes the briefs
+when the tournament runs on liftoff's own personas, produces the artifact, and keeps its
+reasoning in `rounds/NN/build-log.md`, one level up from the output. It hands the field back
+unscored. It commissioned those options, so a ranking from it is the builder grading the build
+one step removed, which is the same failure as self-grading wearing a different hat.
+
+**`liftoff-persona`** owns one slot in wave B' and nothing else. It sees its own brief, the
+target, the anchors and its own output directory, and it never sees the other three.
+
+**`liftoff-evaluator`** owns wave C. It gets the charter and the artifact directory, renders the
+thing, looks at it, and returns one merged verdict block. It does not read the build log, and it
+refuses the round rather than grading around reasoning that arrived anyway.
+
+The seam that matters is between the runner and the evaluator, and it is a filesystem fact rather
+than an instruction: separate contexts, separate directories, and the build log deliberately out
+of reach.
 
 ## Ordering rules
 
@@ -173,9 +240,94 @@ Design system checks run **during** the build. Catching a token violation after 
 
 Evaluation runs **after** the build, against the target from stage 1, with fresh eyes. An audit with no stated target is an opinion. An audit by the author is a formality.
 
+Iteration runs **between** evaluation and PASS, revising the prior artifact rather than rebuilding
+it, and **stops after three rounds** whether or not it has passed. The cap is not a budget nicety.
+Each round is graded by something that cannot be told what the last grader wanted, which is the
+point, and which also means an uncapped loop can oscillate instead of converging. At three it goes
+back to a person with what still fails.
+
 Handoff runs **last, and only on request.** It documents a decision, so it needs a decision to document.
 
+## Taken from the Resource Library (evaluated 25 August)
+
+Three steals from the Rooster File's Resource Library, each passing the same test the
+rejections below failed: it covers a pipeline or judgment nothing already here covers.
+
+- **Prose-slop sweep** (row 4g), from blader/humanizer + Wikipedia's signs-of-AI-writing.
+  The visual sweep had no writing counterpart; now it does, same shape, same automatic
+  trigger, sources named in `prose-tells.md`.
+- **Anchor prompt blocks** (schema extension, no new row), from BYQ's Copy Prompt.
+  Anchors may carry inspected build structure. The Getlayers reel folds into the same
+  mechanism rather than earning a second one.
+- **Style extraction procedure** (row 0g), the one steal from the Hallmark skill. The
+  0.13.0 read-the-live-system gate finally has a procedure instead of a vibe. The rest
+  of that skill is ground impeccable and resonance already hold, same verdict as
+  design-dna below. Screenshot-to-style stays out: inference dressed as reading.
+
+Not taken, already present: the named-agent decomposition from the Content Expert brief
+(the runner/evaluator/persona split IS that shape), video input (0.9.0), and
+teach-your-visual-identity (the ground Brand-Style-Guide + Reference-Library holds).
+Unreconciled: the entries filed to the Fly volume after 8/22, flagged rather than guessed.
+
 ## What we deliberately did not add
+
+### Design-education research (evaluated 19 August)
+
+A research pass on a design education practice training people through the AI shift. Four things
+taken, the rest left, and the reasons matter more than the count.
+
+**Taken:** *speed without taste leads to noise* as independent corroboration of the judgment
+section, arrived at by people whose business is watching what happens to designers when execution
+gets cheap. Failing checks now lead with a negative imperative, because "stop doing X" is a thing
+to go do and "X could be improved" is a paragraph to interpret. Motion got an actual rule to be
+graded against: movement tells the user what matters more or less right now, so motion decorating
+an already-clear moment is noise. And the classify pass now asks what is actually stuck, not only
+what track this is.
+
+**Left: nine technique anchors** offered for `Reference-Library.md`. The research was gathered by
+sampling keyframes rather than watching playback, and its author rated most of the anchors low or
+medium confidence and said so plainly. Feeding low-confidence anchors into the reference library
+would break the rule the library exists to enforce: anchors are real, specific, verified work, not
+plausible reconstructions. An anchor nobody can vouch for is worse than no anchor, because it gets
+treated as ground truth downstream. If those techniques are wanted, someone watches the videos.
+
+**Also left:** a two-voice grader model, since `resonance` and `accessibility-review` already split
+feel from mechanics and naming it adds a row without adding a mechanism. And the content playbook
+around hooks and verbal signatures, which is audience strategy rather than design judgment.
+
+
+
+### /design, and what it took from this loop (evaluated 18 August)
+
+Anthropic shipped `/design` in Claude Code on 17 August 2026 as a research preview. It analyses
+the codebase, understands the existing visual style, generates design tokens before it designs
+anything, returns editable artboards, and lets you accept or reject individual ideas from the
+CLI.
+
+**It obsoletes the explore stage, and the right response is to hand the stage over rather than
+defend it.** Generating several directions to choose between was `maxq:designer` and
+`design-deathmatch`'s job, and `/design` does it better: natively visual, editable, no render
+step. Retiring a stage that lost is cheaper than maintaining a worse copy of it.
+
+**It also partly overlaps the produce-stage token gate.** "Read the live system before inventing
+a token" was added in 0.7.0 after this loop invented a colour a design system already shipped.
+`/design` deriving tokens from the codebase covers most of that for codebase work. The gate
+stays because it also covers a deployed stylesheet, a brand doc, and non-code surfaces, but its
+scope is narrower now and pretending otherwise would be dishonest.
+
+**What it does not do is decide.** `/design` returns options and a person accepts or rejects
+them. That is judgment by preference. It has no notion of what the work should make someone
+feel, no test for whether there is an idea rather than a style, no sweep for the tells, and no
+memory of what the last ten runs learned. "Best of the six I was just shown" is a relative
+judgment with no outside standard.
+
+The sharpest statement of the split came from a stranger in the comments under the announcement,
+who had never heard of this skill: *knowing the tool will help, but knowing what to approve,
+reject, and change will matter much more.* That is the entire remaining case for this loop.
+`/design` generates. This judges. If the judging half goes unused, `/design` alone is enough and
+this is ceremony.
+
+
 
 ### awesome-llm-apps (evaluated 18 August)
 
@@ -316,6 +468,29 @@ runs, or copy the four wanted folders out by hand. Three of them
 (`review-animations`, `prototype`, `pick-ui-library`) ship `disable-model-invocation: true` and
 only run when named.
 
+### make-interfaces-feel-better (REQ-155, 25 August)
+
+**Added: `make-interfaces-feel-better`** (`jakubkrehel/make-interfaces-feel-better`, MIT, at
+`skills/make-interfaces-feel-better/SKILL.md`). Nineteen concrete interface-detail
+prescriptions with exact values — concentric radii (outer = inner + padding), tabular numbers,
+`text-wrap: balance`/`pretty`, font smoothing, optical alignment, 44px hit areas,
+`scale(0.96)` on press, pure-neutral `oklch` image outlines — plus a review protocol with
+evidence tables, severity levels, a considered-but-rejected section, and a verdict.
+
+It passes the test `emil-design-eng` and Genjutsu failed. Those were skipped as a philosophy
+of UI polish, impeccable's exact ground with a looser checklist. This is a mechanism: named
+checks with numbers attached and a reviewable output format, neither of which impeccable
+carries. It runs at 4h as an evaluate-stage sweep, `quick` mode by default so it reports only
+HIGH and MEDIUM findings and stays out of impeccable's way; `full` mode is for asks that are
+themselves polish passes.
+
+**The override that comes with it, same precedent as REQ-121:** its motion prescriptions
+(~100ms staggers, 0.3s springs, exact icon cross-fade values) are defaults, not law. Where a
+project ships a motion doc — `motion-intent.md`, or a stated deliberate timing like Rooster's
+560ms — the project doc wins, and a finding that contradicts it is noise, not a finding.
+
+Install: `npx skills add jakubkrehel/make-interfaces-feel-better`.
+
 
 
 Two candidates were evaluated and rejected, recorded here so nobody re-proposes them in six weeks.
@@ -337,7 +512,31 @@ The rule these two failed: a new component earns a row by covering a pipeline or
 
 MaxQ ships skills as `.skill` files, which are zips of the skill folder. Unzip into `~/.claude/skills/` so the result is `~/.claude/skills/<name>/`, then start a fresh session. Proven with design-deathmatch.
 
-The render engines are different and the difference bites. **None of the three repos ships a top-level SKILL.md.** Each is a collection at `<repo>/skills/<name>/SKILL.md`, 19 skills across the three. Cloning a repo into `~/.claude/skills/threejs/` yields `~/.claude/skills/threejs/skills/threejs-fundamentals/SKILL.md`, which is never discovered, and the failure is silent. Two further traps: the three.js README's own clone command points at an unrelated repo (`pinkforest/threejs-playground`), and folder names can differ from frontmatter names, where frontmatter always wins.
+### The three agents
+
+Agents and skills live in different directories, so the skill install does not carry them by
+itself. `./install.sh` copies `skills/liftoff/agents/*.md` into `~/.claude/agents/` next to the
+skill, or into `./.claude/agents/` with `--project`, and `--link` symlinks them the same way it
+symlinks the skill. The repo holds the source; `~/.claude/agents/` holds what actually runs.
+
+Three things to check afterwards, because each fails quietly rather than loudly.
+
+1. **`/agents` lists all three.** `liftoff-runner`, `liftoff-evaluator`, `liftoff-persona`. A file
+   sitting in the right directory whose frontmatter `name:` disagrees with its filename is a file
+   the picker never offers, and the run degrades to inline without saying anything interesting
+   about why.
+2. **A subagent can spawn subagents in this environment.** The tournament path has the runner
+   spawning four personas, and whether a subagent is allowed to do that is not a property of this
+   repo. Test it once with a trivial fan-out before a real run depends on it. The runner returns
+   `TOURNAMENT: unavailable` and falls back rather than faking one, but finding that out during a
+   high-stakes explore is an expensive way to learn it.
+3. **The evaluator can take a screenshot.** Its verdict is UNVERIFIED without one, by design, and
+   an evaluator that can never render is an evaluator that never issues a PASS. Run
+   `npx playwright screenshot` by hand once and confirm the PNG comes back readable.
+
+### The render engines
+
+These are different and the difference bites. **None of the three repos ships a top-level SKILL.md.** Each is a collection at `<repo>/skills/<name>/SKILL.md`, 19 skills across the three. Cloning a repo into `~/.claude/skills/threejs/` yields `~/.claude/skills/threejs/skills/threejs-fundamentals/SKILL.md`, which is never discovered, and the failure is silent. Two further traps: the three.js README's own clone command points at an unrelated repo (`pinkforest/threejs-playground`), and folder names can differ from frontmatter names, where frontmatter always wins.
 
 So use the script:
 

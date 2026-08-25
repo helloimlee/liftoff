@@ -43,6 +43,12 @@ already exists.
 
 ### Wave B · Make. Mostly sequential, orchestrated by the strong model.
 
+`liftoff-runner` owns this wave. It takes a charter path, a round number and an output directory,
+and it returns an artifact plus a build log written one level up from the artifact. It does not
+talk to the user, does not score the options it commissioned, and does not grade what it built.
+Where it is not installed, the skill runs stages 2 and 3 inline from `stack.md`, which is why that
+file keeps the full procedure rather than a summary of it.
+
 Produce is where writes happen, so this is where parallelism gets dangerous.
 
 - **One writer per artifact.** Always. If two surfaces are genuinely independent files, they can
@@ -53,18 +59,22 @@ Produce is where writes happen, so this is where parallelism gets dangerous.
   screen. Not a page. This is the leash, and it is the whole point.
 
 Explore is the exception. A tournament is many agents producing genuinely separate artifacts,
-which is safe and is exactly what it is for.
+which is safe and is exactly what it is for. Where it runs on liftoff's own personas the runner
+spawns four `liftoff-persona` agents in one message, each with its own slot under
+`rounds/NN/explore/`.
+Four writers with no slots is not a tournament, it is four agents overwriting one file.
 
 ### Wave C · Grade. Parallel, and the biggest win in the loop.
 
 Evaluate is embarrassingly parallel and is almost always run sequentially by accident. Every
 grader reads the same finished artifact and none of them depend on each other.
 
-Fan all of these at once:
+`liftoff-evaluator` holds this wave. It receives the charter and the artifact directory and
+nothing else, runs all of these at once, and merges them:
 
 ```
 craft verdict          emotional audit        accessibility (AA)
-slop sweep             motion craft           motion-gap
+visual slop sweep      prose slop sweep       motion craft + motion-gap
 ```
 
 Then **merge into one verdict block before showing anyone anything.** Six reports is not a
@@ -116,7 +126,9 @@ from the artifact, and this loop bans self-grading at the artifact level for exa
 it should ban it here: a session that produced the work finds what it expects to find when it
 grades the work. The orchestrator planned the thing. It is not a fresh pair of eyes on the thing.
 Route the verdict to an instance that did not plan the build, or run it in a fresh session, and
-flag it SELF and unreliable when neither is possible.
+flag it SELF and unreliable when neither is possible. The tier separation is a pair of named
+agents now rather than a discipline: `liftoff-runner` orchestrates the build, `liftoff-evaluator`
+holds the verdict, and neither is handed the other's context.
 - **Mid model** for bounded production units and tournament personas.
 - **Cheap model** for read-only recon. Wave A is almost entirely this.
 
@@ -144,19 +156,28 @@ Every run ends with the same block, because a person should be able to trust the
 without reading carefully:
 
 ```
-WAVE A  recon      5 agents · parallel · 3s      autonomy 3
-WAVE B  produce    1 writer · sequential         autonomy 1
-WAVE C  grade      6 graders · parallel          autonomy 2
+WAVE A  recon      5 agents · parallel · 3s        autonomy 3
+WAVE B  produce    liftoff-runner · 1 writer       autonomy 1
+WAVE C  grade      liftoff-evaluator · 6 checks    autonomy 2
 
 VERDICT  FAIL
-  ✗ peak moment produces target feeling   the moment carries no consequence
-  ✓ craft · a11y · slop · motion · gaps
+  ✗ Stop shipping a peak that carries no consequence.
+      the moment renders, resolves, and asks nothing of the reader
+  ✓ craft · a11y · slop · prose · motion · gaps
 
+GRADER   liftoff-evaluator (blind)
 SKIPPED  design-deathmatch (not installed), review-animations (not installed)
 ```
 
-Failures first. Passes collapsed to one line. Skipped components named rather than silently
+Failures first, each led by a negative imperative rather than a description. "Stop shipping a
+peak that carries no consequence" is a thing to go do; "the peak moment could be stronger" is a
+paragraph to interpret. Passes collapsed to one line. Skipped components named rather than silently
 dropped, because a stage that quietly did not run reads exactly like a stage that passed.
+
+The `GRADER` line exists so a degraded run cannot pass for a normal one. It reads
+`maxq:evaluator (fresh context)` when the fallback held the verdict, and `inline (SELF,
+unreliable)` when nothing fresh was available. A PASS is worth what the grader that said it was
+worth, and that should not require reading the transcript to work out.
 
 ---
 

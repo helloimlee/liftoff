@@ -6,6 +6,233 @@ and loops until it passes.
 
 ---
 
+## 0.18.1, 25 August
+
+**Backups stop being live installs, and the stack learns nineteen small details.**
+
+- **`install.sh` moves backups out of the live directories.** The old behavior left
+  `liftoff.backup.<stamp>` inside `~/.claude/skills/`, where Claude Code loads it as a second
+  installed skill with a stale trigger description — and where preflight's first real run
+  recorded it as a duplicate `liftoff` entry, which is how this was found, about an hour after
+  0.18.0 shipped. Backups (skill and agents both) now land in `~/.claude/backups/`, or the
+  sibling `backups/` of whatever directory `--project` or `CLAUDE_SKILLS_DIR` targets. The
+  restore is still one `mv`.
+- **`make-interfaces-feel-better` joins the registry at 4h** (REQ-155,
+  `jakubkrehel/make-interfaces-feel-better`): nineteen interface-detail prescriptions with
+  exact values and a review protocol with evidence tables and a verdict. It passes the test
+  `emil-design-eng` and Genjutsu failed — a mechanism impeccable lacks, not a philosophy it
+  already holds — and runs as an evaluate-stage sweep in `quick` mode so it stays out of
+  impeccable's way. Its motion numbers (~100ms staggers, 0.3s springs) yield to the project's
+  motion doc, same override precedent as REQ-121.
+
+## 0.18.0, 25 August
+
+**The agents come home, and get reconciled on the way in.**
+
+- **`liftoff-runner`, `liftoff-evaluator` and `liftoff-persona` ship in the repo**, at
+  `skills/liftoff/agents/`, and `./install.sh` places them in `~/.claude/agents/` alongside the
+  skill. The split was designed in a Cowork session on 19 August and the half of it that could be
+  written as prose shipped that day in 0.16.0: the nine-heading charter schema, the build log
+  moved out of the artifact folder, the three-round cap. The agent files stayed outside the repo,
+  where nothing pulled them forward, so for six days the loop documented a separation of context
+  that only existed in the documentation. The cost was not a broken run. It was a plausible one,
+  which is the failure this whole stage exists to catch, happening one level up from the artifact.
+- **They were drafted against a structure two reframes old, so this reconciles rather than
+  copies.** The runner's explore stage routes the way the registry actually routes now: `/design`
+  in Claude Code, Figma MCP writes where that is connected, `design-deathmatch` when the value is
+  the argument rather than the options, `maxq:designer` as the fallback. The four-persona fan-out
+  is no longer the default shape of a tournament; it is what runs when a tournament is warranted
+  and `design-deathmatch` is not installed. The runner also knows about the two things 0.17.0
+  added underneath it, anchor prompt blocks and the style extraction arriving through the
+  charter's anchors, because a builder that ignores read values goes back to remembering them.
+- **The evaluator grades everything stage 4 grades**, in one merged block: normal verdict,
+  emotional verdict, accessibility, the visual slop sweep, the prose sweep from 0.17.0, and motion
+  craft and gaps where the surface has any. It was drafted holding three verdicts, which would
+  have quietly retired two standing checks by moving the stage into an agent that had never heard
+  of them.
+- **Scoring the option set stayed with the loop, and both stops stayed where they were.** The
+  runner hands the field back unranked. It commissioned those options, so a ranking from it is the
+  builder grading the build one step removed, and stop 2 belongs to a person for the same reason
+  it always did.
+- **Degraded mode is written down instead of assumed.** No `liftoff-evaluator` sends the verdict
+  to `maxq:evaluator`, a different context rather than a purpose-built grader. Neither one means
+  the checks run inline, labelled SELF and unreliable, and the run summary now carries a `GRADER`
+  line so a degraded run cannot pass for a normal one. No `liftoff-runner` means stages 2 and 3
+  run inline from `stack.md`, which is why that file keeps the full procedure rather than a
+  summary of it.
+- **Not verified, on purpose:** whether a subagent can spawn subagents is environment-dependent
+  and this repo cannot answer it for you. It is item two on the install checklist rather than an
+  assumption, and the runner returns `TOURNAMENT: unavailable` and falls back rather than
+  producing one exploration that reads like four.
+
+## 0.17.0, 25 August
+
+**Three steals from the Resource Library, and the sweeps learn to read.**
+
+- **Prose gets the slop sweep it never had.** The visual bans have run automatically at
+  evaluate since 0.11.0; writing had nothing, and this loop produces a lot of writing.
+  New standing check (row 4g) graded from `references/prose-tells.md`: inflated claims,
+  sales register, ghost sources, stock AI words, chatbot residue left in shipped copy.
+  Distilled from blader/humanizer (MIT) and Wikipedia's signs-of-AI-writing page, and
+  their caveat survives the distillation: clusters, never convictions from a single hit,
+  with a false-positive list that binds the grader too. A build can pass every visual ban
+  and still read like a press release. That is now a named FAIL instead of a shrug.
+- **Anchors can carry how, not only what.** From BYQ's Copy Prompt move: an anchor in the
+  reference library may now hold a prompt block, real structure read from the real thing,
+  grid values, spacing rhythm, motion timing, asset paths. Produce consumes it as a build
+  spec in miniature. The rule that keeps it honest: blocks are written from inspection,
+  never imagination, and an anchor whose construction cannot be verified stays a
+  screenshot. Getlayers folds into the same schema rather than earning a second
+  mechanism.
+- **The read-the-live-system gate gets its missing half.** 0.13.0 said pull real values
+  from source before inventing a token, and never said how. `references/style-extract.md`
+  is the how: recon-stage, read-only, primitives with their derivations (the green cast
+  matters more than the hex), provenance and fetch date attached, unreadables named. The
+  one steal from a skill whose remaining ground impeccable and resonance already hold.
+  Screenshot-to-style stays out on purpose: extraction from a rendered image is inference,
+  and inference dressed as reading is the exact failure the gate exists to stop.
+- **Not taken, with reasons on record:** the named-agent decomposition (the
+  runner/evaluator split is already that shape), video input (shipped 0.9.0), and
+  teach-your-visual-identity (design-dna's verdict applies). Library entries filed after
+  8/22 live on the cloud volume and are flagged unreconciled rather than guessed at.
+
+## 0.16.0, 19 August
+
+**Wrote down the thing every stage was already assuming.**
+
+- **The charter has a schema now.** Nine headings, matched literally: track, surface, constraints,
+  definition of done, emotional target, direction, stakes, attachments, anchors. Every stage
+  downstream was already asserting fields on this file. Nothing specified it. The instruction was
+  "write `charter.md` from `loops/charter-template.md`, fill the normal fields," against a template
+  that is not in this repo and may not be in yours.
+- **Two of those fields exist only because this stopped being one context.** Surface and definition
+  of done used to live in the conversation, back when whoever set the target and whoever built were
+  the same reader. A grader that cannot see the request has to be told what was asked for. A stage
+  that cannot find a field does not stop and ask; it fills the gap with a guess that reads exactly
+  like a read, which is the expensive version of this failure.
+- **The build log moved out of the artifact folder.** Fresh eyes was enforced in the prompt and
+  nowhere else, which means it held right up until a grader ran `ls` on the folder it was handed.
+  Reasoning now lives at `rounds/NN/build-log.md` and output at `rounds/NN/artifact/`, one level
+  apart. A grader who reads why a choice was made is agreeing with the choice, not grading it, and
+  no amount of instruction survives the reasoning being sat right there.
+- **Contamination refuses the round** instead of grading it with a caveat. A PASS with an asterisk
+  is indistinguishable from a PASS once it is three days old and someone is quoting it.
+- **UNVERIFIED is a third verdict**, not a soft FAIL. The render broke, so nothing was seen. It does
+  not send anything back to be rebuilt. Fix the render path and grade the same artifact again,
+  because sending a builder off to change things nobody has managed to look at is how a screenshot
+  bug turns into a redesign.
+- **Failing rounds revise rather than rebuild**, carrying the previous artifact forward with the
+  failure list word for word. Paraphrasing a failure is how a fix drifts into a redesign, and a
+  clean rebuild against the same charter reproduces whatever the charter did not say the first time.
+- **Three rounds, then it stops** whether or not it has a PASS. Each round is graded by something
+  that cannot be told what the last grader wanted, which is deliberate and also means the verdicts
+  do not converge on their own; a fourth round is usually the loop arguing with itself. It hands
+  back what still fails and a read on whether the target or the surface is the real problem, and
+  that call belongs to a person, same as the other two.
+- **Explorers get their own output slots.** Four running at once with no slots all write
+  `index.html` to the same place and quietly overwrite each other, and the one you lose is not
+  reliably the one that lost.
+
+## 0.15.0, 19 August
+
+**Failures lead with an imperative, and motion gets a rule.**
+
+- **Every failing check now opens with a negative imperative.** "Stop burying the CTA below the
+  fold" rather than "the call-to-action placement could be improved." Same information, but one is
+  a thing to go do and the other is a paragraph to interpret. It also matches how the emotional
+  verdict already behaves: blunt, no hedge. Explanation comes after the imperative, never instead.
+- **Motion has something specific to fail against.** The rule: movement's job is to tell the user
+  what matters more or less right now. Motion decorating a moment that was already clear is not
+  neutral, it is noise competing with whatever needed the attention. `review-animations` and
+  `find-animation-opportunities` were grading against a vibe before this.
+- **Classify asks one more question:** what is actually stuck. Not what track this is, but what has
+  already been tried and where it stalled. A full loop against a narrow blockage is ceremony, and
+  the assessment catches that before the ceremony starts.
+- **Independent corroboration of the judgment section**, from a design education practice training
+  people through this exact shift: *speed without taste leads to noise, and real impact comes from
+  knowing what good looks like.* Their read is that AI collapsed the steps of the design process
+  into each other rather than speeding them up, which moves the scarce skill from producing to
+  directing. Same conclusion as 0.14.0, reached from a different direction.
+- **Declined nine ready-made reference anchors** offered by the same research. They were gathered by
+  sampling video keyframes rather than watching playback, and their author rated most low or medium
+  confidence and said so plainly. Feeding those into `Reference-Library.md` would break the rule the
+  library exists to enforce. An anchor nobody can vouch for is worse than none, because downstream
+  it gets treated as ground truth anyway.
+
+## 0.14.0, 18 August
+
+**Named the input this whole thing runs on.**
+
+- "Bring your own generator" was quietly assuming a person who knows what to bring. Now stated
+  outright: **liftoff has no taste.** Everything it knows about good came from a designer. The
+  three feelings, the idea sentence, the reference images, the real tokens, the lessons that
+  earned their place by costing someone an afternoon. Remove the person and what remains is a
+  confident measuring instrument pointed at nothing.
+- A FAIL is not the loop having an opinion. It is the loop holding you to yours, consistently, at
+  4pm on a Friday when you would rather it did not.
+- Both stops belong to a person and do not move, because they are the two moments the loop is
+  structurally unqualified to handle. It can rank options against a target; it cannot tell you the
+  target was the wrong thing to want. It can report a flat peak; it cannot decide flat is correct
+  here because this is a settings page and drama would be wrong.
+- **Failure mode on the record:** this can become a way to feel rigorous without being rigorous.
+  Run the loop, collect a PASS, mistake the PASS for judgment rather than proof that judgment was
+  applied consistently. A thin target produces a thin run, and every downstream gate will
+  faithfully confirm the thin target was met.
+- It raises the floor for a designer with a point of view and raises nothing for someone without
+  one. Generators made options cheap, which moved the scarce skill from making things to knowing
+  what to approve, reject and change.
+
+## 0.13.0, 18 August
+
+**Reframed around the thing that does not obsolete.**
+
+- Losing the explore stage to `/design` in a single day was clarifying rather than painful.
+  **Generators improve; standards do not obsolete.** A better generator makes the target, the
+  idea gate, the verdict and the accumulated lessons *more* useful, because the faster options
+  arrive the more the bottleneck moves to knowing which one is right.
+- So liftoff no longer pretends to be a generator. It decides what good means before anything is
+  made, and whether it landed after. **Bring your own generator.**
+- **Exploration routes by surface.** `/design` in Claude Code. Direct writes to the canvas when
+  the Figma MCP is connected. `design-deathmatch` when the argument matters more than the
+  options. A single exploration when none of those exist. This is also why the loop cannot live
+  inside Claude Code: real work happens in Figma too, and the next generator will land somewhere
+  else again.
+- **New step: score the set.** Every option graded against the target *before* the user looks,
+  ranked, one line each on what it does to the peak moment. Six artboards is a menu. Six with a
+  target and a score is a decision with the reasoning attached. Deliberately shallow, since
+  craft and accessibility are cheap to fix and would drown the signal.
+- **Two stops, and only two.** The target and the pick. They are the places where being wrong is
+  expensive and correcting is cheap. Stopping more often trains people to skim, and a skimmed
+  checkpoint manufactures agreement. These two do not move with the autonomy slider, because
+  they are not about whether the loop is reliable. They are about whether it is aimed correctly.
+- If the user picks the option ranked third, that is information about the target, not about
+  their taste. The target gets revisited; the choice does not get overruled.
+- Full sequence in `references/run.md`.
+
+## 0.12.0, 18 August
+
+**Gave the explore stage away.**
+
+- Anthropic shipped `/design` in Claude Code on 17 August. It reads the codebase, derives tokens
+  from the existing visual style, returns editable artboards, and lets you accept or reject ideas
+  individually.
+- **It is a better explorer than this loop ever had, so it is now the explorer.** `/design` takes
+  the row. `design-deathmatch` drops to conditional, for the case where the argument matters more
+  than the options. `maxq:designer` becomes the fallback. Retiring a stage that lost is cheaper
+  than maintaining a worse copy of it.
+- **Honest concession:** `/design` also partly overlaps the produce-stage token gate added in
+  0.7.0. Deriving tokens from the codebase covers most of what that gate was for on codebase work.
+  It stays, because it also covers deployed stylesheets, brand docs and non-code surfaces, but its
+  scope is genuinely narrower now.
+- **What did not move:** the emotional target, the idea pass, the slop sweep, the memory layer,
+  and the verdict. `/design` returns options and a person picks a favourite, which is judgment by
+  preference. "Best of the six I was just shown" is a relative judgment with no outside standard.
+  A design can win the comparison, match your tokens, and still miss the feeling.
+- The clearest statement of the split came from a stranger commenting under the announcement:
+  knowing the tool will help, but knowing what to approve, reject and change will matter more.
+  That is the remaining case for this loop, and if the judging half goes unused then `/design`
+  alone is enough and this is ceremony.
+
 ## 0.11.0, 18 August
 
 **Says back what it heard, and stops grading its own homework.**

@@ -1,24 +1,33 @@
 # Liftoff
 
-A design pass that can tell you no.
+Bring your own generator.
 
-Liftoff runs a design job end to end. It decides what the work should make someone feel, checks
-there is an idea and not just a style, explores if the direction is open, builds, then hands the
-result to fresh eyes that grade it against the original target and fail it if the feeling did
-not land.
+Generators keep improving. `/design` shipped in August 2026 and made a whole stage of this
+obsolete in a day. Liftoff is the part that does not change when the tools do: **it decides what
+good means before anything is made, and whether it landed after.**
+
+It routes exploring to whatever you have. `/design` in Claude Code, the Figma canvas when that
+MCP is connected, a tournament when the argument matters more than the options. Then it scores
+what comes back against the target before you look, builds the one you pick, and grades it with
+fresh eyes that can fail it.
+
+**It has no taste of its own.** Everything it knows about good was put there by a designer, and
+the two stops in the run belong to a person and never move. A FAIL is not the tool having an
+opinion; it is the tool holding you to yours. This raises the floor for someone with a point of
+view and raises nothing for someone without one.
 
 That last part is the point. Most AI design help is an enthusiastic friend who thinks everything
 you make is great. Liftoff has a gate where "this renders correctly and makes nobody feel
 anything" counts as a failure, and the run does not finish until that is fixed.
 
-**[liftoff.gomaxq.com](https://maxq-studio.github.io/liftoff/)** · Built at [MaxQ](https://gomaxq.com).
+**[liftoff.gomaxq.com](https://helloimlee.github.io/liftoff/)** · Built at [MaxQ](https://gomaxq.com).
 
 ---
 
 ## Install
 
 ```bash
-npx skills add MaxQ-studio/liftoff
+npx skills add helloimlee/liftoff
 ```
 
 That drops `liftoff` into `.claude/skills/` for the current project. Start a fresh session
@@ -27,7 +36,7 @@ afterward; skills are read at session start.
 **Or clone and copy**, which works with any agent:
 
 ```bash
-git clone https://github.com/MaxQ-studio/liftoff
+git clone https://github.com/helloimlee/liftoff
 cd liftoff
 ./install.sh                 # copies into ~/.claude/skills/
 ./install.sh --project       # or into ./.claude/skills/ for one project
@@ -36,8 +45,10 @@ cd liftoff
 ./install.sh --dry-run       # see what it would do first
 ```
 
-**Or by hand.** Copy `skills/liftoff/` to `~/.claude/skills/liftoff/`. That is the whole
-install; there is no build step and nothing to configure.
+**Or by hand.** Copy `skills/liftoff/` to `~/.claude/skills/liftoff/`, and the three files in
+`skills/liftoff/agents/` to `~/.claude/agents/`. Agents and skills live in different directories,
+which is the only reason that is two steps instead of one. There is no build step and nothing to
+configure.
 
 ---
 
@@ -76,11 +87,12 @@ without each. Run it once after installing so you know what your version of the 
 
 | Skill | Without it |
 |---|---|
+| `liftoff-runner`, `liftoff-evaluator`, `liftoff-persona` | Ship in this repo and install with it. Without them stages 2, 3 and 4 run inline, and grading falls back to `maxq:evaluator` or to a self-grade the run labels SELF. |
 | `resonance` | No emotional target. The loop still runs; the gate is weaker. |
 | `impeccable` | No build or polish stage. Liftoff becomes planning only. |
 | `copy-editor` | Prose ships unedited. |
 | `design-deathmatch` | No tournament format. Single exploration only. |
-| `maxq:designer` / `maxq:evaluator` | Falls back to inline exploration and self-grading, which it will flag as unreliable. |
+| `maxq:designer` / `maxq:evaluator` | The fallbacks. Without these *and* the liftoff agents, exploration and grading run inline and the verdict is flagged SELF and unreliable. |
 | `design-critique`, `accessibility-review`, `ux-copy`, `design-system`, `design-handoff`, `user-research`, `research-synthesis` | Those sub-steps skip. Named in the run summary. |
 | `threejs-*`, `gsap-*`, `motion-design`, `apple-design` | No 3D, timeline motion, or motion craft gate. |
 
@@ -124,8 +136,10 @@ To update, come back and pull:
 git pull && ./install.sh
 ```
 
-The old version is moved to a timestamped backup rather than clobbered, so a bad update is one
-`mv` away from being undone. Best for people who just want to use the thing.
+The old version is moved to a timestamped backup in `~/.claude/backups/` rather than clobbered,
+so a bad update is one `mv` away from being undone. Backups live outside `skills/` on purpose:
+a backup left in the live directory gets loaded as a second installed skill. Best for people
+who just want to use the thing.
 
 ### Link mode (recommended if you might contribute)
 
@@ -161,7 +175,7 @@ functioning update loop without any infrastructure.
 ### If you installed with npx
 
 ```bash
-npx skills add MaxQ-studio/liftoff
+npx skills add helloimlee/liftoff
 ```
 
 Re-running the same command pulls the current version and overwrites. Same idea, same manual
@@ -175,6 +189,10 @@ trigger.
 skills/liftoff/
   SKILL.md              the loop
   CHEATSHEET.md         capabilities, what to say, when not to use it, limits
+  agents/
+    liftoff-runner.md     explore and produce
+    liftoff-evaluator.md  the blind grade
+    liftoff-persona.md    one entry in a tournament
   references/
     stack.md            the registry, ordering rules, hard-won production gotchas
     idea-pass.md        the verbal gate. one sentence, four tests, before you draw
