@@ -61,9 +61,14 @@ Skipped entirely when the direction is settled.
 Whichever runs gets the three feelings and the peak moment in its brief. An explorer with no
 stated target returns options and a person picking a favourite.
 
+`liftoff-runner` executes this stage: it picks the route, writes the briefs when the tournament
+runs on liftoff's own personas, and hands the field back unscored. Where it is not installed the
+loop runs the stage inline from `stack.md` and says so.
+
 ### 3 · Score the set
 Every option graded against the target before you look at them. Ranked, each with one line on
-what it does to the peak moment and what it costs.
+what it does to the peak moment and what it costs. The loop scores, never the runner: whoever
+commissioned the options is the wrong one to rank them.
 
 This is the step that changes what an option set *is*. Six artboards is a menu. Six artboards
 with a stated target and a score each is a decision with the reasoning attached.
@@ -78,17 +83,19 @@ assessed here, because they are cheap to fix and would drown the signal.
 > your choice overruled.
 
 ### 4 · Produce
-Build the pick out. Real tokens, taste anchors, microcopy and prose as separate jobs, render
-engines only if the surface needs them.
+Build the pick out. Real tokens read at recon, taste anchors, microcopy and prose as separate
+jobs, render engines only if the surface needs them. Same runner, called again, given what you
+picked.
 
 ### 5 · Deep grade
-All graders at once on the finished thing, merged into one verdict block: craft, emotional audit,
-accessibility, slop sweep, motion craft, motion gaps. Failures first, ordered by damage, each with
-a one-line reason and the exact file or node.
+`liftoff-evaluator` takes the charter and the artifact directory, renders it, and runs everything
+at once into one verdict block: craft, emotional audit, accessibility, visual slop sweep, prose
+sweep, motion craft, motion gaps. Failures first, ordered by damage, each with a one-line reason
+and the exact file or node.
 
-Graders get the charter and the artifact and nothing about how the artifact was made. That is why
-the build log lives outside the artifact folder rather than beside it. If the thing cannot be
-rendered the verdict is UNVERIFIED, which is not a fail and does not start another build round.
+It gets nothing about how the artifact was made, and does not go looking. That is why the build
+log lives outside the artifact folder rather than beside it. If the thing cannot be rendered the
+verdict is UNVERIFIED, which is not a fail and does not start another build round.
 
 ### 6 · Iterate to PASS, then record
 Revise the prior artifact rather than rebuilding it, carrying the failure list across word for

@@ -6,6 +6,46 @@ and loops until it passes.
 
 ---
 
+## 0.18.0, 25 August
+
+**The agents come home, and get reconciled on the way in.**
+
+- **`liftoff-runner`, `liftoff-evaluator` and `liftoff-persona` ship in the repo**, at
+  `skills/liftoff/agents/`, and `./install.sh` places them in `~/.claude/agents/` alongside the
+  skill. The split was designed in a Cowork session on 19 August and the half of it that could be
+  written as prose shipped that day in 0.16.0: the nine-heading charter schema, the build log
+  moved out of the artifact folder, the three-round cap. The agent files stayed outside the repo,
+  where nothing pulled them forward, so for six days the loop documented a separation of context
+  that only existed in the documentation. The cost was not a broken run. It was a plausible one,
+  which is the failure this whole stage exists to catch, happening one level up from the artifact.
+- **They were drafted against a structure two reframes old, so this reconciles rather than
+  copies.** The runner's explore stage routes the way the registry actually routes now: `/design`
+  in Claude Code, Figma MCP writes where that is connected, `design-deathmatch` when the value is
+  the argument rather than the options, `maxq:designer` as the fallback. The four-persona fan-out
+  is no longer the default shape of a tournament; it is what runs when a tournament is warranted
+  and `design-deathmatch` is not installed. The runner also knows about the two things 0.17.0
+  added underneath it, anchor prompt blocks and the style extraction arriving through the
+  charter's anchors, because a builder that ignores read values goes back to remembering them.
+- **The evaluator grades everything stage 4 grades**, in one merged block: normal verdict,
+  emotional verdict, accessibility, the visual slop sweep, the prose sweep from 0.17.0, and motion
+  craft and gaps where the surface has any. It was drafted holding three verdicts, which would
+  have quietly retired two standing checks by moving the stage into an agent that had never heard
+  of them.
+- **Scoring the option set stayed with the loop, and both stops stayed where they were.** The
+  runner hands the field back unranked. It commissioned those options, so a ranking from it is the
+  builder grading the build one step removed, and stop 2 belongs to a person for the same reason
+  it always did.
+- **Degraded mode is written down instead of assumed.** No `liftoff-evaluator` sends the verdict
+  to `maxq:evaluator`, a different context rather than a purpose-built grader. Neither one means
+  the checks run inline, labelled SELF and unreliable, and the run summary now carries a `GRADER`
+  line so a degraded run cannot pass for a normal one. No `liftoff-runner` means stages 2 and 3
+  run inline from `stack.md`, which is why that file keeps the full procedure rather than a
+  summary of it.
+- **Not verified, on purpose:** whether a subagent can spawn subagents is environment-dependent
+  and this repo cannot answer it for you. It is item two on the install checklist rather than an
+  assumption, and the runner returns `TOURNAMENT: unavailable` and falls back rather than
+  producing one exploration that reads like four.
+
 ## 0.17.0, 25 August
 
 **Three steals from the Resource Library, and the sweeps learn to read.**

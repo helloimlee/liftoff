@@ -1,6 +1,6 @@
 # Liftoff cheat sheet
 
-v0.7.0. What it does, what to say to get it, and when not to bother.
+v0.18.0. What it does, what to say to get it, and when not to bother.
 
 ---
 
@@ -94,6 +94,8 @@ page with a target it can be graded against. The second sentence is the whole di
 - Optional second opinion when the verdict is close
 
 ### Deploy agents efficiently
+- **Building and grading are separate agents** with separate contexts. The runner explores and
+  produces, the evaluator grades and is never shown how any of it was made
 - **Recon runs as one parallel batch**: stylesheet, components, a11y baseline, research,
   anchors. Cheap model, no approval, nothing written
 - **One writer per artifact**, always. Concurrent writes to one file fail later and confusingly
@@ -178,8 +180,14 @@ is worth more than approving two.
 - **Escalation runs one direction.** A large ask that mentions accessibility can still land in
   the small audit skill and stay there. Drafted fix in `references/escalation-edits.md`, not
   applied.
-- **The tournament format is not installed everywhere.** Where it is missing the format can be
-  run by hand, and the run should say so.
+- **The tournament format ships here now, and still depends on your environment.** Where
+  `design-deathmatch` is missing, liftoff runs the format on its own personas, four at a time.
+  That needs a subagent to be allowed to spawn subagents, which varies and is worth testing once
+  rather than mid-tournament. Where it cannot, you get one exploration and a run that says so.
+- **The grader is a separate agent that has to be installed.** `install.sh` places it. Without it
+  the verdict falls to `maxq:evaluator`, which is a different context rather than a purpose-built
+  grader. Without either, the run grades itself and labels the verdict SELF, which you should read
+  as unreliable, because it is.
 - **Inspiration sourcing works and has nothing to draw from** until boards get curated.
 - **Memory is opt-in and human-confirmed.** It writes to `memory/` and proposes lessons, but
   never promotes one on its own. Counting is automatic; deciding it is true is not.
@@ -190,14 +198,27 @@ is worth more than approving two.
 
 ```
 SKILL.md                          the loop
+agents/liftoff-runner.md          explore and produce, stages 2 and 3
+agents/liftoff-evaluator.md       stage 4, blind, holds every verdict
+agents/liftoff-persona.md         one tournament entry, spawned four at a time
 references/stack.md               the registry, ordering rules, production gotchas
+references/run.md                 the sequence, and where the two stops sit
+references/agents.md              waves, the autonomy slider, cost tiers
 references/idea-pass.md           the verbal gate
+references/echo.md                say the brief back before acting on it
+references/style-extract.md       how to read a live system before inventing a token
+references/anchor-prompts.md      what an anchor may carry beyond a screenshot
+references/prose-tells.md         the writing half of the slop sweep
+references/memory.md              what carries between runs, and the promotion bar
 references/inspiration.md         outside reference, and how it feeds the anchors
 references/escalation-edits.md    drafted, not applied
 scripts/install-render-engines.sh tested
 scripts/pinterest-sync.py         fallback path
 CHANGELOG.md                      what changed and when
 ```
+
+The agents install to `~/.claude/agents/`, not into the skill folder, because that is where a
+picker looks for them. `./install.sh` does both.
 
 ---
 

@@ -45,8 +45,10 @@ cd liftoff
 ./install.sh --dry-run       # see what it would do first
 ```
 
-**Or by hand.** Copy `skills/liftoff/` to `~/.claude/skills/liftoff/`. That is the whole
-install; there is no build step and nothing to configure.
+**Or by hand.** Copy `skills/liftoff/` to `~/.claude/skills/liftoff/`, and the three files in
+`skills/liftoff/agents/` to `~/.claude/agents/`. Agents and skills live in different directories,
+which is the only reason that is two steps instead of one. There is no build step and nothing to
+configure.
 
 ---
 
@@ -85,11 +87,12 @@ without each. Run it once after installing so you know what your version of the 
 
 | Skill | Without it |
 |---|---|
+| `liftoff-runner`, `liftoff-evaluator`, `liftoff-persona` | Ship in this repo and install with it. Without them stages 2, 3 and 4 run inline, and grading falls back to `maxq:evaluator` or to a self-grade the run labels SELF. |
 | `resonance` | No emotional target. The loop still runs; the gate is weaker. |
 | `impeccable` | No build or polish stage. Liftoff becomes planning only. |
 | `copy-editor` | Prose ships unedited. |
 | `design-deathmatch` | No tournament format. Single exploration only. |
-| `maxq:designer` / `maxq:evaluator` | Falls back to inline exploration and self-grading, which it will flag as unreliable. |
+| `maxq:designer` / `maxq:evaluator` | The fallbacks. Without these *and* the liftoff agents, exploration and grading run inline and the verdict is flagged SELF and unreliable. |
 | `design-critique`, `accessibility-review`, `ux-copy`, `design-system`, `design-handoff`, `user-research`, `research-synthesis` | Those sub-steps skip. Named in the run summary. |
 | `threejs-*`, `gsap-*`, `motion-design`, `apple-design` | No 3D, timeline motion, or motion craft gate. |
 
@@ -184,6 +187,10 @@ trigger.
 skills/liftoff/
   SKILL.md              the loop
   CHEATSHEET.md         capabilities, what to say, when not to use it, limits
+  agents/
+    liftoff-runner.md     explore and produce
+    liftoff-evaluator.md  the blind grade
+    liftoff-persona.md    one entry in a tournament
   references/
     stack.md            the registry, ordering rules, hard-won production gotchas
     idea-pass.md        the verbal gate. one sentence, four tests, before you draw

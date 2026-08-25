@@ -16,10 +16,11 @@ and one HTML file.
 skills/liftoff/       the skill itself. this is the shipped artifact
   SKILL.md            the loop. version lives in frontmatter
   CHEATSHEET.md       daily-use reference
+  agents/             runner, evaluator, persona. installed to ~/.claude/agents, not the skill dir
   references/         stack.md is the registry, the rest are gates and guides
   scripts/            install helpers, all bash except pinterest-sync.py
 docs/index.html       landing page, served by GitHub Pages from /docs
-install.sh            copy or symlink the skill into a skills directory
+install.sh            copy or symlink the skill and the agents into their directories
 ```
 
 ## Before you change anything

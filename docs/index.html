@@ -225,7 +225,17 @@
     <div class="rel r">
 
       <div class="note">
-        <div class="vtag">0.17.0<span>25 AUG</span><span class="latest">LATEST</span></div>
+        <div class="vtag">0.18.0<span>25 AUG</span><span class="latest">LATEST</span></div>
+        <div>
+          <h3>Building and grading became two different agents</h3>
+          <p>They were always meant to be two sets of eyes. Now they're two agents: one explores and builds, one is handed the target and the finished thing and nothing else, and a third is a single entry in a tournament. All three were written six days ago and left sitting outside the repo the whole time, pointed at a version of this loop that had changed twice since. <em>A separation that only exists in the description of it isn't one.</em></p>
+          <p>Bringing them in meant reconciling them rather than copying them. The grader arrived holding three verdicts against a stage that now runs six, so it would have quietly retired two standing checks on its way through the door. The builder arrived assuming a tournament was the normal way to explore, which stopped being true when <code style="font-family:var(--mono)">/design</code> shipped. And scoring the options stayed with the loop rather than moving to the thing that made them &mdash; whoever commissioned six directions is the wrong one to rank them.</p>
+          <p>One thing deliberately not claimed: whether an agent is allowed to spawn its own agents depends on where you're running it. That's item two on the install checklist, not an assumption.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="vtag">0.17.0<span>25 AUG</span></div>
         <div>
           <h3>The sweeps learned to read</h3>
           <p>The visual slop bans have run automatically since 0.11.0. Prose had no equivalent, and this loop writes a lot of prose. Now any human-facing copy gets graded against a distilled rubric &mdash; inflated claims, sales register, ghost sources, chatbot residue &mdash; built from an open-source humanizer skill and Wikipedia's own list of AI writing tells, with their caveat kept: clusters count, single hits don't.</p>

@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: One command that runs a design job end to end and can fail it. Bring your own generator: it routes exploration to /design in Claude Code, to Figma when the MCP is connected, or to a tournament when the argument matters more than the options, then grades what comes back against a target you set first. Trigger on "design this properly", "full pass", "the whole treatment", "make this great", "liftoff", or any substantial design request. Two stops only: the target, and the pick. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy or design-system alone.
-version: 0.17.0
+version: 0.18.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -87,7 +87,7 @@ specific blockage is ceremony, and the assessment is what catches that before th
 **Track.** Product or brand.
 
 - **Product track.** The output is an interface someone uses. Run the full loop below.
-- **Brand track.** The output is a static asset: a lockup, a slide, a one-pager, a social post. If the three visual identity files (`Brand-Style-Guide.md`, `Reference-Library.md`, `Layout-System.md`) already answer the question, apply them, run the token verification, and stop. That is the fast lane and it does not need liftoff. Only when the asset needs real exploration does it come back here, in document mode: keep the target and the resonance audit, skip `impeccable` and `maxq:evaluator`.
+- **Brand track.** The output is a static asset: a lockup, a slide, a one-pager, a social post. If the three visual identity files (`Brand-Style-Guide.md`, `Reference-Library.md`, `Layout-System.md`) already answer the question, apply them, run the token verification, and stop. That is the fast lane and it does not need liftoff. Only when the asset needs real exploration does it come back here, in document mode: keep the target and the resonance audit, skip `impeccable` and the evaluator.
 
 **Inputs on the table.** Whatever is attached decides which sub-skills ride along.
 
@@ -139,7 +139,7 @@ told what it will be held to.
 .liftoff/<slug>/charter.md, anchors.md
 .liftoff/<slug>/rounds/NN/artifact/       what gets graded
 .liftoff/<slug>/rounds/NN/build-log.md    how it got built. Never inside artifact/.
-.liftoff/<slug>/rounds/NN/explore/01..04  one slot per competing direction
+.liftoff/<slug>/rounds/NN/explore/01..05  one slot per direction; 05 is the synthesis, which competes rather than concludes
 ```
 
 Four concurrent explorers given no slots all write `index.html` to the same place and quietly
@@ -168,15 +168,24 @@ Skip for genuinely mechanical work. A padding fix does not need a thesis.
 
 Skip this stage when the direction is settled and this is execution.
 
-**`/design` is the explorer.** It reads the codebase, derives tokens from the existing visual
-style, and returns editable artboards you can accept or reject individually. That is a better
-exploration than this loop ever produced on its own, and the honest move is to use it rather
-than compete with it.
+**`liftoff-runner` executes this stage and produce.** It takes the charter path, a round number
+and an output directory, and it hands back the option set. The routing question comes before the
+explorer question: if the value is the argument rather than the options, it is a tournament
+whatever surface you are standing on. Everything else routes by surface.
 
+**`/design` is the explorer** when you are in Claude Code. It reads the codebase, derives tokens
+from the existing visual style, and returns editable artboards you can accept or reject
+individually. That is a better exploration than this loop ever produced on its own, and the
+honest move is to use it rather than compete with it.
+
+- **The Figma MCP** writes real boards to a real canvas wherever it is connected. Clone existing
+  artwork, inherit real components, never open a blank frame.
 - **`design-deathmatch`** only when the stakes justify a tournament and the value is the
   argument rather than the options: two people stuck on direction, or a peak moment where the
   losing directions need to be on record with reasons.
-- **`maxq:designer`** as the fallback when neither is installed.
+- **`liftoff-persona`**, four in parallel with one output slot each, when a tournament is
+  warranted and `design-deathmatch` is not installed. That is the only thing the fan-out is for.
+- **`maxq:designer`** as the fallback when none of those is available.
 
 **What this stage still owes, whichever explorer runs.** Pass the three feelings and the peak
 moment into the brief, because an explorer with no stated target returns options and a person
@@ -190,7 +199,9 @@ a preference. Grading it against a written target is a verdict.
 ### 2b. Score the set
 
 Grade every option against the target *before* the user looks at them. Ranked, each with one line
-on what it does to the peak moment and what it costs.
+on what it does to the peak moment and what it costs. **The loop scores, never the runner.** It
+commissioned those options, so a ranking from it is the builder grading the build one step
+removed.
 
 This is what changes an option set into a decision. Six artboards is a menu. Six artboards with a
 target and a score each is a decision with its reasoning attached.
@@ -205,7 +216,7 @@ than the choice overruled.
 
 ### 3. Produce
 
-Hand to **`impeccable`** with the target stated explicitly in the brief, not just left in PRODUCT.md for it to find. Impeccable reads PRODUCT.md during setup, so the target arrives either way, but a named target in the prompt outperforms a filed one.
+The runner owns this stage too, and hands to **`impeccable`** with the target stated explicitly in the brief, not just left in PRODUCT.md for it to find. Impeccable reads PRODUCT.md during setup, so the target arrives either way, but a named target in the prompt outperforms a filed one.
 
 **Read the live system before inventing a single token.** If the work ships anywhere with an
 existing stylesheet, pull the real values from source before choosing a colour, a face, or a
@@ -240,7 +251,7 @@ Motion gets graded like anything else: `review-animations` holds the craft bar a
 
 ### 4. Evaluate
 
-Hand to **`maxq:evaluator`** with the charter attached. Fresh eyes, renders it, never self-grades. The evaluator returns the normal verdict; liftoff additionally requires the emotional verdict from `resonance audit`:
+Hand to **`liftoff-evaluator`** with the charter path and the artifact directory, and nothing else. Fresh eyes, renders it, never self-grades. It holds every verdict this stage requires and merges them into one block; the emotional one comes from `resonance audit`:
 
 ```
 Emotional verdict: PASS | FAIL
@@ -345,6 +356,13 @@ Fan out reads. Serialize writes. That one rule decides the shape of every wave: 
 parallel reads, produce is one writer per artifact, evaluate is six parallel graders merged into
 a single verdict.
 
+**Three named agents carry the waves**, and they ship in this skill at `agents/`, installed to
+`~/.claude/agents/`. `liftoff-runner` executes explore and produce. `liftoff-persona` is one
+competitor in a tournament and is useful for nothing else. `liftoff-evaluator` holds stage 4 and
+receives the charter and the artifact and nothing else. The skill keeps what cannot be delegated:
+the classification, the charter, the score, both stops, and the call on whether to spend another
+round.
+
 Autonomy is a slider per stage, not a global setting, and it moves with earned trust. Start at
 recon 3, produce 1, grade 2, iterate 1. A stage goes up a level after three clean runs and drops
 back the moment it produces something you had to undo.
@@ -352,6 +370,15 @@ back the moment it produces something you had to undo.
 The constraint is never generation speed, it is how fast a person can verify. If a wave returns
 more than a screen of output to check, the wave is too big. Split it and run twice. Full detail,
 concurrency caps and the run-summary format in `references/agents.md`.
+
+**When the agents are not installed.** No `liftoff-evaluator` sends the verdict to
+`maxq:evaluator` instead: a different context is not a purpose-built grader, but it is still not
+the context that built the thing. With neither available the checks run inline, labelled SELF and
+unreliable, and the run summary names which grader held the verdict. No `liftoff-runner`
+means stages 2 and 3 run inline from `references/stack.md`, which keeps the full procedure rather
+than a summary for exactly this case. No `liftoff-persona` and no `design-deathmatch` means one
+exploration and a run that says a tournament did not happen. A missing agent degrades the pass; it
+never breaks it, and it never quietly changes what a PASS means.
 
 ## Cost routing
 
