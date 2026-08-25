@@ -1,7 +1,7 @@
 ---
 name: liftoff
 description: One command that runs a design job end to end and can fail it. Bring your own generator: it routes exploration to /design in Claude Code, to Figma when the MCP is connected, or to a tournament when the argument matters more than the options, then grades what comes back against a target you set first. Trigger on "design this properly", "full pass", "the whole treatment", "make this great", "liftoff", or any substantial design request. Two stops only: the target, and the pick. Use this instead of calling resonance, impeccable, design-critique, accessibility-review, ux-copy or design-system alone.
-version: 0.16.0
+version: 0.17.0
 user-invocable: true
 argument-hint: "[target]"
 ---
@@ -211,11 +211,21 @@ Hand to **`impeccable`** with the target stated explicitly in the brief, not jus
 existing stylesheet, pull the real values from source before choosing a colour, a face, or a
 size. Not from memory, not from a brand doc that may have drifted. This is a hard gate because
 the failure is invisible: inventing a warm accent for a system that already ships one produces
-work that looks right and is wrong, and nobody catches it until integration.
+work that looks right and is wrong, and nobody catches it until integration. The procedure
+behind the gate is `references/style-extract.md`: it runs in recon, and its output lands in the
+charter's anchors with source and date, so produce inherits read values rather than remembered
+ones.
 
 **Load the taste anchors before generating anything.** `Brand-Style-Guide.md` for the rules, `Layout-System.md` for the grid, `Reference-Library.md` for the anchors. The reference library is the one that decides whether the result feels made or feels generated. Real screenshots of work that is actually good give the build something specific to reach for. A prose description of taste produces a prose-description-shaped design, which is exactly the flat, competent, nobody-hates-it result we are trying to avoid.
 
 Anchors arrive through `Reference-Library.md` and nowhere else. Pinterest boards feed that file at stage 1; they are never read directly here. An anchor showing up mid-build is a new opinion showing up mid-build.
+
+**An anchor may carry a prompt block**, real structure read from the real thing: grid values,
+spacing rhythm, motion timing, asset paths. When one is present, produce consumes it as a build
+spec in miniature and the build log says so. A screenshot tells produce what good looks like; a
+prompt block tells it how the thing was built, which is the difference between reaching for a
+mood and reaching for a mechanism. Schema and the inspection-only rule in
+`references/anchor-prompts.md`.
 
 Same rule inside Figma: clone existing artwork, inherit real components, never start from an empty frame.
 
@@ -268,6 +278,14 @@ bans every time: side-stripe borders, gradient text, glassmorphism by default, i
 grids, numbered section markers used as scaffolding rather than sequence, hero-metric templates.
 This is automatic at evaluate, not a thing the user has to request, because the pattern that
 produces slop is reflex and reflex does not announce itself.
+
+**Prose gets the same sweep.** Any human-facing copy the run produced is graded against
+`references/prose-tells.md`, the writing counterpart to the visual bans: inflated claims, sales
+register, ghost sources, stock AI words, chatbot residue. Distilled from blader/humanizer and
+Wikipedia's signs-of-AI-writing page, with their own caveat kept: these are signs in clusters,
+never convictions from a single hit, and the false-positive list binds the grader too. A build
+can pass every visual ban and still read like a press release; that is now a FAIL with a named
+row instead of a shrug.
 
 **If the artifact cannot be rendered, the human is the evaluator.** Export it, hand it over,
 and say plainly that the visual check did not run. Do not pass on structure alone and do not

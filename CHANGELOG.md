@@ -6,6 +6,37 @@ and loops until it passes.
 
 ---
 
+## 0.17.0, 25 August
+
+**Three steals from the Resource Library, and the sweeps learn to read.**
+
+- **Prose gets the slop sweep it never had.** The visual bans have run automatically at
+  evaluate since 0.11.0; writing had nothing, and this loop produces a lot of writing.
+  New standing check (row 4g) graded from `references/prose-tells.md`: inflated claims,
+  sales register, ghost sources, stock AI words, chatbot residue left in shipped copy.
+  Distilled from blader/humanizer (MIT) and Wikipedia's signs-of-AI-writing page, and
+  their caveat survives the distillation: clusters, never convictions from a single hit,
+  with a false-positive list that binds the grader too. A build can pass every visual ban
+  and still read like a press release. That is now a named FAIL instead of a shrug.
+- **Anchors can carry how, not only what.** From BYQ's Copy Prompt move: an anchor in the
+  reference library may now hold a prompt block, real structure read from the real thing,
+  grid values, spacing rhythm, motion timing, asset paths. Produce consumes it as a build
+  spec in miniature. The rule that keeps it honest: blocks are written from inspection,
+  never imagination, and an anchor whose construction cannot be verified stays a
+  screenshot. Getlayers folds into the same schema rather than earning a second
+  mechanism.
+- **The read-the-live-system gate gets its missing half.** 0.13.0 said pull real values
+  from source before inventing a token, and never said how. `references/style-extract.md`
+  is the how: recon-stage, read-only, primitives with their derivations (the green cast
+  matters more than the hex), provenance and fetch date attached, unreadables named. The
+  one steal from a skill whose remaining ground impeccable and resonance already hold.
+  Screenshot-to-style stays out on purpose: extraction from a rendered image is inference,
+  and inference dressed as reading is the exact failure the gate exists to stop.
+- **Not taken, with reasons on record:** the named-agent decomposition (the
+  runner/evaluator split is already that shape), video input (shipped 0.9.0), and
+  teach-your-visual-identity (design-dna's verdict applies). Library entries filed after
+  8/22 live on the cloud volume and are flagged unreconciled rather than guessed at.
+
 ## 0.16.0, 19 August
 
 **Wrote down the thing every stage was already assuming.**

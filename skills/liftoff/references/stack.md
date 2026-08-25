@@ -21,7 +21,8 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 | 1c | Input | `user-research` | skill | conditional | The decision needs research that does not exist yet |
 | 1d | Target | `motion-design` | skill | conditional | The surface has motion. Sets timing/easing intent before any engine runs. |
 | 1f | Target | `apple-design` | skill | conditional | Gesture-driven or physical motion: drag, swipe, sheets, momentum, interruptible transitions. |
-| 1e | Input | Pinterest via Zapier | connector | conditional | A curated board exists and the library has no anchors from it. See `inspiration.md`. |
+| 1e | Input | Pinterest via Zapier | connector | conditional | A curated board exists and the library has no anchors from it. See `inspiration.md`. Anchors may carry prompt blocks per `anchor-prompts.md`. |
+| 0g | Recon | style extraction (`references/style-extract.md`) | inline | conditional | Wave A. Anything shipping into an existing visual system. Feeds the charter's anchors. |
 | 2 | Explore | `/design` | bundled skill | conditional | Claude Code only. Reads the codebase, derives tokens, returns editable artboards. |
 | 2a | Explore | Figma MCP write | connector | conditional | Figma connected. The loop writes real boards to a real canvas. |
 | 2b | Explore | `design-deathmatch` | skill | conditional | Stakes justify a tournament AND the argument matters more than the options |
@@ -39,6 +40,7 @@ Read this at the start of every run. Skip any stage marked `off` or pointing at 
 | 4d | Evaluate | `design-critique` | skill | conditional | Close verdict, high-stakes surface, or a pass that still feels off |
 | 4e | Evaluate | `review-animations` | skill | conditional | The surface has motion. Craft gate: approval is earned. |
 | 4f | Evaluate | `find-animation-opportunities` | skill | conditional | Motion-gap pass. Finds what should animate and rejects what should not. |
+| 4g | Evaluate | prose-slop sweep (`references/prose-tells.md`) | inline | on | Any human-facing copy in the artifact. Automatic, clusters not single hits. |
 | 5 | Handoff | `design-handoff` | skill | conditional | The ask is explicitly "ready for engineering" |
 | 0c | Audit | `improve-animations` | skill | conditional | Entry point for an existing codebase: prioritized motion audit, read-only. |
 
@@ -166,10 +168,10 @@ Which rows can run at the same time, which cannot, and why.
 
 | Wave | Rows | Concurrency | Model | Default autonomy |
 |---|---|---|---|---|
-| A recon | 0b classify, 0d AGENTS.md, 0e watch, 1b/1c research, 2c design-system, 1e inspiration, 4c baseline | all at once | cheap | 3, interrupt only on failure |
+| A recon | 0b classify, 0d AGENTS.md, 0e watch, 0g style extraction, 1b/1c research, 2c design-system, 1e inspiration, 4c baseline | all at once | cheap | 3, interrupt only on failure |
 | B make | 3 impeccable, 3b ux-copy, 3c copy-editor, 3d/3e render | one writer per artifact | mid, strong orchestrates | 1, surface every result |
 | B' explore | 2 designer, 2b deathmatch | cap 4 | mid | 2 |
-| C grade | 4 evaluator, 4b resonance, 4c a11y, 4d critique, 4e review-animations, 4f motion-gap | all at once | strong for verdicts | 2, merged output |
+| C grade | 4 evaluator, 4b resonance, 4c a11y, 4d critique, 4e review-animations, 4f motion-gap, 4g prose sweep | all at once | strong for verdicts | 2, merged output |
 
 Reads parallelise safely. Writes do not, and two agents touching one artifact fail later and
 inexplicably rather than immediately. Explore is the one place many agents produce concurrently,
@@ -197,6 +199,27 @@ point, and which also means an uncapped loop can oscillate instead of converging
 back to a person with what still fails.
 
 Handoff runs **last, and only on request.** It documents a decision, so it needs a decision to document.
+
+## Taken from the Resource Library (evaluated 25 August)
+
+Three steals from the Rooster File's Resource Library, each passing the same test the
+rejections below failed: it covers a pipeline or judgment nothing already here covers.
+
+- **Prose-slop sweep** (row 4g), from blader/humanizer + Wikipedia's signs-of-AI-writing.
+  The visual sweep had no writing counterpart; now it does, same shape, same automatic
+  trigger, sources named in `prose-tells.md`.
+- **Anchor prompt blocks** (schema extension, no new row), from BYQ's Copy Prompt.
+  Anchors may carry inspected build structure. The Getlayers reel folds into the same
+  mechanism rather than earning a second one.
+- **Style extraction procedure** (row 0g), the one steal from the Hallmark skill. The
+  0.13.0 read-the-live-system gate finally has a procedure instead of a vibe. The rest
+  of that skill is ground impeccable and resonance already hold, same verdict as
+  design-dna below. Screenshot-to-style stays out: inference dressed as reading.
+
+Not taken, already present: the named-agent decomposition from the Content Expert brief
+(the runner/evaluator/persona split IS that shape), video input (0.9.0), and
+teach-your-visual-identity (the ground Brand-Style-Guide + Reference-Library holds).
+Unreconciled: the entries filed to the Fly volume after 8/22, flagged rather than guessed.
 
 ## What we deliberately did not add
 
